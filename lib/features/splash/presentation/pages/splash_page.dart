@@ -16,10 +16,11 @@ class _SplashPageState extends State<SplashPage> {
   }
 
   void _navigateToLogin() {
-    Future.delayed(const Duration(seconds: 2), () {
+    Future.delayed(const Duration(seconds: 1), () {
       if (mounted) {
         // Use context.go to replace the splash screen with the login screen
-        context.go('/login');
+        // context.go('/login');
+        context.go('/home');
       }
     });
   }

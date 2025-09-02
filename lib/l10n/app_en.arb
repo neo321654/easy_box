@@ -4,5 +4,14 @@
   "loginPageTitle": "Login",
   "loginEmailLabel": "Email",
   "loginPasswordLabel": "Password",
-  "loginButtonText": "Login"
+  "loginButtonText": "Login",
+  "homeMenuInventory": "Inventory",
+  "homeMenuReceiving": "Receiving",
+  "homeMenuScanning": "Scanning",
+  "homeMenuSettings": "Settings",
+  "settingsPageTitle": "Settings",
+  "settingsThemeTitle": "Dark Theme",
+  "settingsLanguageTitle": "Language",
+  "languageRussian": "Russian",
+  "languageEnglish": "English"
 }

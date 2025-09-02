@@ -127,6 +127,60 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Войти'**
   String get loginButtonText;
+
+  /// No description provided for @homeMenuInventory.
+  ///
+  /// In ru, this message translates to:
+  /// **'Инвентаризация'**
+  String get homeMenuInventory;
+
+  /// No description provided for @homeMenuReceiving.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приёмка товара'**
+  String get homeMenuReceiving;
+
+  /// No description provided for @homeMenuScanning.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сканирование'**
+  String get homeMenuScanning;
+
+  /// No description provided for @homeMenuSettings.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки'**
+  String get homeMenuSettings;
+
+  /// No description provided for @settingsPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Настройки'**
+  String get settingsPageTitle;
+
+  /// No description provided for @settingsThemeTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Тёмная тема'**
+  String get settingsThemeTitle;
+
+  /// No description provided for @settingsLanguageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Язык'**
+  String get settingsLanguageTitle;
+
+  /// No description provided for @languageRussian.
+  ///
+  /// In ru, this message translates to:
+  /// **'Русский'**
+  String get languageRussian;
+
+  /// No description provided for @languageEnglish.
+  ///
+  /// In ru, this message translates to:
+  /// **'Английский'**
+  String get languageEnglish;
 }
 
 class _AppLocalizationsDelegate

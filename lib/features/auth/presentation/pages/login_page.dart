@@ -1,5 +1,5 @@
-import 'package:easy_box/core/extensions/context_extension.dart';
-import 'package:easy_box/core/utils/app_dimensions.dart';
+import 'package:easy_box/core/extensions/extensions.dart';
+import 'package:easy_box/core/utils/utils.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatelessWidget {

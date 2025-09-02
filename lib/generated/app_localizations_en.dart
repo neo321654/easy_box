@@ -22,4 +22,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get loginButtonText => 'Login';
+
+  @override
+  String get homeMenuInventory => 'Inventory';
+
+  @override
+  String get homeMenuReceiving => 'Receiving';
+
+  @override
+  String get homeMenuScanning => 'Scanning';
+
+  @override
+  String get homeMenuSettings => 'Settings';
+
+  @override
+  String get settingsPageTitle => 'Settings';
+
+  @override
+  String get settingsThemeTitle => 'Dark Theme';
+
+  @override
+  String get settingsLanguageTitle => 'Language';
+
+  @override
+  String get languageRussian => 'Russian';
+
+  @override
+  String get languageEnglish => 'English';
 }

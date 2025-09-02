@@ -4,5 +4,14 @@
   "loginPageTitle": "Вход",
   "loginEmailLabel": "Электронная почта",
   "loginPasswordLabel": "Пароль",
-  "loginButtonText": "Войти"
+  "loginButtonText": "Войти",
+  "homeMenuInventory": "Инвентаризация",
+  "homeMenuReceiving": "Приёмка товара",
+  "homeMenuScanning": "Сканирование",
+  "homeMenuSettings": "Настройки",
+  "settingsPageTitle": "Настройки",
+  "settingsThemeTitle": "Тёмная тема",
+  "settingsLanguageTitle": "Язык",
+  "languageRussian": "Русский",
+  "languageEnglish": "Английский"
 }

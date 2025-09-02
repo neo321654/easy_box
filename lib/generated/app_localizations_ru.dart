@@ -22,4 +22,31 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get loginButtonText => 'Войти';
+
+  @override
+  String get homeMenuInventory => 'Инвентаризация';
+
+  @override
+  String get homeMenuReceiving => 'Приёмка товара';
+
+  @override
+  String get homeMenuScanning => 'Сканирование';
+
+  @override
+  String get homeMenuSettings => 'Настройки';
+
+  @override
+  String get settingsPageTitle => 'Настройки';
+
+  @override
+  String get settingsThemeTitle => 'Тёмная тема';
+
+  @override
+  String get settingsLanguageTitle => 'Язык';
+
+  @override
+  String get languageRussian => 'Русский';
+
+  @override
+  String get languageEnglish => 'Английский';
 }
