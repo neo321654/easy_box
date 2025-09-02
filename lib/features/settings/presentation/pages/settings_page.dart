@@ -1,5 +1,6 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository.dart';
 import 'package:easy_box/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +14,8 @@ class SettingsPage extends StatelessWidget {
     return BlocListener<SettingsBloc, SettingsState>(
       listener: (context, state) {
         // Save the settings whenever the state changes
-        final repository = context.read<SettingsRepository>();
-        repository.saveThemeMode(state.themeMode);
-        repository.saveLocale(state.locale);
+        sl<SettingsRepository>().saveThemeMode(state.themeMode);
+        sl<SettingsRepository>().saveLocale(state.locale);
       },
       child: Scaffold(
         appBar: AppBar(
