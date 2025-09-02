@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/router/app_router.dart';
-import 'di/injection_container.dart' as di;
+import 'di/injection_container.dart';
 import 'generated/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await di.init();
+  await init();
   runApp(const MyApp());
 }
 
@@ -17,8 +17,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => di.sl<SettingsBloc>(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => sl<SettingsBloc>()),
+        // TODO: Add other Blocs here in the future
+      ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {
           return MaterialApp.router(
