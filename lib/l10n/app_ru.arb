@@ -1,0 +1,8 @@
+{
+  "@@locale": "ru",
+  "appTitle": "Easy Box",
+  "loginPageTitle": "Вход",
+  "loginEmailLabel": "Электронная почта",
+  "loginPasswordLabel": "Пароль",
+  "loginButtonText": "Войти"
+}
