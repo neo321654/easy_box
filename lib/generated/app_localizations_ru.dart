@@ -100,8 +100,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pleaseEnterQuantityError => 'Пожалуйста, введите количество';
 
   @override
-  String get quantityMustBePositiveError =>
-      'Количество должно быть положительным';
+  String get quantityMustBePositiveError => 'Количество должно быть положительным';
 
   @override
   String get productNotFoundDialogTitle => 'Товар не найден';
