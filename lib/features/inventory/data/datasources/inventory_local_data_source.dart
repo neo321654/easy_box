@@ -7,4 +7,5 @@ abstract class InventoryLocalDataSource {
   Future<List<Map<String, dynamic>>> getQueuedStockUpdates();
   Future<void> clearQueuedStockUpdates();
   Future<void> updateLocalProductStock(String sku, int quantity);
+  Future<void> saveProduct(ProductModel product);
 }

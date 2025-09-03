@@ -16,8 +16,7 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
       final batch = txn.batch();
       batch.delete(_tableProducts); // Clear old cache
       for (final product in products) {
-        batch.insert(_tableProducts, product.toJson(),
-            conflictAlgorithm: ConflictAlgorithm.replace);
+        batch.insert(_tableProducts, product.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
       }
       await batch.commit(noResult: true);
     });
@@ -55,6 +54,15 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
     await database.rawUpdate(
       'UPDATE $_tableProducts SET quantity = quantity + ? WHERE sku = ?',
       [quantity, sku],
+    );
+  }
+
+  @override
+  Future<void> saveProduct(ProductModel product) async {
+    await database.insert(
+      _tableProducts,
+      product.toJson(),
+      conflictAlgorithm: ConflictAlgorithm.replace,
     );
   }
 }

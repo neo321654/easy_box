@@ -59,6 +59,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
     if (await networkInfo.isConnected) {
       try {
         final newProduct = await remoteDataSource.createProduct(name: name, sku: sku);
+        await localDataSource.saveProduct(newProduct);
         return Right(newProduct);
       } on ServerException {
         return Left(ServerFailure());
