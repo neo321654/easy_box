@@ -13,7 +13,10 @@ import 'package:easy_box/features/inventory/domain/usecases/add_stock_usecase.da
 import 'package:easy_box/features/inventory/domain/usecases/find_product_by_sku_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/get_products_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/create_product_usecase.dart';
+import 'package:easy_box/features/inventory/domain/usecases/update_product_usecase.dart';
+import 'package:easy_box/features/inventory/domain/usecases/delete_product_usecase.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
@@ -59,12 +62,15 @@ Future<void> init() async {
   //--------------------
   // Blocs
   sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl()));
+  sl.registerFactory(() => ProductDetailBloc(updateProductUseCase: sl(), deleteProductUseCase: sl()));
 
   // Use Cases
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
   sl.registerLazySingleton(() => FindProductBySkuUseCase(sl()));
   sl.registerLazySingleton(() => AddStockUseCase(sl()));
   sl.registerLazySingleton(() => CreateProductUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateProductUseCase(sl()));
+  sl.registerLazySingleton(() => DeleteProductUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<InventoryRepository>(
@@ -151,8 +157,14 @@ Future<void> init() async {
       db.execute(
         'CREATE TABLE product_creations_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sku TEXT, local_id TEXT, timestamp INTEGER)',
       );
+      db.execute(
+        'CREATE TABLE product_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, name TEXT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
+      );
+      db.execute(
+        'CREATE TABLE product_deletions_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, timestamp INTEGER)',
+      );
     },
-    version: 3,
+    version: 4,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(
@@ -162,6 +174,14 @@ Future<void> init() async {
       if (oldVersion < 3) {
         db.execute(
           'CREATE TABLE product_creations_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sku TEXT, local_id TEXT, timestamp INTEGER)',
+        );
+      }
+      if (oldVersion < 4) {
+        db.execute(
+          'CREATE TABLE product_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, name TEXT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
+        );
+        db.execute(
+          'CREATE TABLE product_deletions_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, timestamp INTEGER)',
         );
       }
     },

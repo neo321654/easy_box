@@ -289,6 +289,60 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Создать и добавить на склад'**
   String get createAndAddStockButtonText;
+
+  /// No description provided for @editProductDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать товар'**
+  String get editProductDialogTitle;
+
+  /// No description provided for @saveButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get saveButtonText;
+
+  /// No description provided for @deleteProductDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить товар'**
+  String get deleteProductDialogTitle;
+
+  /// No description provided for @deleteConfirmationMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите удалить {productName}?'**
+  String deleteConfirmationMessage(String productName);
+
+  /// No description provided for @deleteButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get deleteButtonText;
+
+  /// No description provided for @failedToUpdateProductMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось обновить товар.'**
+  String get failedToUpdateProductMessage;
+
+  /// No description provided for @productUpdatedSuccessfullyMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно обновлен.'**
+  String get productUpdatedSuccessfullyMessage;
+
+  /// No description provided for @failedToDeleteProductMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось удалить товар.'**
+  String get failedToDeleteProductMessage;
+
+  /// No description provided for @productDeletedSuccessfullyMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно удален.'**
+  String get productDeletedSuccessfullyMessage;
 }
 
 class _AppLocalizationsDelegate

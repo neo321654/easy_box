@@ -114,4 +114,33 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get createAndAddStockButtonText => 'Создать и добавить на склад';
+
+  @override
+  String get editProductDialogTitle => 'Редактировать товар';
+
+  @override
+  String get saveButtonText => 'Сохранить';
+
+  @override
+  String get deleteProductDialogTitle => 'Удалить товар';
+
+  @override
+  String deleteConfirmationMessage(String productName) {
+    return 'Вы уверены, что хотите удалить $productName?';
+  }
+
+  @override
+  String get deleteButtonText => 'Удалить';
+
+  @override
+  String get failedToUpdateProductMessage => 'Не удалось обновить товар.';
+
+  @override
+  String get productUpdatedSuccessfullyMessage => 'Товар успешно обновлен.';
+
+  @override
+  String get failedToDeleteProductMessage => 'Не удалось удалить товар.';
+
+  @override
+  String get productDeletedSuccessfullyMessage => 'Товар успешно удален.';
 }

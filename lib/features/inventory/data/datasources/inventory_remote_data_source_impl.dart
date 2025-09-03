@@ -59,4 +59,27 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
     _products.add(newProduct);
     return newProduct;
   }
+
+  @override
+  Future<void> updateProduct(ProductModel product) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    final index = _products.indexWhere((p) => p.id == product.id);
+    if (index != -1) {
+      _products[index] = product;
+    } else {
+      throw ServerException(); // Product not found on remote
+    }
+  }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    final initialLength = _products.length;
+    _products.removeWhere((p) => p.id == id);
+    if (_products.length == initialLength) {
+      throw ServerException(); // Product not found on remote
+    }
+  }
 }
