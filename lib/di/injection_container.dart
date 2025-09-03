@@ -24,6 +24,13 @@ import 'package:easy_box/features/settings/domain/usecases/save_theme_mode_useca
 import 'package:easy_box/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sqflite/sqflite.dart';
+import 'package:path/path.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easy_box/core/network/network_info.dart';
+import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
+import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source_impl.dart';
+
 
 final sl = GetIt.instance;
 
@@ -58,10 +65,21 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddStockUseCase(sl()));
 
   // Repositories
-  sl.registerLazySingleton<InventoryRepository>(() => InventoryRepositoryImpl(remoteDataSource: sl()));
+  sl.registerLazySingleton<InventoryRepository>(
+    () => InventoryRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
 
   // Data Sources
   sl.registerLazySingleton<InventoryRemoteDataSource>(() => InventoryRemoteDataSourceImpl());
+
+  // Local Data Sources
+  sl.registerLazySingleton<InventoryLocalDataSource>(
+    () => InventoryLocalDataSourceImpl(database: sl()),
+  );
   //endregion
 
   //--------------------
@@ -118,5 +136,19 @@ Future<void> init() async {
   //####################
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
+
+  final db = await openDatabase(
+    join(await getDatabasesPath(), 'easy_box_database.db'),
+    onCreate: (db, version) {
+      return db.execute(
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER)',
+      );
+    },
+    version: 1,
+  );
+  sl.registerLazySingleton<Database>(() => db);
+
+  sl.registerLazySingleton(() => Connectivity());
+  sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   //endregion
 }
