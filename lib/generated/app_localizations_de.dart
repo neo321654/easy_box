@@ -39,7 +39,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String get settingsPageTitle => 'Einstellungen';
 
   @override
-  String get settingsThemeTitle => 'Dunkles Design';
+  String get settingsThemeTitle => 'Design';
+
+  @override
+  String get settingsThemeSystem => 'System';
+
+  @override
+  String get settingsThemeLight => 'Hell';
+
+  @override
+  String get settingsThemeDark => 'Dunkel';
 
   @override
   String get settingsLanguageTitle => 'Sprache';

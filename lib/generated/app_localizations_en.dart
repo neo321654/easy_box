@@ -39,7 +39,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get settingsPageTitle => 'Settings';
 
   @override
-  String get settingsThemeTitle => 'Dark Theme';
+  String get settingsThemeTitle => 'Theme';
+
+  @override
+  String get settingsThemeSystem => 'System';
+
+  @override
+  String get settingsThemeLight => 'Light';
+
+  @override
+  String get settingsThemeDark => 'Dark';
 
   @override
   String get settingsLanguageTitle => 'Language';
