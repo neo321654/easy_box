@@ -20,6 +20,7 @@
   "languageGerman": "German",
   "loginAnonymousButtonText": "Continue as Guest",
   "inventoryPageTitle": "Inventory",
+  "inventorySearchHint": "Search by name, SKU, or location...",
     "retryButtonText": "Retry",
   "nPieces": "{count,plural, =1{1 piece} other{{count} pieces}}",
   "@nPieces": {

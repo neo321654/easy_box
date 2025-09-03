@@ -220,6 +220,12 @@ abstract class AppLocalizations {
   /// **'Инвентарь'**
   String get inventoryPageTitle;
 
+  /// No description provided for @inventorySearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по имени, SKU или местоположению...'**
+  String get inventorySearchHint;
+
   /// No description provided for @retryButtonText.
   ///
   /// In ru, this message translates to:

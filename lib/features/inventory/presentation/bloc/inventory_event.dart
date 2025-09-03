@@ -8,3 +8,12 @@ abstract class InventoryEvent extends Equatable {
 }
 
 class FetchProductsRequested extends InventoryEvent {}
+
+class SearchTermChanged extends InventoryEvent {
+  final String searchTerm;
+
+  const SearchTermChanged(this.searchTerm);
+
+  @override
+  List<Object> get props => [searchTerm];
+}

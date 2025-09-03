@@ -69,6 +69,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inventoryPageTitle => 'Инвентарь';
 
   @override
+  String get inventorySearchHint => 'Поиск по имени, SKU или местоположению...';
+
+  @override
   String get retryButtonText => 'Повторить';
 
   @override

@@ -20,6 +20,7 @@
   "languageGerman": "Deutsch",
   "loginAnonymousButtonText": "Als Gast fortfahren",
   "inventoryPageTitle": "Inventar",
+  "inventorySearchHint": "Suche nach Name, SKU oder Standort...",
     "retryButtonText": "Wiederholen",
   "nPieces": "{count,plural, one{1 Stück} other{{count} Stücke}}",
   "@nPieces": {

@@ -13,6 +13,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
       : _getProductsUseCase = getProductsUseCase,
         super(InventoryInitial()) {
     on<FetchProductsRequested>(_onFetchProductsRequested);
+    on<SearchTermChanged>(_onSearchTermChanged);
   }
 
   Future<void> _onFetchProductsRequested(
@@ -23,7 +24,17 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     final failureOrProducts = await _getProductsUseCase();
     failureOrProducts.fold(
       (failure) => emit(const InventoryFailure()),
-      (products) => emit(InventorySuccess(products)),
+      (products) => emit(InventorySuccess(allProducts: products)),
     );
+  }
+
+  Future<void> _onSearchTermChanged(
+    SearchTermChanged event,
+    Emitter<InventoryState> emit,
+  ) async {
+    final currentState = state;
+    if (currentState is InventorySuccess) {
+      emit(currentState.copyWith(searchTerm: event.searchTerm));
+    }
   }
 }

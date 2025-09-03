@@ -20,6 +20,7 @@
   "languageGerman": "Немецкий",
   "loginAnonymousButtonText": "Продолжить как гость",
   "inventoryPageTitle": "Инвентарь",
+  "inventorySearchHint": "Поиск по имени, SKU или местоположению...",
     "retryButtonText": "Повторить",
   "nPieces": "{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
   "@nPieces": {
