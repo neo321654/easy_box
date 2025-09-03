@@ -28,3 +28,12 @@ class ReceivingFailure extends ReceivingState {
   @override
   List<Object> get props => [errorMessage];
 }
+
+class ReceivingProductNotFound extends ReceivingState {
+  final String sku;
+
+  const ReceivingProductNotFound(this.sku);
+
+  @override
+  List<Object> get props => [sku];
+}

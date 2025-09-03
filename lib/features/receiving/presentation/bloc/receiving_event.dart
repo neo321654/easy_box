@@ -19,3 +19,18 @@ class StockAdded extends ReceivingEvent {
   @override
   List<Object> get props => [sku, quantity];
 }
+
+class CreateProductAndAddStock extends ReceivingEvent {
+  final String name;
+  final String sku;
+  final int quantity;
+
+  const CreateProductAndAddStock({
+    required this.name,
+    required this.sku,
+    required this.quantity,
+  });
+
+  @override
+  List<Object> get props => [name, sku, quantity];
+}

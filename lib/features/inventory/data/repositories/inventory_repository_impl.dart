@@ -49,8 +49,24 @@ class InventoryRepositoryImpl implements InventoryRepository {
         return Left(ServerFailure());
       }
     } else {
-      return Left(ServerFailure()); // Sku lookup offline not supported in this scenario
+      return Left(ServerFailure()); // Or a specific NetworkFailure
     }
+  }
+
+  @override
+  Future<Either<Failure, Product>> createProduct(
+      {required String name, required String sku}) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku);
+        return Right(newProduct);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      return Left(ServerFailure()); // Or a specific NetworkFailure
+    }
+  }
   }
 
   @override
@@ -60,8 +76,8 @@ class InventoryRepositoryImpl implements InventoryRepository {
         final result = await remoteDataSource.addStock(sku, quantityToAdd);
         await localDataSource.updateLocalProductStock(sku, quantityToAdd);
         return Right(result);
-      } on ProductNotFoundException {
-        return Left(ServerFailure());
+      } on ProductNotFoundException catch (e) {
+        return Left(ProductNotFoundFailure(e.sku));
       } on ServerException {
         return Left(ServerFailure());
       }

@@ -64,6 +64,50 @@ class _ReceivingViewState extends State<_ReceivingView> {
     }
   }
 
+  void _showCreateProductDialog(String sku) {
+    final TextEditingController productNameController = TextEditingController();
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Product Not Found'), // TODO: Localize
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('SKU: $sku'),
+            TextField(
+              controller: productNameController,
+              decoration: const InputDecoration(labelText: 'Product Name'), // TODO: Localize
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: const Text('Cancel'), // TODO: Localize
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (productNameController.text.isNotEmpty) {
+                Navigator.of(ctx).pop();
+                context.read<ReceivingBloc>().add(
+                      CreateProductAndAddStock(
+                        name: productNameController.text,
+                        sku: sku,
+                        quantity: int.tryParse(_quantityController.text) ?? 0,
+                      ),
+                    );
+              }
+            },
+            child: const Text('Create & Add Stock'), // TODO: Localize
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,8 +124,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
                     content: Text(state.errorMessage),
                     backgroundColor: Colors.red),
               );
-          }
-          if (state is ReceivingSuccess) {
+          } else if (state is ReceivingSuccess) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
@@ -92,6 +135,8 @@ class _ReceivingViewState extends State<_ReceivingView> {
             _skuController.clear();
             _quantityController.clear();
             FocusScope.of(context).unfocus();
+          } else if (state is ReceivingProductNotFound) {
+            _showCreateProductDialog(state.sku);
           }
         },
         child: Padding(

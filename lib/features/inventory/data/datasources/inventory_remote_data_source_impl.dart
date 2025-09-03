@@ -45,4 +45,18 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
       throw ProductNotFoundException(sku);
     }
   }
+
+  @override
+  Future<ProductModel> createProduct({required String name, required String sku}) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 400));
+    final newProduct = ProductModel(
+      id: DateTime.now().millisecondsSinceEpoch.toString(), // Mock ID
+      name: name,
+      sku: sku,
+      quantity: 0, // Initial quantity is 0
+    );
+    _products.add(newProduct);
+    return newProduct;
+  }
 }
