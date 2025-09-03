@@ -88,7 +88,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
                 quantity: int.tryParse(_quantityController.text) ?? 0,
               );
               context.read<ProductDetailBloc>().add(ProductUpdated(updatedProduct));
-              Navigator.of(ctx).pop();
+              Navigator.of(ctx).pop(); // Pop dialog
             },
             child: Text(context.S.saveButtonText),
           ),
@@ -113,8 +113,8 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
           ElevatedButton(
             onPressed: () {
               context.read<ProductDetailBloc>().add(ProductDeleted(widget.product.id));
-              Navigator.of(ctx).pop();
-              Navigator.of(context).pop(); // Pop detail page after deletion
+              Navigator.of(ctx).pop(); // Pop dialog
+              // Navigator.of(context).pop(); // Pop detail page after deletion - this will be handled by listener
             },
             child: Text(context.S.deleteButtonText),
           ),
@@ -145,6 +145,12 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.green));
+            // If update was successful, pop the detail page and return true
+            if (state.message == context.S.productUpdatedSuccessfullyMessage) {
+              Navigator.of(context).pop(true);
+            } else if (state.message == context.S.productDeletedSuccessfullyMessage) {
+              Navigator.of(context).pop(true); // Pop detail page after deletion
+            }
           } else if (state is ProductDetailFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
