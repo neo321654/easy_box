@@ -73,7 +73,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0);
         await localDataSource.saveProduct(newProduct);
         await localDataSource.addProductCreationToQueue(name, sku, localId);
-        return Right(newProduct);
+        return const Right(OperationResult(isQueued: true)); // Fixed: return OperationResult
       } on Exception {
         return Left(CacheFailure()); // Or a more specific failure
       }
