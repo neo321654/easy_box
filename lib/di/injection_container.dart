@@ -1,6 +1,7 @@
 import 'package:easy_box/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
 import 'package:easy_box/features/auth/domain/usecases/get_me_usecase.dart';
+import 'package:easy_box/features/auth/domain/usecases/login_anonymously_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
@@ -55,12 +56,14 @@ Future<void> init() async {
         loginUseCase: sl(),
         getMeUseCase: sl(),
         logoutUseCase: sl(),
+        loginAnonymouslyUseCase: sl(),
       ));
 
   // Use Cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
   sl.registerLazySingleton(() => GetMeUseCase(sl()));
   sl.registerLazySingleton(() => LogoutUseCase(sl()));
+  sl.registerLazySingleton(() => LoginAnonymouslyUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));

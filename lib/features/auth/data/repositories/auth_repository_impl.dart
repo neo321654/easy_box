@@ -2,9 +2,11 @@ import 'package:easy_box/features/auth/domain/entities/user.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+
 class AuthRepositoryImpl implements AuthRepository {
   final SharedPreferences _prefs;
   static const _userTokenKey = 'user_token';
+  static const _anonymousUserToken = 'anonymous_user';
 
   AuthRepositoryImpl(this._prefs);
 
@@ -32,20 +34,43 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
+  Future<User> loginAnonymously() async {
+    await Future.delayed(const Duration(milliseconds: 500));
+    await _prefs.setString(_userTokenKey, _anonymousUserToken);
+    return const User(
+      id: 'anonymous',
+      name: 'Guest',
+      email: '',
+      isAnonymous: true,
+    );
+  }
+
+  @override
   Future<User?> getMe() async {
     final token = _prefs.getString(_userTokenKey);
 
-    if (token != null) {
-      // In a real app, we would use this token to fetch user data from an API.
-      // Here, we'll just return a mock user if the token exists.
-      await Future.delayed(const Duration(milliseconds: 200)); // Simulate fetch
+    if (token == null) {
+      return null;
+    }
+
+    await Future.delayed(const Duration(milliseconds: 200)); // Simulate fetch
+
+    if (token == _anonymousUserToken) {
       return const User(
-        id: '1',
-        name: 'Admin User',
-        email: 'admin@example.com',
+        id: 'anonymous',
+        name: 'Guest',
+        email: '',
+        isAnonymous: true,
       );
     }
-    return null;
+
+    // In a real app, we would use the token to fetch user data.
+    // For now, any other token is considered a real user.
+    return const User(
+      id: '1',
+      name: 'Admin User',
+      email: 'admin@example.com',
+    );
   }
 
   @override
