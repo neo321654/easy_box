@@ -1,3 +1,4 @@
+import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<SettingsBloc>()),
-        // TODO: Add other Blocs here in the future
+        BlocProvider(create: (context) => sl<AuthBloc>()),
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {

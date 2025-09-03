@@ -1,3 +1,7 @@
+import 'package:easy_box/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
+import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
+import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:easy_box/features/settings/domain/repositories/settings_repository.dart';
 import 'package:easy_box/features/settings/domain/usecases/load_locale_usecase.dart';
@@ -11,19 +15,13 @@ import 'package:shared_preferences/shared_preferences.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
-  // External
-  final sharedPreferences = await SharedPreferences.getInstance();
-  sl.registerLazySingleton(() => sharedPreferences);
+  //####################
+  //region Features
+  //####################
 
-  // Repositories
-  sl.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(sl()));
-
-  // Use Cases
-  sl.registerLazySingleton(() => LoadThemeModeUseCase(sl()));
-  sl.registerLazySingleton(() => SaveThemeModeUseCase(sl()));
-  sl.registerLazySingleton(() => LoadLocaleUseCase(sl()));
-  sl.registerLazySingleton(() => SaveLocaleUseCase(sl()));
-
+  //--------------------
+  //region Settings
+  //--------------------
   // Blocs
   sl.registerFactory(() {
     final initialState = SettingsState(
@@ -36,4 +34,36 @@ Future<void> init() async {
       saveLocaleUseCase: sl(),
     );
   });
+
+  // Use Cases
+  sl.registerLazySingleton(() => LoadThemeModeUseCase(sl()));
+  sl.registerLazySingleton(() => SaveThemeModeUseCase(sl()));
+  sl.registerLazySingleton(() => LoadLocaleUseCase(sl()));
+  sl.registerLazySingleton(() => SaveLocaleUseCase(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(sl()));
+  //endregion
+
+  //--------------------
+  //region Auth
+  //--------------------
+  // Blocs
+  sl.registerFactory(() => AuthBloc(loginUseCase: sl()));
+
+  // Use Cases
+  sl.registerLazySingleton(() => LoginUseCase(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  //endregion
+
+  //endregion
+
+  //####################
+  //region External
+  //####################
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerLazySingleton(() => sharedPreferences);
+  //endregion
 }
