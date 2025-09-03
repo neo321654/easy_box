@@ -46,9 +46,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 }
-   // In a real app, you might want to handle this case differently,
-      // maybe by creating a new product. For now, we'll throw an error.
-      throw Exception('Product with SKU $sku not found.');
-    }
-  }
+
+class ProductNotFoundException implements Exception {
+  final String sku;
+
+  ProductNotFoundException(this.sku);
+
+  @override
+  String toString() => 'Product with SKU $sku not found.';
 }

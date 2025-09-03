@@ -1,3 +1,4 @@
+import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_list_item.dart';
@@ -33,7 +34,7 @@ class InventoryPage extends StatelessWidget {
                       onPressed: () {
                         context.read<InventoryBloc>().add(FetchProductsRequested());
                       },
-                      child: const Text('Retry'), // TODO: Localize
+                      child: Text(context.S.retryButtonText),
                     ),
                   ],
                 ),
@@ -54,14 +55,6 @@ class InventoryPage extends StatelessWidget {
               );
             }
             return const SizedBox.shrink();
-          },
-        ),
-      ),
-    );
-  }
-}
-
- const SizedBox.shrink();
           },
         ),
       ),

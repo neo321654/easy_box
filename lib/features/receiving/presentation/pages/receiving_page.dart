@@ -1,3 +1,4 @@
+import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Receive Stock'), // TODO: Localize
+        title: Text(context.S.receiveStockPageTitle),
       ),
       body: BlocListener<ReceivingBloc, ReceivingState>(
         listener: (context, state) {
@@ -65,14 +66,18 @@ class _ReceivingViewState extends State<_ReceivingView> {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(content: Text(state.errorMessage), backgroundColor: Colors.red),
+                SnackBar(
+                    content: Text(state.errorMessage),
+                    backgroundColor: Colors.red),
               );
           }
           if (state is ReceivingSuccess) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                SnackBar(content: Text(state.successMessage), backgroundColor: Colors.green),
+                SnackBar(
+                    content: Text(state.successMessage),
+                    backgroundColor: Colors.green),
               );
             _skuController.clear();
             _quantityController.clear();
@@ -87,24 +92,29 @@ class _ReceivingViewState extends State<_ReceivingView> {
               children: [
                 TextFormField(
                   controller: _skuController,
-                  decoration: const InputDecoration(
-                    labelText: 'Product SKU', // TODO: Localize
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.S.productSkuLabel,
+                    border: const OutlineInputBorder(),
                   ),
-                  validator: (value) => (value?.isEmpty ?? true) ? 'Please enter a SKU' : null,
+                  validator: (value) =>
+                      (value?.isEmpty ?? true) ? context.S.pleaseEnterSkuError : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _quantityController,
-                  decoration: const InputDecoration(
-                    labelText: 'Quantity', // TODO: Localize
-                    border: OutlineInputBorder(),
+                  decoration: InputDecoration(
+                    labelText: context.S.quantityLabel,
+                    border: const OutlineInputBorder(),
                   ),
                   keyboardType: TextInputType.number,
                   inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                   validator: (value) {
-                    if (value?.isEmpty ?? true) return 'Please enter a quantity';
-                    if ((int.tryParse(value!) ?? 0) <= 0) return 'Quantity must be positive';
+                    if (value?.isEmpty ?? true) {
+                      return context.S.pleaseEnterQuantityError;
+                    }
+                    if ((int.tryParse(value!) ?? 0) <= 0) {
+                      return context.S.quantityMustBePositiveError;
+                    }
                     return null;
                   },
                 ),
@@ -124,14 +134,6 @@ class _ReceivingViewState extends State<_ReceivingView> {
                   },
                 ),
               ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-         ],
             ),
           ),
         ),

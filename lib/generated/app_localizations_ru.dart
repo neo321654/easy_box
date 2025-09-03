@@ -92,4 +92,14 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get okButtonText => 'ОК';
+
+  @override
+  String get pleaseEnterSkuError => 'Пожалуйста, введите SKU';
+
+  @override
+  String get pleaseEnterQuantityError => 'Пожалуйста, введите количество';
+
+  @override
+  String get quantityMustBePositiveError =>
+      'Количество должно быть положительным';
 }

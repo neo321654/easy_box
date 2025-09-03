@@ -29,5 +29,8 @@
   "addStockButtonText": "Добавить на склад",
   "scanBarcodePageTitle": "Сканировать штрих-код",
   "productNotFound": "Товар не найден",
-  "okButtonText": "ОК"
+  "okButtonText": "ОК",
+  "pleaseEnterSkuError": "Пожалуйста, введите SKU",
+  "pleaseEnterQuantityError": "Пожалуйста, введите количество",
+  "quantityMustBePositiveError": "Количество должно быть положительным"
 }
