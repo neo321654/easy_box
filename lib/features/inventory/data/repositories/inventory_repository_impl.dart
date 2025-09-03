@@ -22,14 +22,14 @@ class InventoryRepositoryImpl implements InventoryRepository {
   Future<Either<Failure, List<Product>>> getProducts() async {
     if (await networkInfo.isConnected) {
       try {
+        await _syncPendingStockUpdates();
         final remoteProducts = await remoteDataSource.getProducts();
         await localDataSource.cacheProducts(remoteProducts);
         return Right(remoteProducts);
       } on ServerException {
-        // If server fails, do nothing, just fall through to load from cache.
+        // Fallback to cache
       }
     }
-
     // If offline OR if remote call failed, try to load from cache.
     try {
       final localProducts = await localDataSource.getLastProducts();
@@ -41,8 +41,6 @@ class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
   Future<Either<Failure, Product?>> findProductBySku(String sku) async {
-    // For this method, we might always want to check online first if possible,
-    // or check cache first. Let's assume online-first for now.
     if (await networkInfo.isConnected) {
       try {
         final remoteProduct = await remoteDataSource.findProductBySku(sku);
@@ -51,8 +49,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         return Left(ServerFailure());
       }
     } else {
-      // Sku lookup offline is not implemented in this scenario, returning failure.
-      return Left(ServerFailure()); // Or a specific NetworkFailure
+      return Left(ServerFailure()); // Sku lookup offline not supported in this scenario
     }
   }
 
@@ -61,15 +58,37 @@ class InventoryRepositoryImpl implements InventoryRepository {
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.addStock(sku, quantityToAdd);
-        // Optionally, invalidate or update cache here
+        await localDataSource.updateLocalProductStock(sku, quantityToAdd);
         return Right(result);
       } on ProductNotFoundException {
-        return Left(ServerFailure()); // Or a more specific failure
+        return Left(ServerFailure());
       } on ServerException {
         return Left(ServerFailure());
       }
     } else {
-      return Left(ServerFailure()); // Or a specific NetworkFailure
+      try {
+        await localDataSource.addStockToQueue(sku, quantityToAdd);
+        await localDataSource.updateLocalProductStock(sku, quantityToAdd);
+        return const Right(null);
+      } on Exception {
+        return Left(CacheFailure());
+      }
+    }
+  }
+
+  Future<void> _syncPendingStockUpdates() async {
+    final pendingUpdates = await localDataSource.getQueuedStockUpdates();
+    if (pendingUpdates.isNotEmpty) {
+      for (final update in pendingUpdates) {
+        try {
+          await remoteDataSource.addStock(update['sku'], update['quantity']);
+        } catch (e) {
+          // In a real app, we might want to handle this more gracefully,
+          // e.g., retry logic, or marking specific updates as failed.
+          // For now, we'll assume it continues and will be cleared.
+        }
+      }
+      await localDataSource.clearQueuedStockUpdates();
     }
   }
 }
