@@ -20,11 +20,10 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     Emitter<InventoryState> emit,
   ) async {
     emit(InventoryLoading());
-    try {
-      final products = await _getProductsUseCase();
-      emit(InventorySuccess(products));
-    } catch (e) {
-      emit(InventoryFailure(e.toString()));
-    }
+    final failureOrProducts = await _getProductsUseCase();
+    failureOrProducts.fold(
+      (failure) => emit(const InventoryFailure('Server Error')), // TODO: Localize error message
+      (products) => emit(InventorySuccess(products)),
+    );
   }
 }

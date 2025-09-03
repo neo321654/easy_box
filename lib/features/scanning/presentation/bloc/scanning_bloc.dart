@@ -20,15 +20,17 @@ class ScanningBloc extends Bloc<ScanningEvent, ScanningState> {
     Emitter<ScanningState> emit,
   ) async {
     emit(ScanningLoading());
-    try {
-      final product = await _findProductBySkuUseCase(event.sku);
-      if (product != null) {
-        emit(ScanningProductFound(product));
-      } else {
-        emit(ScanningProductNotFound());
-      }
-    } catch (e) {
-      emit(ScanningFailure(e.toString()));
-    }
+    final failureOrProduct = await _findProductBySkuUseCase(event.sku);
+
+    failureOrProduct.fold(
+      (failure) => emit(const ScanningFailure('Server Error')), // TODO: Localize
+      (product) {
+        if (product != null) {
+          emit(ScanningProductFound(product));
+        } else {
+          emit(ScanningProductNotFound());
+        }
+      },
+    );
   }
 }

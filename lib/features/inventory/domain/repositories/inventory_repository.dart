@@ -1,7 +1,9 @@
+import 'package:dartz/dartz.dart';
+import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 
 abstract class InventoryRepository {
-  Future<List<Product>> getProducts();
-  Future<Product?> findProductBySku(String sku);
-  Future<void> addStock(String sku, int quantityToAdd);
+  Future<Either<Failure, List<Product>>> getProducts();
+  Future<Either<Failure, Product?>> findProductBySku(String sku);
+  Future<Either<Failure, void>> addStock(String sku, int quantityToAdd);
 }
