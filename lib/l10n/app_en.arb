@@ -22,6 +22,29 @@
   "loginAnonymousButtonText": "Continue as Guest",
   "inventoryPageTitle": "Inventory",
   "inventorySearchHint": "Search by name, SKU, or location...",
+  "orderListPageTitle": "Orders",
+  "orderListFailedToLoad": "Failed to load orders",
+  "orderStatusLabel": "Status: {status}",
+  "@orderStatusLabel": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "orderLinesLabel": "{count,plural, =1{1 line} other{{count} lines}}",
+  "@orderLinesLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "pickingPageTitle": "Picking Order: {orderId}",
+  "@pickingPageTitle": {
+    "placeholders": {
+      "orderId": {}
+    }
+  },
+  "pickingPageLocationLabel": "Location",
+  "pickingPageSkuLabel": "SKU",
+  "pickingPageCompleteButton": "Complete Picking",
     "retryButtonText": "Retry",
   "nPieces": "{count,plural, =1{1 piece} other{{count} pieces}}",
   "@nPieces": {

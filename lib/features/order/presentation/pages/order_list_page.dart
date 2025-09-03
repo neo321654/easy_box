@@ -1,3 +1,4 @@
+import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/order/domain/entities/entities.dart';
@@ -15,7 +16,7 @@ class OrderListPage extends StatelessWidget {
       create: (context) => sl<OrderListBloc>()..add(FetchOrdersRequested()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Orders'), // TODO: Localize
+          title: Text(context.S.orderListPageTitle),
         ),
         body: BlocBuilder<OrderListBloc, OrderListState>(
           builder: (context, state) {
@@ -24,8 +25,8 @@ class OrderListPage extends StatelessWidget {
             }
             if (state is OrderListFailure) {
               return ErrorDisplay(
-                message: 'Failed to load orders', // TODO: Localize
-                retryButtonText: 'Retry', // TODO: Localize
+                message: context.S.orderListFailedToLoad,
+                retryButtonText: context.S.retryButtonText,
                 onRetry: () {
                   context.read<OrderListBloc>().add(FetchOrdersRequested());
                 },
@@ -38,8 +39,8 @@ class OrderListPage extends StatelessWidget {
                   final order = state.orders[index];
                   return ListTile(
                     title: Text('${order.id} - ${order.customerName}'),
-                    subtitle: Text('Status: ${order.status.name}'),
-                    trailing: Text('${order.lines.length} lines'),
+                    subtitle: Text(context.S.orderStatusLabel(order.status.name)),
+                    trailing: Text(context.S.orderLinesLabel(order.lines.length)),
                     onTap: () async {
                       final result = await Navigator.of(context).push(
                         MaterialPageRoute(

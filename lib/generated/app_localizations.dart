@@ -232,6 +232,54 @@ abstract class AppLocalizations {
   /// **'Поиск по имени, SKU или местоположению...'**
   String get inventorySearchHint;
 
+  /// No description provided for @orderListPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заказы'**
+  String get orderListPageTitle;
+
+  /// No description provided for @orderListFailedToLoad.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить заказы'**
+  String get orderListFailedToLoad;
+
+  /// No description provided for @orderStatusLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус: {status}'**
+  String orderStatusLabel(Object status);
+
+  /// No description provided for @orderLinesLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count,plural, one{{count} позиция} few{{count} позиции} many{{count} позиций} other{{count} позиции}}'**
+  String orderLinesLabel(num count);
+
+  /// No description provided for @pickingPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сборка заказа: {orderId}'**
+  String pickingPageTitle(Object orderId);
+
+  /// No description provided for @pickingPageLocationLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Место'**
+  String get pickingPageLocationLabel;
+
+  /// No description provided for @pickingPageSkuLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU'**
+  String get pickingPageSkuLabel;
+
+  /// No description provided for @pickingPageCompleteButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Завершить сборку'**
+  String get pickingPageCompleteButton;
+
   /// No description provided for @retryButtonText.
   ///
   /// In ru, this message translates to:

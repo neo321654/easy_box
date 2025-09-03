@@ -22,6 +22,29 @@
   "loginAnonymousButtonText": "Продолжить как гость",
   "inventoryPageTitle": "Инвентарь",
   "inventorySearchHint": "Поиск по имени, SKU или местоположению...",
+  "orderListPageTitle": "Заказы",
+  "orderListFailedToLoad": "Не удалось загрузить заказы",
+  "orderStatusLabel": "Статус: {status}",
+  "@orderStatusLabel": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "orderLinesLabel": "{count,plural, one{{count} позиция} few{{count} позиции} many{{count} позиций} other{{count} позиции}}",
+  "@orderLinesLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "pickingPageTitle": "Сборка заказа: {orderId}",
+  "@pickingPageTitle": {
+    "placeholders": {
+      "orderId": {}
+    }
+  },
+  "pickingPageLocationLabel": "Место",
+  "pickingPageSkuLabel": "SKU",
+  "pickingPageCompleteButton": "Завершить сборку",
     "retryButtonText": "Повторить",
   "nPieces": "{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
   "@nPieces": {

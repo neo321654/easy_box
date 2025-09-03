@@ -22,6 +22,29 @@
   "loginAnonymousButtonText": "Als Gast fortfahren",
   "inventoryPageTitle": "Inventar",
   "inventorySearchHint": "Suche nach Name, SKU oder Standort...",
+  "orderListPageTitle": "Bestellungen",
+  "orderListFailedToLoad": "Bestellungen konnten nicht geladen werden",
+  "orderStatusLabel": "Status: {status}",
+  "@orderStatusLabel": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "orderLinesLabel": "{count,plural, one{1 Position} other{{count} Positionen}}",
+  "@orderLinesLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "pickingPageTitle": "Bestellung kommissionieren: {orderId}",
+  "@pickingPageTitle": {
+    "placeholders": {
+      "orderId": {}
+    }
+  },
+  "pickingPageLocationLabel": "Standort",
+  "pickingPageSkuLabel": "SKU",
+  "pickingPageCompleteButton": "Kommissionierung abschließen",
     "retryButtonText": "Wiederholen",
   "nPieces": "{count,plural, one{1 Stück} other{{count} Stücke}}",
   "@nPieces": {

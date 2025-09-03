@@ -75,6 +75,44 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inventorySearchHint => 'Поиск по имени, SKU или местоположению...';
 
   @override
+  String get orderListPageTitle => 'Заказы';
+
+  @override
+  String get orderListFailedToLoad => 'Не удалось загрузить заказы';
+
+  @override
+  String orderStatusLabel(Object status) {
+    return 'Статус: $status';
+  }
+
+  @override
+  String orderLinesLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count позиции',
+      many: '$count позиций',
+      few: '$count позиции',
+      one: '$count позиция',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickingPageTitle(Object orderId) {
+    return 'Сборка заказа: $orderId';
+  }
+
+  @override
+  String get pickingPageLocationLabel => 'Место';
+
+  @override
+  String get pickingPageSkuLabel => 'SKU';
+
+  @override
+  String get pickingPageCompleteButton => 'Завершить сборку';
+
+  @override
   String get retryButtonText => 'Повторить';
 
   @override

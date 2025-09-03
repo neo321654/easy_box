@@ -75,6 +75,43 @@ class AppLocalizationsDe extends AppLocalizations {
   String get inventorySearchHint => 'Suche nach Name, SKU oder Standort...';
 
   @override
+  String get orderListPageTitle => 'Bestellungen';
+
+  @override
+  String get orderListFailedToLoad =>
+      'Bestellungen konnten nicht geladen werden';
+
+  @override
+  String orderStatusLabel(Object status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String orderLinesLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Positionen',
+      one: '1 Position',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickingPageTitle(Object orderId) {
+    return 'Bestellung kommissionieren: $orderId';
+  }
+
+  @override
+  String get pickingPageLocationLabel => 'Standort';
+
+  @override
+  String get pickingPageSkuLabel => 'SKU';
+
+  @override
+  String get pickingPageCompleteButton => 'Kommissionierung abschließen';
+
+  @override
   String get retryButtonText => 'Wiederholen';
 
   @override

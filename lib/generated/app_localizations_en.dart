@@ -75,6 +75,42 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inventorySearchHint => 'Search by name, SKU, or location...';
 
   @override
+  String get orderListPageTitle => 'Orders';
+
+  @override
+  String get orderListFailedToLoad => 'Failed to load orders';
+
+  @override
+  String orderStatusLabel(Object status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String orderLinesLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lines',
+      one: '1 line',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickingPageTitle(Object orderId) {
+    return 'Picking Order: $orderId';
+  }
+
+  @override
+  String get pickingPageLocationLabel => 'Location';
+
+  @override
+  String get pickingPageSkuLabel => 'SKU';
+
+  @override
+  String get pickingPageCompleteButton => 'Complete Picking';
+
+  @override
   String get retryButtonText => 'Retry';
 
   @override

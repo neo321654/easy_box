@@ -1,3 +1,4 @@
+import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/order/domain/entities/entities.dart';
 import 'package:easy_box/features/order/presentation/bloc/picking_bloc.dart';
@@ -44,7 +45,8 @@ class _PickingViewState extends State<_PickingView> {
         appBar: AppBar(
           title: BlocBuilder<PickingBloc, PickingState>(
             builder: (context, state) {
-              return Text('Picking Order: ${state.order?.id ?? ''}');
+              return Text(
+                  context.S.pickingPageTitle(state.order?.id ?? ''));
             },
           ),
         ),
@@ -61,8 +63,8 @@ class _PickingViewState extends State<_PickingView> {
                 return ListTile(
                   tileColor: isPicked ? Colors.green.withOpacity(0.2) : null,
                   title: Text(line.productName),
-                  subtitle:
-                      Text('SKU: ${line.sku}\nLocation: ${line.location ?? 'N/A'}'),
+                  subtitle: Text(
+                      '${context.S.pickingPageSkuLabel}: ${line.sku}\n${context.S.pickingPageLocationLabel}: ${line.location ?? 'N/A'}'),
                   trailing: Text(
                     '${line.quantityPicked}/${line.quantityToPick}',
                     style: Theme.of(context).textTheme.titleLarge,
@@ -93,7 +95,7 @@ class _PickingViewState extends State<_PickingView> {
                       context.read<PickingBloc>().add(PickingCompleted());
                     }
                   : null, // Disable button if not all items are picked
-              label: const Text('Complete Picking'),
+              label: Text(context.S.pickingPageCompleteButton),
               icon: const Icon(Icons.check),
               backgroundColor: allItemsPicked ? null : Colors.grey,
             );
