@@ -2,45 +2,57 @@ import 'package:collection/collection.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
+import 'package:sqflite/sqflite.dart';
 
 class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
-  // Mock database table.
-  static final List<ProductModel> _products = [
-    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150),
-    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85),
-    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110),
-    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200),
-    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350),
-  ];
+  final Database database;
+
+  InventoryRemoteDataSourceImpl({required this.database});
 
   @override
   Future<List<ProductModel>> getProducts() async {
     // Simulate network delay
     await Future.delayed(const Duration(seconds: 1));
-    return _products;
+    final List<Map<String, dynamic>> maps = await database.query('products');
+    return List.generate(maps.length, (i) {
+      return ProductModel.fromJson(maps[i]);
+    });
   }
 
   @override
   Future<ProductModel?> findProductBySku(String sku) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 300));
-    return _products.firstWhereOrNull((product) => product.sku == sku);
+    final List<Map<String, dynamic>> maps = await database.query(
+      'products',
+      where: 'sku = ?',
+      whereArgs: [sku],
+    );
+    if (maps.isNotEmpty) {
+      return ProductModel.fromJson(maps.first);
+    } else {
+      return null;
+    }
   }
 
   @override
   Future<void> addStock(String sku, int quantityToAdd) async {
     await Future.delayed(const Duration(milliseconds: 500));
-    final productIndex = _products.indexWhere((p) => p.sku == sku);
+    final List<Map<String, dynamic>> maps = await database.query(
+      'products',
+      where: 'sku = ?',
+      whereArgs: [sku],
+    );
 
-    if (productIndex != -1) {
-      final oldProduct = _products[productIndex];
-      final newProduct = ProductModel(
-        id: oldProduct.id,
-        name: oldProduct.name,
-        sku: oldProduct.sku,
-        quantity: oldProduct.quantity + quantityToAdd,
+    if (maps.isNotEmpty) {
+      final oldProduct = ProductModel.fromJson(maps.first);
+      final newQuantity = oldProduct.quantity + quantityToAdd;
+      await database.update(
+        'products',
+        {'quantity': newQuantity},
+        where: 'id = ?',
+        whereArgs: [oldProduct.id],
       );
-      _products[productIndex] = newProduct;
     } else {
       throw ProductNotFoundException(sku);
     }
@@ -56,7 +68,7 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
       sku: sku,
       quantity: 0, // Initial quantity is 0
     );
-    _products.add(newProduct);
+    await database.insert('products', newProduct.toJson());
     return newProduct;
   }
 
@@ -64,10 +76,13 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
   Future<void> updateProduct(ProductModel product) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 500));
-    final index = _products.indexWhere((p) => p.id == product.id);
-    if (index != -1) {
-      _products[index] = product;
-    } else {
+    final rowsAffected = await database.update(
+      'products',
+      product.toJson(),
+      where: 'id = ?',
+      whereArgs: [product.id],
+    );
+    if (rowsAffected == 0) {
       throw ServerException(); // Product not found on remote
     }
   }
@@ -76,9 +91,12 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
   Future<void> deleteProduct(String id) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 500));
-    final initialLength = _products.length;
-    _products.removeWhere((p) => p.id == id);
-    if (_products.length == initialLength) {
+    final rowsAffected = await database.delete(
+      'products',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (rowsAffected == 0) {
       throw ServerException(); // Product not found on remote
     }
   }
