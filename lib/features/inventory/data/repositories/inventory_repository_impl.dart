@@ -158,16 +158,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingCreations = await localDataSource.getQueuedProductCreations();
     if (pendingCreations.isNotEmpty) {
       for (final creation in pendingCreations) {
-        try {
-          final remoteProduct = await remoteDataSource.createProduct(
-            name: creation['name'],
-            sku: creation['sku'],
-          );
-          // Update local product with real server ID
-          await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
-        } catch (e) {
-          // Handle creation sync failure (e.g., log, retry later)
-        }
+        final remoteProduct = await remoteDataSource.createProduct(
+          name: creation['name'],
+          sku: creation['sku'],
+        );
+        // Update local product with real server ID
+        await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
       }
       await localDataSource.clearQueuedProductCreations();
     }
@@ -176,11 +172,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingStockUpdates = await localDataSource.getQueuedStockUpdates();
     if (pendingStockUpdates.isNotEmpty) {
       for (final update in pendingStockUpdates) {
-        try {
-          await remoteDataSource.addStock(update['sku'], update['quantity']);
-        } catch (e) {
-          // Handle stock update sync failure
-        }
+        await remoteDataSource.addStock(update['sku'], update['quantity']);
       }
       await localDataSource.clearQueuedStockUpdates();
     }
@@ -189,17 +181,13 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingUpdates = await localDataSource.getQueuedProductUpdates();
     if (pendingUpdates.isNotEmpty) {
       for (final update in pendingUpdates) {
-        try {
-          final productModel = ProductModel(
-            id: update['product_id'],
-            name: update['name'],
-            sku: update['sku'],
-            quantity: update['quantity'],
-          );
-          await remoteDataSource.updateProduct(productModel);
-        } catch (e) {
-          // Handle update sync failure
-        }
+        final productModel = ProductModel(
+          id: update['product_id'],
+          name: update['name'],
+          sku: update['sku'],
+          quantity: update['quantity'],
+        );
+        await remoteDataSource.updateProduct(productModel);
       }
       await localDataSource.clearQueuedProductUpdates();
     }
@@ -208,11 +196,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingDeletions = await localDataSource.getQueuedProductDeletions();
     if (pendingDeletions.isNotEmpty) {
       for (final deletion in pendingDeletions) {
-        try {
-          await remoteDataSource.deleteProduct(deletion['product_id']);
-        } catch (e) {
-          // Handle deletion sync failure
-        }
+        await remoteDataSource.deleteProduct(deletion['product_id']);
       }
       await localDataSource.clearQueuedProductDeletions();
     }
