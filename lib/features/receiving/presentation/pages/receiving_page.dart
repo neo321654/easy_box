@@ -129,7 +129,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                    content: Text(state.successMessage),
+                    content: Text(state.successMessage + (state.isQueued ? ' (Offline)' : '')), // Added offline indicator
                     backgroundColor: Colors.green),
               );
             _skuController.clear();

@@ -143,7 +143,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
           if (state is ProductDetailSuccess) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.green));
+              ..showSnackBar(SnackBar(content: Text(state.message + (state.isQueued ? ' (Offline)' : '')), backgroundColor: Colors.green)); // Added offline indicator
             // If update was successful, pop the detail page and return the updated product
             if (state.type == ProductDetailSuccessType.updated) {
               Navigator.of(context).pop(state.updatedProduct);
