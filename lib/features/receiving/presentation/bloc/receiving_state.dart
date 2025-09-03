@@ -13,11 +13,12 @@ class ReceivingLoading extends ReceivingState {}
 
 class ReceivingSuccess extends ReceivingState {
   final String successMessage;
+  final bool isQueued; // Added
 
-  const ReceivingSuccess(this.successMessage);
+  const ReceivingSuccess(this.successMessage, {this.isQueued = false}); // Added
 
   @override
-  List<Object> get props => [successMessage];
+  List<Object> get props => [successMessage, isQueued]; // Added isQueued
 }
 
 class ReceivingFailure extends ReceivingState {

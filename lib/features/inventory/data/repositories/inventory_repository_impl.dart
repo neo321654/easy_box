@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/core/network/network_info.dart';
+import 'package:easy_box/core/usecases/operation_result.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
@@ -55,13 +56,13 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, Product>> createProduct(
+  Future<Either<Failure, OperationResult>> createProduct(
       {required String name, required String sku}) async {
     if (await networkInfo.isConnected) {
       try {
         final newProduct = await remoteDataSource.createProduct(name: name, sku: sku);
         await localDataSource.saveProduct(newProduct);
-        return Right(newProduct);
+        return const Right(OperationResult(isQueued: false));
       } on ServerException {
         return Left(ServerFailure());
       }
@@ -72,7 +73,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0);
         await localDataSource.saveProduct(newProduct);
         await localDataSource.addProductCreationToQueue(name, sku, localId);
-        return Right(newProduct);
+        return const Right(OperationResult(isQueued: true));
       } on Exception {
         return Left(CacheFailure()); // Or a more specific failure
       }
@@ -80,12 +81,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> addStock(String sku, int quantityToAdd) async {
+  Future<Either<Failure, OperationResult>> addStock(String sku, int quantityToAdd) async {
     if (await networkInfo.isConnected) {
       try {
         final result = await remoteDataSource.addStock(sku, quantityToAdd);
         await localDataSource.updateLocalProductStock(sku, quantityToAdd);
-        return Right(result);
+        return const Right(OperationResult(isQueued: false));
       } on ProductNotFoundException catch (e) {
         return Left(ProductNotFoundFailure(e.sku));
       } on ServerException {
@@ -95,7 +96,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       try {
         await localDataSource.addStockToQueue(sku, quantityToAdd);
         await localDataSource.updateLocalProductStock(sku, quantityToAdd);
-        return const Right(null);
+        return const Right(OperationResult(isQueued: true));
       } on Exception {
         return Left(CacheFailure());
       }
@@ -103,7 +104,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> updateProduct(Product product) async {
+  Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
     final productModel = ProductModel(
       id: product.id,
       name: product.name,
@@ -114,7 +115,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       try {
         await remoteDataSource.updateProduct(productModel);
         await localDataSource.updateProduct(productModel);
-        return const Right(null);
+        return const Right(OperationResult(isQueued: false));
       } on ServerException {
         return Left(ServerFailure());
       }
@@ -123,7 +124,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       try {
         await localDataSource.addProductUpdateToQueue(productModel);
         await localDataSource.updateProduct(productModel);
-        return const Right(null);
+        return const Right(OperationResult(isQueued: true));
       } on Exception {
         return Left(CacheFailure());
       }
@@ -131,12 +132,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteProduct(String id) async {
+  Future<Either<Failure, OperationResult>> deleteProduct(String id) async {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.deleteProduct(id);
         await localDataSource.deleteProduct(id);
-        return const Right(null);
+        return const Right(OperationResult(isQueued: false));
       } on ServerException {
         return Left(ServerFailure());
       }
@@ -145,7 +146,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       try {
         await localDataSource.addProductDeletionToQueue(id);
         await localDataSource.deleteProduct(id);
-        return const Right(null);
+        return const Right(OperationResult(isQueued: true));
       } on Exception {
         return Left(CacheFailure());
       }
@@ -182,6 +183,38 @@ class InventoryRepositoryImpl implements InventoryRepository {
         }
       }
       await localDataSource.clearQueuedStockUpdates();
+    }
+
+    // Sync product updates
+    final pendingUpdates = await localDataSource.getQueuedProductUpdates();
+    if (pendingUpdates.isNotEmpty) {
+      for (final update in pendingUpdates) {
+        try {
+          final productModel = ProductModel(
+            id: update['product_id'],
+            name: update['name'],
+            sku: update['sku'],
+            quantity: update['quantity'],
+          );
+          await remoteDataSource.updateProduct(productModel);
+        } catch (e) {
+          // Handle update sync failure
+        }
+      }
+      await localDataSource.clearQueuedProductUpdates();
+    }
+
+    // Sync product deletions
+    final pendingDeletions = await localDataSource.getQueuedProductDeletions();
+    if (pendingDeletions.isNotEmpty) {
+      for (final deletion in pendingDeletions) {
+        try {
+          await remoteDataSource.deleteProduct(deletion['product_id']);
+        } catch (e) {
+          // Handle deletion sync failure
+        }
+      }
+      await localDataSource.clearQueuedProductDeletions();
     }
   }
 }

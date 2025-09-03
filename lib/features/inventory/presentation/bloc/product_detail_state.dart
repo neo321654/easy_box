@@ -20,11 +20,12 @@ class ProductDetailSuccess extends ProductDetailState {
   final String message;
   final ProductDetailSuccessType type;
   final Product? updatedProduct;
+  final bool isQueued; // Added
 
-  const ProductDetailSuccess(this.message, {required this.type, this.updatedProduct});
+  const ProductDetailSuccess(this.message, {required this.type, this.updatedProduct, this.isQueued = false}); // Added
 
   @override
-  List<Object> get props => [message, type, updatedProduct ?? 'null'];
+  List<Object> get props => [message, type, updatedProduct ?? 'null', isQueued]; // Added isQueued
 }
 
 class ProductDetailFailure extends ProductDetailState {

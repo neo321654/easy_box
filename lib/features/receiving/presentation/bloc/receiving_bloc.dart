@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/features/inventory/domain/usecases/add_stock_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/create_product_usecase.dart';
 import 'package:easy_box/core/error/failures.dart';
+import 'package:easy_box/core/usecases/operation_result.dart';
 
 part 'receiving_event.dart';
 part 'receiving_state.dart';
@@ -28,12 +29,12 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
   ) async {
     emit(ReceivingLoading());
 
-    final failureOrSuccess = await _addStockUseCase(
+    final failureOrResult = await _addStockUseCase(
       sku: event.sku,
       quantity: event.quantity,
     );
 
-    failureOrSuccess.fold(
+    failureOrResult.fold(
       (failure) {
         if (failure is ProductNotFoundFailure) {
           emit(ReceivingProductNotFound(failure.sku));
@@ -41,7 +42,7 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
           emit(const ReceivingFailure('Failed to add stock.')); // TODO: Localize
         }
       },
-      (_) => emit(ReceivingSuccess('Stock added successfully for SKU: ${event.sku}')), // TODO: Localize
+      (result) => emit(ReceivingSuccess('Stock added successfully for SKU: ${event.sku}', isQueued: result.isQueued)), // Pass isQueued
     );
   }
 
@@ -60,7 +61,7 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
       (failure) async {
         emit(const ReceivingFailure('Failed to create product.')); // TODO: Localize
       },
-      (product) async {
+      (createResult) async {
         final failureOrAddStock = await _addStockUseCase(
           sku: event.sku,
           quantity: event.quantity,
@@ -68,7 +69,7 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
 
         failureOrAddStock.fold(
           (failure) => emit(const ReceivingFailure('Failed to add stock after creating product.')), // TODO: Localize
-          (_) => emit(ReceivingSuccess('Product created and stock added successfully for SKU: ${event.sku}')), // TODO: Localize
+          (addStockResult) => emit(ReceivingSuccess('Product created and stock added successfully for SKU: ${event.sku}', isQueued: createResult.isQueued || addStockResult.isQueued)), // Pass isQueued
         );
       },
     );
