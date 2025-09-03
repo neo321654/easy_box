@@ -28,9 +28,9 @@ class SettingsRepositoryImpl implements SettingsRepository {
   }
 
   @override
-  Locale loadLocale() {
+  Locale? loadLocale() {
     final languageCode = _prefs.getString(_localeKey);
-    if (languageCode == null) return const Locale('ru'); // Default to Russian
+    if (languageCode == null) return null; // Return null if no locale is saved
     return Locale(languageCode);
   }
 }

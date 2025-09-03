@@ -35,11 +35,11 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source_impl.dart';
-
+import 'package:flutter/material.dart';
 
 final sl = GetIt.instance;
 
-Future<void> init() async {
+Future<void> init({Locale? systemLocale}) async {
   // Initial mock data for the persistent mock backend
   final List<ProductModel> initialMockProducts = [
     const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150),
@@ -113,6 +113,7 @@ Future<void> init() async {
       initialState: initialState,
       saveThemeModeUseCase: sl(),
       saveLocaleUseCase: sl(),
+      systemLocale: systemLocale,
     );
   });
 

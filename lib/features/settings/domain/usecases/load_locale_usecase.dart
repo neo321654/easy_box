@@ -6,7 +6,7 @@ class LoadLocaleUseCase {
 
   LoadLocaleUseCase(this.repository);
 
-  Locale call() {
+  Locale? call() {
     return repository.loadLocale();
   }
 }

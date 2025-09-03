@@ -4,5 +4,5 @@ abstract class SettingsRepository {
   Future<void> saveThemeMode(ThemeMode themeMode);
   ThemeMode loadThemeMode();
   Future<void> saveLocale(Locale locale);
-  Locale loadLocale();
+  Locale? loadLocale();
 }

@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,8 @@ import 'generated/app_localizations.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await init();
+  final systemLocale = PlatformDispatcher.instance.locale; // Get system locale
+  await init(systemLocale: systemLocale); // Pass system locale
 
   // Get the AuthBloc instance from the service locator
   final authBloc = sl<AuthBloc>();

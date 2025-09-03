@@ -22,6 +22,7 @@ class ProductListItem extends StatelessWidget {
             builder: (context) => ProductDetailPage(product: product),
           ),
         );
+        if (!context.mounted) return; // Add this line
         // If result is a Product, it means it was updated. If true, it was deleted.
         if (result is Product || result == true) {
           // Refresh the inventory list
