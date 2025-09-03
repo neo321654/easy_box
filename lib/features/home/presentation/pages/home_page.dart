@@ -12,7 +12,14 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.S.appTitle),
+        title: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is AuthSuccess) {
+              return Text('Welcome, ${state.user.name}');
+            }
+            return Text(context.S.appTitle);
+          },
+        ),
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
