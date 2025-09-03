@@ -1,5 +1,6 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
+import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -89,13 +90,9 @@ class _LoginPageState extends State<LoginPage> {
                       obscureText: true,
                     ),
                     const SizedBox(height: AppDimensions.large),
-                    ElevatedButton(
+                    PrimaryButton(
                       onPressed: state is AuthLoading ? null : _login,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(
-                            double.infinity, AppDimensions.buttonHeight), // full width
-                      ),
-                      child: Text(context.S.loginButtonText),
+                      text: context.S.loginButtonText,
                     ),
                     const SizedBox(height: AppDimensions.small),
                     TextButton(
@@ -106,7 +103,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
               if (state is AuthLoading)
-                const CircularProgressIndicator(),
+                const LoadingIndicator(),
             ],
           );
         },

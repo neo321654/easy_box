@@ -1,7 +1,9 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/widgets/edit_product_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -29,70 +31,14 @@ class _ProductDetailView extends StatefulWidget {
 }
 
 class _ProductDetailViewState extends State<_ProductDetailView> {
-  late TextEditingController _nameController;
-  late TextEditingController _skuController;
-  late TextEditingController _quantityController;
-
-  @override
-  void initState() {
-    super.initState();
-    _nameController = TextEditingController(text: widget.product.name);
-    _skuController = TextEditingController(text: widget.product.sku);
-    _quantityController = TextEditingController(text: widget.product.quantity.toString());
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _skuController.dispose();
-    _quantityController.dispose();
-    super.dispose();
-  }
-
   void _showEditDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(context.S.editProductDialogTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            TextField(
-              controller: _nameController,
-              decoration: InputDecoration(labelText: context.S.productNameLabel),
-            ),
-            TextField(
-              controller: _skuController,
-              decoration: InputDecoration(labelText: context.S.productSkuLabel),
-            ),
-            TextField(
-              controller: _quantityController,
-              decoration: InputDecoration(labelText: context.S.quantityLabel),
-              keyboardType: TextInputType.number,
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Text(context.S.cancelButtonText),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              final updatedProduct = Product(
-                id: widget.product.id,
-                name: _nameController.text,
-                sku: _skuController.text,
-                quantity: int.tryParse(_quantityController.text) ?? 0,
-              );
-              context.read<ProductDetailBloc>().add(ProductUpdated(updatedProduct));
-              Navigator.of(ctx).pop(); // Pop dialog
-            },
-            child: Text(context.S.saveButtonText),
-          ),
-        ],
+      builder: (ctx) => EditProductDialog(
+        product: widget.product,
+        onUpdate: (updatedProduct) {
+          context.read<ProductDetailBloc>().add(ProductUpdated(updatedProduct));
+        },
       ),
     );
   }
@@ -100,24 +46,15 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
   void _showDeleteConfirmationDialog() {
     showDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(context.S.deleteProductDialogTitle),
+      builder: (ctx) => ConfirmationDialog(
+        title: context.S.deleteProductDialogTitle,
         content: Text(context.S.deleteConfirmationMessage(widget.product.name)),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Text(context.S.cancelButtonText),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              context.read<ProductDetailBloc>().add(ProductDeleted(widget.product.id));
-              Navigator.of(ctx).pop(); // Pop dialog
-            },
-            child: Text(context.S.deleteButtonText),
-          ),
-        ],
+        confirmButtonText: context.S.deleteButtonText,
+        onConfirm: () {
+          context
+              .read<ProductDetailBloc>()
+              .add(ProductDeleted(widget.product.id));
+        },
       ),
     );
   }
@@ -147,7 +84,8 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(
-                  content: Text(message + (state.isQueued ? context.S.offlineIndicator : '')),
+                  content: Text(
+                      message + (state.isQueued ? context.S.offlineIndicator : '')),
                   backgroundColor: Colors.green));
             if (state.type == ProductDetailSuccessType.updated) {
               Navigator.of(context).pop(state.updatedProduct);
