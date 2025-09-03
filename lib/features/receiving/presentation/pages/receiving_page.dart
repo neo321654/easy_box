@@ -67,6 +67,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
 
   void _showCreateProductDialog(String sku) {
     final TextEditingController productNameController = TextEditingController();
+    final TextEditingController locationController = TextEditingController();
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -79,6 +80,10 @@ class _ReceivingViewState extends State<_ReceivingView> {
             TextField(
               controller: productNameController,
               decoration: InputDecoration(labelText: context.S.productNameLabel),
+            ),
+            TextField(
+              controller: locationController,
+              decoration: InputDecoration(labelText: context.S.productLocationLabel),
             ),
           ],
         ),
@@ -98,6 +103,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
                         name: productNameController.text,
                         sku: sku,
                         quantity: int.tryParse(_quantityController.text) ?? 0,
+                        location: locationController.text,
                       ),
                     );
               }

@@ -57,10 +57,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
   Future<Either<Failure, OperationResult>> createProduct(
-      {required String name, required String sku}) async {
+      {required String name, required String sku, String? location}) async {
     if (await networkInfo.isConnected) {
       try {
-        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku);
+        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location);
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
@@ -70,9 +70,9 @@ class InventoryRepositoryImpl implements InventoryRepository {
       // Offline creation
       try {
         final localId = DateTime.now().millisecondsSinceEpoch.toString(); // Generate a temporary local ID
-        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0);
+        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0, location: location);
         await localDataSource.saveProduct(newProduct);
-        await localDataSource.addProductCreationToQueue(name, sku, localId);
+        await localDataSource.addProductCreationToQueue(name, sku, location, localId);
         return const Right(OperationResult(isQueued: true)); // Fixed: return OperationResult
       } on Exception {
         return Left(CacheFailure()); // Or a more specific failure
@@ -110,6 +110,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       name: product.name,
       sku: product.sku,
       quantity: product.quantity,
+      location: product.location,
     );
     if (await networkInfo.isConnected) {
       try {
@@ -161,6 +162,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         final remoteProduct = await remoteDataSource.createProduct(
           name: creation['name'],
           sku: creation['sku'],
+          location: creation['location'],
         );
         // Update local product with real server ID
         await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
@@ -186,6 +188,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
           name: update['name'],
           sku: update['sku'],
           quantity: update['quantity'],
+          location: update['location'],
         );
         await remoteDataSource.updateProduct(productModel);
       }

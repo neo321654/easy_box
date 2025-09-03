@@ -39,6 +39,7 @@
   "quantityMustBePositiveError": "Menge muss positiv sein",
   "productNotFoundDialogTitle": "Produkt nicht gefunden",
   "productNameLabel": "Produktname",
+  "productLocationLabel": "Standort",
   "cancelButtonText": "Abbrechen",
   "createAndAddStockButtonText": "Erstellen & Bestand hinzufügen",
   "editProductDialogTitle": "Produkt bearbeiten",
@@ -75,6 +76,7 @@
     }
   },
   "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "productLocationLabelWithColon": "Standort: {location}",
   "@quantityLabelWithColon": {
     "placeholders": {
       "quantityLabel": {},

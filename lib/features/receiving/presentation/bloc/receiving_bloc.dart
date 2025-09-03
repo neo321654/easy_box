@@ -54,6 +54,7 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
     final failureOrCreateResult = await _createProductUseCase(
       name: event.name,
       sku: event.sku,
+      location: event.location,
     );
 
     await failureOrCreateResult.fold(

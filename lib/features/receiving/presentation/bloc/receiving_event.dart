@@ -24,13 +24,15 @@ class CreateProductAndAddStock extends ReceivingEvent {
   final String name;
   final String sku;
   final int quantity;
+  final String? location;
 
   const CreateProductAndAddStock({
     required this.name,
     required this.sku,
     required this.quantity,
+    this.location,
   });
 
   @override
-  List<Object> get props => [name, sku, quantity];
+  List<Object?> get props => [name, sku, quantity, location];
 }

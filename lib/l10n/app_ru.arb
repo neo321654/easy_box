@@ -39,6 +39,7 @@
   "quantityMustBePositiveError": "Количество должно быть положительным",
   "productNotFoundDialogTitle": "Товар не найден",
   "productNameLabel": "Название товара",
+  "productLocationLabel": "Местоположение",
   "cancelButtonText": "Отмена",
   "createAndAddStockButtonText": "Создать и добавить на склад",
   "editProductDialogTitle": "Редактировать товар",
@@ -75,6 +76,7 @@
     }
   },
   "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "productLocationLabelWithColon": "Местоположение: {location}",
   "@quantityLabelWithColon": {
     "placeholders": {
       "quantityLabel": {},

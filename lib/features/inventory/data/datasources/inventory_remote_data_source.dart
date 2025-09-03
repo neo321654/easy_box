@@ -4,7 +4,7 @@ abstract class InventoryRemoteDataSource {
   Future<List<ProductModel>> getProducts();
   Future<ProductModel?> findProductBySku(String sku);
   Future<void> addStock(String sku, int quantityToAdd);
-  Future<ProductModel> createProduct({required String name, required String sku});
+  Future<ProductModel> createProduct({required String name, required String sku, String? location});
   Future<void> updateProduct(ProductModel product);
   Future<void> deleteProduct(String id);
 }
