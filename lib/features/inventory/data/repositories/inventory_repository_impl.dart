@@ -23,14 +23,15 @@ class InventoryRepositoryImpl implements InventoryRepository {
   Future<Either<Failure, List<Product>>> getProducts() async {
     if (await networkInfo.isConnected) {
       try {
-        await _syncPendingUpdates();
-        // We no longer fetch from remote here, as local is the source of truth for reads
-        // The sync pushes changes to remote, and local is updated by addStock/createProduct
+        await _syncPendingUpdates(); // 1. PUSH local changes to remote
+        final remoteProducts = await remoteDataSource.getProducts(); // 2. PULL latest from remote
+        await localDataSource.cacheProducts(remoteProducts); // 3. Cache latest remote data
+        return Right(remoteProducts); // 4. Return fresh data
       } on ServerException {
-        // Handle server sync failure, but still try to load from cache below
+        // If server fails (either sync or pull), fall through to load from cache below
       }
     }
-    // Always read from local cache
+    // Always read from local cache (either because offline, or remote failed)
     try {
       final localProducts = await localDataSource.getLastProducts();
       return Right(localProducts);
