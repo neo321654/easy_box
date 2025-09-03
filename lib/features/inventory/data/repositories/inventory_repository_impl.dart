@@ -49,7 +49,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         return Left(ServerFailure());
       }
     } else {
-      return Left(ServerFailure()); // Or a specific NetworkFailure
+      return Left(ServerFailure()); // Sku lookup offline not supported in this scenario
     }
   }
 
@@ -66,7 +66,6 @@ class InventoryRepositoryImpl implements InventoryRepository {
     } else {
       return Left(ServerFailure()); // Or a specific NetworkFailure
     }
-  }
   }
 
   @override
