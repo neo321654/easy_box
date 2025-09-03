@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/domain/usecases/update_product_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/delete_product_usecase.dart';
-
+import 'package:easy_box/core/error/failures.dart';
 
 part 'product_detail_event.dart';
 part 'product_detail_state.dart';
@@ -31,7 +31,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrSuccess = await _updateProductUseCase(event.product);
     failureOrSuccess.fold(
       (failure) => emit(const ProductDetailFailure('Failed to update product.')), // This will be localized in UI
-      (_) => emit(const ProductDetailSuccess('Product updated successfully.')), // This will be localized in UI
+      (_) => emit(ProductDetailSuccess('Product updated successfully.', updatedProduct: event.product)), // Pass updated product
     );
   }
 
@@ -43,7 +43,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrSuccess = await _deleteProductUseCase(event.id);
     failureOrSuccess.fold(
       (failure) => emit(const ProductDetailFailure('Failed to delete product.')), // This will be localized in UI
-      (_) => emit(const ProductDetailSuccess('Product deleted successfully.')), // This will be localized in UI
+      (_) => emit(const ProductDetailSuccess('Product deleted successfully.')), // No product to pass for delete
     );
   }
 }

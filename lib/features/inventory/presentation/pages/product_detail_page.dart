@@ -114,7 +114,6 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             onPressed: () {
               context.read<ProductDetailBloc>().add(ProductDeleted(widget.product.id));
               Navigator.of(ctx).pop(); // Pop dialog
-              // Navigator.of(context).pop(); // Pop detail page after deletion - this will be handled by listener
             },
             child: Text(context.S.deleteButtonText),
           ),
@@ -145,9 +144,9 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.green));
-            // If update was successful, pop the detail page and return true
-            if (state.message == context.S.productUpdatedSuccessfullyMessage) {
-              Navigator.of(context).pop(true);
+            // If update was successful, pop the detail page and return the updated product
+            if (state.updatedProduct != null) {
+              Navigator.of(context).pop(state.updatedProduct);
             } else if (state.message == context.S.productDeletedSuccessfullyMessage) {
               Navigator.of(context).pop(true); // Pop detail page after deletion
             }

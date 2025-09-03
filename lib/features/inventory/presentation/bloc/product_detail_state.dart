@@ -13,11 +13,12 @@ class ProductDetailLoading extends ProductDetailState {}
 
 class ProductDetailSuccess extends ProductDetailState {
   final String message;
+  final Product? updatedProduct; // Added
 
-  const ProductDetailSuccess(this.message);
+  const ProductDetailSuccess(this.message, {this.updatedProduct}); // Added
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, updatedProduct ?? 'null']; // Added updatedProduct
 }
 
 class ProductDetailFailure extends ProductDetailState {
