@@ -26,15 +26,16 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await localDataSource.cacheProducts(remoteProducts);
         return Right(remoteProducts);
       } on ServerException {
-        return Left(ServerFailure());
+        // If server fails, do nothing, just fall through to load from cache.
       }
-    } else {
-      try {
-        final localProducts = await localDataSource.getLastProducts();
-        return Right(localProducts);
-      } on Exception { // Catching any exception from local db
-        return Left(CacheFailure());
-      }
+    }
+
+    // If offline OR if remote call failed, try to load from cache.
+    try {
+      final localProducts = await localDataSource.getLastProducts();
+      return Right(localProducts);
+    } on Exception {
+      return Left(CacheFailure());
     }
   }
 
