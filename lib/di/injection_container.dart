@@ -23,6 +23,7 @@ import 'package:easy_box/features/order/data/datasources/order_remote_data_sourc
 import 'package:easy_box/features/order/data/repositories/order_repository_impl.dart';
 import 'package:easy_box/features/order/domain/repositories/order_repository.dart';
 import 'package:easy_box/features/order/domain/usecases/get_orders_usecase.dart';
+import 'package:easy_box/features/order/domain/usecases/update_order_usecase.dart';
 import 'package:easy_box/features/order/presentation/bloc/order_list_bloc.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
@@ -67,6 +68,7 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Use Cases
   sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateOrderUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<OrderRepository>(
