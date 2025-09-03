@@ -5,6 +5,8 @@ import 'package:easy_box/features/auth/domain/usecases/login_anonymously_usecase
 import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
+import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source_impl.dart';
 import 'package:easy_box/features/inventory/data/repositories/inventory_repository_impl.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
 import 'package:easy_box/features/inventory/domain/usecases/add_stock_usecase.dart';
@@ -56,7 +58,10 @@ Future<void> init() async {
   sl.registerLazySingleton(() => AddStockUseCase(sl()));
 
   // Repositories
-  sl.registerLazySingleton<InventoryRepository>(() => InventoryRepositoryImpl());
+  sl.registerLazySingleton<InventoryRepository>(() => InventoryRepositoryImpl(remoteDataSource: sl()));
+
+  // Data Sources
+  sl.registerLazySingleton<InventoryRemoteDataSource>(() => InventoryRemoteDataSourceImpl());
   //endregion
 
   //--------------------

@@ -18,20 +18,16 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
     StockAdded event,
     Emitter<ReceivingState> emit,
   ) async {
-    if (event.quantity <= 0) {
-      emit(const ReceivingFailure('Quantity must be positive.'));
-      return;
-    }
-    
     emit(ReceivingLoading());
-    try {
-      await _addStockUseCase(
-        sku: event.sku,
-        quantityToAdd: event.quantity,
-      );
-      emit(ReceivingSuccess('Stock added successfully for SKU: ${event.sku}'));
-    } catch (e) {
-      emit(ReceivingFailure(e.toString()));
-    }
+
+    final failureOrSuccess = await _addStockUseCase(
+      sku: event.sku,
+      quantity: event.quantity,
+    );
+
+    failureOrSuccess.fold(
+      (failure) => emit(const ReceivingFailure('Failed to add stock.')), // TODO: Localize
+      (_) => emit(ReceivingSuccess('Stock added successfully for SKU: ${event.sku}')), // TODO: Localize
+    );
   }
 }
