@@ -42,7 +42,11 @@ class InventoryRepositoryImpl implements InventoryRepository {
       );
       _products[productIndex] = newProduct;
     } else {
-      // In a real app, you might want to handle this case differently,
+      throw ProductNotFoundException(sku);
+    }
+  }
+}
+   // In a real app, you might want to handle this case differently,
       // maybe by creating a new product. For now, we'll throw an error.
       throw Exception('Product with SKU $sku not found.');
     }
