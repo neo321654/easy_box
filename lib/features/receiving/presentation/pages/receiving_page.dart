@@ -1,0 +1,133 @@
+import 'package:easy_box/di/injection_container.dart';
+import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class ReceivingPage extends StatelessWidget {
+  const ReceivingPage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<ReceivingBloc>(),
+      child: const _ReceivingView(),
+    );
+  }
+}
+
+class _ReceivingView extends StatefulWidget {
+  const _ReceivingView();
+
+  @override
+  State<_ReceivingView> createState() => _ReceivingViewState();
+}
+
+class _ReceivingViewState extends State<_ReceivingView> {
+  late final TextEditingController _skuController;
+  late final TextEditingController _quantityController;
+  final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    _skuController = TextEditingController();
+    _quantityController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _skuController.dispose();
+    _quantityController.dispose();
+    super.dispose();
+  }
+
+  void _addStock() {
+    if (_formKey.currentState?.validate() ?? false) {
+      context.read<ReceivingBloc>().add(
+            StockAdded(
+              sku: _skuController.text,
+              quantity: int.tryParse(_quantityController.text) ?? 0,
+            ),
+          );
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Receive Stock'), // TODO: Localize
+      ),
+      body: BlocListener<ReceivingBloc, ReceivingState>(
+        listener: (context, state) {
+          if (state is ReceivingFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text(state.errorMessage), backgroundColor: Colors.red),
+              );
+          }
+          if (state is ReceivingSuccess) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(content: Text(state.successMessage), backgroundColor: Colors.green),
+              );
+            _skuController.clear();
+            _quantityController.clear();
+            FocusScope.of(context).unfocus();
+          }
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                TextFormField(
+                  controller: _skuController,
+                  decoration: const InputDecoration(
+                    labelText: 'Product SKU', // TODO: Localize
+                    border: OutlineInputBorder(),
+                  ),
+                  validator: (value) => (value?.isEmpty ?? true) ? 'Please enter a SKU' : null,
+                ),
+                const SizedBox(height: 16),
+                TextFormField(
+                  controller: _quantityController,
+                  decoration: const InputDecoration(
+                    labelText: 'Quantity', // TODO: Localize
+                    border: OutlineInputBorder(),
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                  validator: (value) {
+                    if (value?.isEmpty ?? true) return 'Please enter a quantity';
+                    if ((int.tryParse(value!) ?? 0) <= 0) return 'Quantity must be positive';
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 24),
+                BlocBuilder<ReceivingBloc, ReceivingState>(
+                  builder: (context, state) {
+                    if (state is ReceivingLoading) {
+                      return const CircularProgressIndicator();
+                    }
+                    return ElevatedButton(
+                      onPressed: _addStock,
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: const Text('Add Stock'), // TODO: Localize
+                    );
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}

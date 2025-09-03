@@ -47,7 +47,7 @@ class HomePage extends StatelessWidget {
             icon: Icons.archive_outlined,
             title: context.S.homeMenuReceiving,
             onTap: () {
-              // TODO: Navigate to receiving
+              context.push('/receiving');
             },
           ),
           _HomeMenuItem(
