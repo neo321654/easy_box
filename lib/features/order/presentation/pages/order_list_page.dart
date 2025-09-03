@@ -1,6 +1,8 @@
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
+import 'package:easy_box/features/order/domain/entities/entities.dart';
 import 'package:easy_box/features/order/presentation/bloc/order_list_bloc.dart';
+import 'package:easy_box/features/order/presentation/pages/picking_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -39,7 +41,9 @@ class OrderListPage extends StatelessWidget {
                     subtitle: Text('Status: ${order.status.name}'),
                     trailing: Text('${order.lines.length} lines'),
                     onTap: () {
-                      // TODO: Navigate to order picking page
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => PickingPage(order: order),
+                      ));
                     },
                   );
                 },
