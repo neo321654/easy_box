@@ -99,4 +99,16 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get quantityMustBePositiveError => 'Quantity must be positive';
+
+  @override
+  String get productNotFoundDialogTitle => 'Product Not Found';
+
+  @override
+  String get productNameLabel => 'Product Name';
+
+  @override
+  String get cancelButtonText => 'Cancel';
+
+  @override
+  String get createAndAddStockButtonText => 'Create & Add Stock';
 }

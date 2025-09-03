@@ -265,6 +265,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Количество должно быть положительным'**
   String get quantityMustBePositiveError;
+
+  /// No description provided for @productNotFoundDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар не найден'**
+  String get productNotFoundDialogTitle;
+
+  /// No description provided for @productNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название товара'**
+  String get productNameLabel;
+
+  /// No description provided for @cancelButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отмена'**
+  String get cancelButtonText;
+
+  /// No description provided for @createAndAddStockButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создать и добавить на склад'**
+  String get createAndAddStockButtonText;
 }
 
 class _AppLocalizationsDelegate

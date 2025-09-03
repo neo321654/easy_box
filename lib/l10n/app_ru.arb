@@ -32,5 +32,9 @@
   "okButtonText": "ОК",
   "pleaseEnterSkuError": "Пожалуйста, введите SKU",
   "pleaseEnterQuantityError": "Пожалуйста, введите количество",
-  "quantityMustBePositiveError": "Количество должно быть положительным"
+  "quantityMustBePositiveError": "Количество должно быть положительным",
+  "productNotFoundDialogTitle": "Товар не найден",
+  "productNameLabel": "Название товара",
+  "cancelButtonText": "Отмена",
+  "createAndAddStockButtonText": "Создать и добавить на склад"
 }

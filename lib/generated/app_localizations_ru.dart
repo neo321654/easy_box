@@ -102,4 +102,16 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get quantityMustBePositiveError =>
       'Количество должно быть положительным';
+
+  @override
+  String get productNotFoundDialogTitle => 'Товар не найден';
+
+  @override
+  String get productNameLabel => 'Название товара';
+
+  @override
+  String get cancelButtonText => 'Отмена';
+
+  @override
+  String get createAndAddStockButtonText => 'Создать и добавить на склад';
 }

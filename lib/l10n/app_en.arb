@@ -32,5 +32,9 @@
   "okButtonText": "OK",
   "pleaseEnterSkuError": "Please enter a SKU",
   "pleaseEnterQuantityError": "Please enter a quantity",
-  "quantityMustBePositiveError": "Quantity must be positive"
+  "quantityMustBePositiveError": "Quantity must be positive",
+  "productNotFoundDialogTitle": "Product Not Found",
+  "productNameLabel": "Product Name",
+  "cancelButtonText": "Cancel",
+  "createAndAddStockButtonText": "Create & Add Stock"
 }

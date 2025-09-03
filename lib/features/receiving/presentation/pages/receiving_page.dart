@@ -70,14 +70,14 @@ class _ReceivingViewState extends State<_ReceivingView> {
       context: context,
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
-        title: const Text('Product Not Found'), // TODO: Localize
+        title: Text(context.S.productNotFoundDialogTitle),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Text('SKU: $sku'),
             TextField(
               controller: productNameController,
-              decoration: const InputDecoration(labelText: 'Product Name'), // TODO: Localize
+              decoration: InputDecoration(labelText: context.S.productNameLabel),
             ),
           ],
         ),
@@ -86,7 +86,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
             onPressed: () {
               Navigator.of(ctx).pop();
             },
-            child: const Text('Cancel'), // TODO: Localize
+            child: Text(context.S.cancelButtonText),
           ),
           ElevatedButton(
             onPressed: () {
@@ -101,7 +101,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
                     );
               }
             },
-            child: const Text('Create & Add Stock'), // TODO: Localize
+            child: Text(context.S.createAndAddStockButtonText),
           ),
         ],
       ),
