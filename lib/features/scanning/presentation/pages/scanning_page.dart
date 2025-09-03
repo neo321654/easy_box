@@ -121,9 +121,9 @@ class _ScanningViewState extends State<_ScanningView> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('${context.S.productSkuLabel}: ${product.sku}'),
+            Text(context.S.productSkuLabelWithColon(context.S.productSkuLabel, product.sku)),
             const SizedBox(height: 8),
-            Text('${context.S.quantityLabel}: ${product.quantity}'),
+            Text(context.S.quantityLabelWithColon(context.S.quantityLabel, product.quantity)),
           ],
         ),
         actions: [

@@ -145,4 +145,24 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get productDeletedSuccessfullyMessage =>
       'Product deleted successfully.';
+
+  @override
+  String welcomeMessage(Object userName) {
+    return 'Welcome, $userName';
+  }
+
+  @override
+  String skuLabelWithColon(Object sku) {
+    return 'SKU: $sku';
+  }
+
+  @override
+  String productSkuLabelWithColon(Object productSkuLabel, Object sku) {
+    return '$productSkuLabel: $sku';
+  }
+
+  @override
+  String quantityLabelWithColon(Object quantityLabel, Object quantity) {
+    return '$quantityLabel: $quantity';
+  }
 }

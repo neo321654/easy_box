@@ -70,7 +70,7 @@ class AppLocalizationsRu extends AppLocalizations {
       other: '$count штуки',
       many: '$count штук',
       few: '$count штуки',
-      one: '1 штука',
+      one: '$count штука',
     );
     return '$_temp0';
   }
@@ -146,4 +146,24 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get productDeletedSuccessfullyMessage => 'Товар успешно удален.';
+
+  @override
+  String welcomeMessage(Object userName) {
+    return 'Добро пожаловать, $userName';
+  }
+
+  @override
+  String skuLabelWithColon(Object sku) {
+    return 'SKU: $sku';
+  }
+
+  @override
+  String productSkuLabelWithColon(Object productSkuLabel, Object sku) {
+    return '$productSkuLabel: $sku';
+  }
+
+  @override
+  String quantityLabelWithColon(Object quantityLabel, Object quantity) {
+    return '$quantityLabel: $quantity';
+  }
 }

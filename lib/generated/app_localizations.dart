@@ -211,7 +211,7 @@ abstract class AppLocalizations {
   /// No description provided for @nPieces.
   ///
   /// In ru, this message translates to:
-  /// **'{count,plural, one{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
+  /// **'{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
   String nPieces(num count);
 
   /// No description provided for @receiveStockPageTitle.
@@ -351,6 +351,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Товар успешно удален.'**
   String get productDeletedSuccessfullyMessage;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добро пожаловать, {userName}'**
+  String welcomeMessage(Object userName);
+
+  /// No description provided for @skuLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU: {sku}'**
+  String skuLabelWithColon(Object sku);
+
+  /// No description provided for @productSkuLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'{productSkuLabel}: {sku}'**
+  String productSkuLabelWithColon(Object productSkuLabel, Object sku);
+
+  /// No description provided for @quantityLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'{quantityLabel}: {quantity}'**
+  String quantityLabelWithColon(Object quantityLabel, Object quantity);
 }
 
 class _AppLocalizationsDelegate

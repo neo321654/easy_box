@@ -74,7 +74,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text('SKU: $sku'),
+            Text(context.S.skuLabelWithColon(sku)),
             TextField(
               controller: productNameController,
               decoration: InputDecoration(labelText: context.S.productNameLabel),

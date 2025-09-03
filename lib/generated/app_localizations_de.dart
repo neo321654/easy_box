@@ -51,7 +51,7 @@ class AppLocalizationsDe extends AppLocalizations {
   String get languageEnglish => 'Englisch';
 
   @override
-  String get languageGerman => 'Немецкий';
+  String get languageGerman => 'Deutsch';
 
   @override
   String get loginAnonymousButtonText => 'Als Gast fortfahren';
@@ -147,4 +147,24 @@ class AppLocalizationsDe extends AppLocalizations {
   @override
   String get productDeletedSuccessfullyMessage =>
       'Produkt erfolgreich gelöscht.';
+
+  @override
+  String welcomeMessage(Object userName) {
+    return 'Willkommen, $userName';
+  }
+
+  @override
+  String skuLabelWithColon(Object sku) {
+    return 'SKU: $sku';
+  }
+
+  @override
+  String productSkuLabelWithColon(Object productSkuLabel, Object sku) {
+    return '$productSkuLabel: $sku';
+  }
+
+  @override
+  String quantityLabelWithColon(Object quantityLabel, Object quantity) {
+    return '$quantityLabel: $quantity';
+  }
 }

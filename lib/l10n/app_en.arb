@@ -51,5 +51,31 @@
   "failedToUpdateProductMessage": "Failed to update product.",
   "productUpdatedSuccessfullyMessage": "Product updated successfully.",
   "failedToDeleteProductMessage": "Failed to delete product.",
-  "productDeletedSuccessfullyMessage": "Product deleted successfully."
+  "productDeletedSuccessfullyMessage": "Product deleted successfully.",
+  "welcomeMessage": "Welcome, {userName}",
+  "@welcomeMessage": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+  "skuLabelWithColon": "SKU: {sku}",
+  "@skuLabelWithColon": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "productSkuLabelWithColon": "{productSkuLabel}: {sku}",
+  "@productSkuLabelWithColon": {
+    "placeholders": {
+      "productSkuLabel": {},
+      "sku": {}
+    }
+  },
+  "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "@quantityLabelWithColon": {
+    "placeholders": {
+      "quantityLabel": {},
+      "quantity": {}
+    }
+  }
 }
