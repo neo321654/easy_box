@@ -62,6 +62,16 @@ class _PickingViewState extends State<_PickingView> {
                 final isPicked = line.quantityPicked >= line.quantityToPick;
                 return ListTile(
                   tileColor: isPicked ? Colors.green.withAlpha(51) : null,
+                  leading: line.imageUrl != null && line.imageUrl!.isNotEmpty
+                      ? Image.network(
+                          line.imageUrl!,
+                          width: 50,
+                          height: 50,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) =>
+                              const Icon(Icons.broken_image),
+                        )
+                      : const Icon(Icons.image_not_supported),
                   title: Text(line.productName),
                   subtitle: Text(
                       '${context.S.pickingPageSkuLabel}: ${line.sku}\n${context.S.pickingPageLocationLabel}: ${line.location ?? 'N/A'}'),
