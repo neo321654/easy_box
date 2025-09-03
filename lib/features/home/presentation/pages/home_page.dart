@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
             icon: Icons.qr_code_scanner,
             title: context.S.homeMenuScanning,
             onTap: () {
-              // TODO: Navigate to scanning
+              context.push('/scanning');
             },
           ),
           _HomeMenuItem(
