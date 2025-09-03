@@ -126,15 +126,6 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
                   context.S.productLocationLabelWithColon(widget.product.location!),
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
-              const SizedBox(height: 8),
-              if (widget.product.imageUrl != null && widget.product.imageUrl!.isNotEmpty)
-                Image.network(
-                  widget.product.imageUrl!,
-                  width: 100, // Adjust size as needed
-                  height: 100,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image), // Placeholder for error
-                ),
               // TODO: Add more product details if available
             ],
           ),

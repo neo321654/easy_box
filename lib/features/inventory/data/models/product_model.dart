@@ -7,7 +7,6 @@ class ProductModel extends Product {
     required super.sku,
     required super.quantity,
     super.location,
-    super.imageUrl,
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
@@ -17,7 +16,6 @@ class ProductModel extends Product {
       sku: json['sku'],
       quantity: json['quantity'],
       location: json['location'],
-      imageUrl: json['image_url'],
     );
   }
 
@@ -28,7 +26,6 @@ class ProductModel extends Product {
       'sku': sku,
       'quantity': quantity,
       'location': location,
-      'image_url': imageUrl,
     };
   }
 }

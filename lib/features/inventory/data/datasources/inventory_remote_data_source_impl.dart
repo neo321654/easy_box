@@ -58,7 +58,7 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
   }
 
   @override
-  Future<ProductModel> createProduct({required String name, required String sku, String? location, String? imageUrl}) async {
+  Future<ProductModel> createProduct({required String name, required String sku, String? location}) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 400));
     final newProduct = ProductModel(
@@ -67,7 +67,6 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
       sku: sku,
       quantity: 0, // Initial quantity is 0
       location: location,
-      imageUrl: imageUrl,
     );
     await database.insert('products', newProduct.toJson());
     return newProduct;

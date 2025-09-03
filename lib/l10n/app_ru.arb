@@ -65,7 +65,6 @@
   "productNotFoundDialogTitle": "Товар не найден",
   "productNameLabel": "Название товара",
   "productLocationLabel": "Местоположение",
-  "productImageUrlLabel": "URL изображения",
   "cancelButtonText": "Отмена",
   "createAndAddStockButtonText": "Создать и добавить на склад",
   "editProductDialogTitle": "Редактировать товар",
