@@ -203,7 +203,7 @@ abstract class AppLocalizations {
   /// No description provided for @nPieces.
   ///
   /// In ru, this message translates to:
-  /// **'{count,plural, =1{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
+  /// **'{count,plural, one{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
   String nPieces(num count);
 
   /// No description provided for @receiveStockPageTitle.

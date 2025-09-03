@@ -17,10 +17,10 @@
   "loginAnonymousButtonText": "Продолжить как гость",
   "inventoryPageTitle": "Инвентарь",
     "retryButtonText": "Повторить",
-  "nPieces": "{count,plural, =1{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
+  "nPieces": "{count,plural, one{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
   "@nPieces": {
     "placeholders": {
-      "count": {}
+      "count": {} 
     }
   },
   "receiveStockPageTitle": "Приемка товара",

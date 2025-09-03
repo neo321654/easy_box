@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart';

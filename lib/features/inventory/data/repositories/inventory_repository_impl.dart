@@ -73,7 +73,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0);
         await localDataSource.saveProduct(newProduct);
         await localDataSource.addProductCreationToQueue(name, sku, localId);
-        return const Right(OperationResult(isQueued: true));
+        return Right(newProduct);
       } on Exception {
         return Left(CacheFailure()); // Or a more specific failure
       }
@@ -84,7 +84,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
   Future<Either<Failure, OperationResult>> addStock(String sku, int quantityToAdd) async {
     if (await networkInfo.isConnected) {
       try {
-        final result = await remoteDataSource.addStock(sku, quantityToAdd);
+        await remoteDataSource.addStock(sku, quantityToAdd);
         await localDataSource.updateLocalProductStock(sku, quantityToAdd);
         return const Right(OperationResult(isQueued: false));
       } on ProductNotFoundException catch (e) {

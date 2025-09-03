@@ -44,7 +44,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrResult = await _deleteProductUseCase(event.id);
     failureOrResult.fold(
       (failure) => emit(const ProductDetailFailure('Failed to delete product.')), // This will be localized in UI
-      (result) => emit(ProductDetailSuccess('Product deleted successfully.', type: ProductDetailSuccessType.deleted, isQueued: result.isQueued)), // No product to pass for delete
+      (result) => emit(const ProductDetailSuccess('Product deleted successfully.', type: ProductDetailSuccessType.deleted, isQueued: result.isQueued)), // No product to pass for delete
     );
   }
 }

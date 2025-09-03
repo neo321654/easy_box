@@ -52,22 +52,22 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
   ) async {
     emit(ReceivingLoading());
 
-    final failureOrCreateProduct = await _createProductUseCase(
+    final failureOrCreateResult = await _createProductUseCase(
       name: event.name,
       sku: event.sku,
     );
 
-    await failureOrCreateProduct.fold(
+    await failureOrCreateResult.fold(
       (failure) async {
         emit(const ReceivingFailure('Failed to create product.')); // TODO: Localize
       },
       (createResult) async {
-        final failureOrAddStock = await _addStockUseCase(
+        final failureOrAddStockResult = await _addStockUseCase(
           sku: event.sku,
           quantity: event.quantity,
         );
 
-        failureOrAddStock.fold(
+        failureOrAddStockResult.fold(
           (failure) => emit(const ReceivingFailure('Failed to add stock after creating product.')), // TODO: Localize
           (addStockResult) => emit(ReceivingSuccess('Product created and stock added successfully for SKU: ${event.sku}', isQueued: createResult.isQueued || addStockResult.isQueued)), // Pass isQueued
         );
