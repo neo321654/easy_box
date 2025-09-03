@@ -40,12 +40,17 @@ class InventoryPage extends StatelessWidget {
               );
             }
             if (state is InventorySuccess) {
-              return ListView.builder(
-                itemCount: state.products.length,
-                itemBuilder: (context, index) {
-                  final product = state.products[index];
-                  return ProductListItem(product: product);
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<InventoryBloc>().add(FetchProductsRequested());
                 },
+                child: ListView.builder(
+                  itemCount: state.products.length,
+                  itemBuilder: (context, index) {
+                    final product = state.products[index];
+                    return ProductListItem(product: product);
+                  },
+                ),
               );
             }
             return const SizedBox.shrink();
