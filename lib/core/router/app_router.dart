@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/pages/inventory_page.dart';
+import 'package:easy_box/features/receiving/presentation/pages/receiving_page.dart';
 import 'package:easy_box/features/scanning/presentation/pages/scanning_page.dart';
 import 'package:easy_box/features/settings/presentation/pages/settings_page.dart';
 import 'package:flutter/material.dart';
@@ -41,6 +42,10 @@ void initializeRouter(AuthBloc authBloc) {
       GoRoute(
         path: '/scanning',
         builder: (context, state) => const ScanningPage(),
+      ),
+      GoRoute(
+        path: '/receiving',
+        builder: (context, state) => const ReceivingPage(),
       ),
     ],
     redirect: (context, state) {

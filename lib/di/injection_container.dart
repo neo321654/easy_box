@@ -7,9 +7,11 @@ import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/inventory/data/repositories/inventory_repository_impl.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
+import 'package:easy_box/features/inventory/domain/usecases/add_stock_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/find_product_by_sku_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/get_products_usecase.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
+import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:easy_box/features/settings/domain/repositories/settings_repository.dart';
@@ -29,6 +31,13 @@ Future<void> init() async {
   //####################
 
   //--------------------
+  //region Receiving
+  //--------------------
+  // Blocs
+  sl.registerFactory(() => ReceivingBloc(addStockUseCase: sl()));
+  //endregion
+
+  //--------------------
   //region Scanning
   //--------------------
   // Blocs
@@ -44,6 +53,7 @@ Future<void> init() async {
   // Use Cases
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
   sl.registerLazySingleton(() => FindProductBySkuUseCase(sl()));
+  sl.registerLazySingleton(() => AddStockUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<InventoryRepository>(() => InventoryRepositoryImpl());
