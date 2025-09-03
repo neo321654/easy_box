@@ -18,6 +18,12 @@ import 'package:easy_box/features/inventory/domain/usecases/delete_product_useca
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart'; // Added for initial mock data
+import 'package:easy_box/features/order/data/datasources/order_remote_data_source.dart';
+import 'package:easy_box/features/order/data/datasources/order_remote_data_source_impl.dart';
+import 'package:easy_box/features/order/data/repositories/order_repository_impl.dart';
+import 'package:easy_box/features/order/domain/repositories/order_repository.dart';
+import 'package:easy_box/features/order/domain/usecases/get_orders_usecase.dart';
+import 'package:easy_box/features/order/presentation/bloc/order_list_bloc.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
@@ -52,6 +58,27 @@ Future<void> init({Locale? systemLocale}) async {
   //####################
   //region Features
   //####################
+
+  //--------------------
+  //region Order
+  //--------------------
+  // Blocs
+  sl.registerFactory(() => OrderListBloc(getOrdersUseCase: sl()));
+
+  // Use Cases
+  sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<OrderRepository>(
+    () => OrderRepositoryImpl(
+      remoteDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // Data Sources
+  sl.registerLazySingleton<OrderRemoteDataSource>(() => OrderRemoteDataSourceImpl());
+  //endregion
 
   //--------------------
   //region Receiving

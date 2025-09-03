@@ -64,6 +64,13 @@ class HomePage extends StatelessWidget {
               context.push('/settings');
             },
           ),
+          _HomeMenuItem(
+            icon: Icons.shopping_basket_outlined,
+            title: context.S.homeMenuPicking,
+            onTap: () {
+              context.push('/orders');
+            },
+          ),
         ],
       ),
     );

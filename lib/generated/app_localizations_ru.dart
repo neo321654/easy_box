@@ -33,6 +33,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeMenuScanning => 'Сканирование';
 
   @override
+  String get homeMenuPicking => 'Сборка';
+
+  @override
   String get homeMenuSettings => 'Настройки';
 
   @override

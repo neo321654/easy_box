@@ -148,6 +148,12 @@ abstract class AppLocalizations {
   /// **'Сканирование'**
   String get homeMenuScanning;
 
+  /// No description provided for @homeMenuPicking.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сборка'**
+  String get homeMenuPicking;
+
   /// No description provided for @homeMenuSettings.
   ///
   /// In ru, this message translates to:
