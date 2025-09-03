@@ -140,11 +140,21 @@ Future<void> init() async {
   final db = await openDatabase(
     join(await getDatabasesPath(), 'easy_box_database.db'),
     onCreate: (db, version) {
-      return db.execute(
+      db.execute(
         'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER)',
       );
+      db.execute(
+        'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
+      );
     },
-    version: 1,
+    version: 2,
+    onUpgrade: (db, oldVersion, newVersion) {
+      if (oldVersion < 2) {
+        db.execute(
+          'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
+        );
+      }
+    },
   );
   sl.registerLazySingleton<Database>(() => db);
 
