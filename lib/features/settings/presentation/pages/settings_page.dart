@@ -81,6 +81,16 @@ class SettingsPage extends StatelessWidget {
                   }
                 },
               ),
+              RadioListTile<Locale>(
+                title: Text(context.S.languageGerman),
+                value: const Locale('de'),
+                groupValue: settingsState.locale,
+                onChanged: (locale) {
+                  if (locale != null) {
+                    context.read<SettingsBloc>().add(LocaleChanged(locale));
+                  }
+                },
+              ),
             ],
           );
         },
