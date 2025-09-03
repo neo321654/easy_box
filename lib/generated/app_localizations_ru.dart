@@ -169,6 +169,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get productLocationLabel => 'Местоположение';
 
   @override
+  String get productImageUrlLabel => 'URL изображения';
+
+  @override
   String get cancelButtonText => 'Отмена';
 
   @override

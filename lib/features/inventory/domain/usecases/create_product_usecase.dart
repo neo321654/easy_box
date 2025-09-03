@@ -8,7 +8,7 @@ class CreateProductUseCase {
 
   CreateProductUseCase(this.repository);
 
-  Future<Either<Failure, OperationResult>> call({required String name, required String sku, String? location}) {
-    return repository.createProduct(name: name, sku: sku, location: location);
+  Future<Either<Failure, OperationResult>> call({required String name, required String sku, String? location, String? imageUrl}) {
+    return repository.createProduct(name: name, sku: sku, location: location, imageUrl: imageUrl);
   }
 }
