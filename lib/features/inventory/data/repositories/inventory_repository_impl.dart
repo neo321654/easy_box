@@ -24,14 +24,13 @@ class InventoryRepositoryImpl implements InventoryRepository {
     if (await networkInfo.isConnected) {
       try {
         await _syncPendingUpdates();
-        final remoteProducts = await remoteDataSource.getProducts();
-        await localDataSource.cacheProducts(remoteProducts);
-        return Right(remoteProducts);
+        // We no longer fetch from remote here, as local is the source of truth for reads
+        // The sync pushes changes to remote, and local is updated by addStock/createProduct
       } on ServerException {
-        // Fallback to cache
+        // Handle server sync failure, but still try to load from cache below
       }
     }
-    // If offline OR if remote call failed, try to load from cache.
+    // Always read from local cache
     try {
       final localProducts = await localDataSource.getLastProducts();
       return Right(localProducts);
