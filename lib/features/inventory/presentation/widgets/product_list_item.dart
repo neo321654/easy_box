@@ -1,7 +1,9 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/pages/product_detail_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductListItem extends StatelessWidget {
   final Product product;
@@ -14,12 +16,16 @@ class ProductListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
-        Navigator.of(context).push(
+      onTap: () async {
+        final result = await Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => ProductDetailPage(product: product),
           ),
         );
+        if (result == true) {
+          // If product was updated or deleted, refresh the inventory list
+          context.read<InventoryBloc>().add(FetchProductsRequested());
+        }
       },
       child: ListTile(
         title: Text(product.name),
