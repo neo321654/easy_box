@@ -11,15 +11,26 @@ class PickingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) =>
-          PickingBloc(updateOrderUseCase: sl()).add(InitializePicking(order)),
-      child: const _PickingView(),
+      create: (context) => PickingBloc(updateOrderUseCase: sl()),
+      child: _PickingView(order: order),
     );
   }
 }
 
-class _PickingView extends StatelessWidget {
-  const _PickingView();
+class _PickingView extends StatefulWidget {
+  final Order order;
+  const _PickingView({required this.order});
+
+  @override
+  State<_PickingView> createState() => _PickingViewState();
+}
+
+class _PickingViewState extends State<_PickingView> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<PickingBloc>().add(InitializePicking(widget.order));
+  }
 
   @override
   Widget build(BuildContext context) {
