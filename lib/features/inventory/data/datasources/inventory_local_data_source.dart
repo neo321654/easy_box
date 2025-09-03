@@ -13,4 +13,5 @@ abstract class InventoryLocalDataSource {
   Future<void> addProductCreationToQueue(String name, String sku, String localId);
   Future<List<Map<String, dynamic>>> getQueuedProductCreations();
   Future<void> clearQueuedProductCreations();
+  Future<void> updateProductId(String oldId, String newId);
 }

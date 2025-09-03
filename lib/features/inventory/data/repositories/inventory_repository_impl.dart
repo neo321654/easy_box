@@ -113,10 +113,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
             sku: creation['sku'],
           );
           // Update local product with real server ID
-          await localDataSource.database.rawUpdate(
-            'UPDATE products SET id = ? WHERE id = ?',
-            [remoteProduct.id, creation['local_id']],
-          );
+          await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
         } catch (e) {
           // Handle creation sync failure (e.g., log, retry later)
         }

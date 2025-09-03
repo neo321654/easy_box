@@ -86,4 +86,12 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
   Future<void> clearQueuedProductCreations() async {
     await database.delete(_tableProductCreationsQueue);
   }
+
+  @override
+  Future<void> updateProductId(String oldId, String newId) async {
+    await database.rawUpdate(
+      'UPDATE $_tableProducts SET id = ? WHERE id = ?',
+      [newId, oldId],
+    );
+  }
 }
