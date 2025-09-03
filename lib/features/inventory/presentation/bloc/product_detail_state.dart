@@ -1,5 +1,10 @@
 part of 'product_detail_bloc.dart';
 
+enum ProductDetailSuccessType {
+  updated,
+  deleted,
+}
+
 abstract class ProductDetailState extends Equatable {
   const ProductDetailState();
 
@@ -13,12 +18,13 @@ class ProductDetailLoading extends ProductDetailState {}
 
 class ProductDetailSuccess extends ProductDetailState {
   final String message;
-  final Product? updatedProduct; // Added
+  final ProductDetailSuccessType type;
+  final Product? updatedProduct;
 
-  const ProductDetailSuccess(this.message, {this.updatedProduct}); // Added
+  const ProductDetailSuccess(this.message, {required this.type, this.updatedProduct});
 
   @override
-  List<Object> get props => [message, updatedProduct ?? 'null']; // Added updatedProduct
+  List<Object> get props => [message, type, updatedProduct ?? 'null'];
 }
 
 class ProductDetailFailure extends ProductDetailState {

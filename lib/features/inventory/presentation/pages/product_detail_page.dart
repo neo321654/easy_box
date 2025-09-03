@@ -145,9 +145,9 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
               ..hideCurrentSnackBar()
               ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.green));
             // If update was successful, pop the detail page and return the updated product
-            if (state.updatedProduct != null) {
+            if (state.type == ProductDetailSuccessType.updated) {
               Navigator.of(context).pop(state.updatedProduct);
-            } else if (state.message == context.S.productDeletedSuccessfullyMessage) {
+            } else if (state.type == ProductDetailSuccessType.deleted) {
               Navigator.of(context).pop(true); // Pop detail page after deletion
             }
           } else if (state is ProductDetailFailure) {

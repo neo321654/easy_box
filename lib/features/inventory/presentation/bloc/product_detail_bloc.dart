@@ -31,7 +31,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrSuccess = await _updateProductUseCase(event.product);
     failureOrSuccess.fold(
       (failure) => emit(const ProductDetailFailure('Failed to update product.')), // This will be localized in UI
-      (_) => emit(ProductDetailSuccess('Product updated successfully.', updatedProduct: event.product)), // Pass updated product
+      (_) => emit(ProductDetailSuccess('Product updated successfully.', type: ProductDetailSuccessType.updated, updatedProduct: event.product)), // Pass updated product
     );
   }
 
@@ -43,7 +43,7 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrSuccess = await _deleteProductUseCase(event.id);
     failureOrSuccess.fold(
       (failure) => emit(const ProductDetailFailure('Failed to delete product.')), // This will be localized in UI
-      (_) => emit(const ProductDetailSuccess('Product deleted successfully.')), // No product to pass for delete
+      (_) => emit(const ProductDetailSuccess('Product deleted successfully.', type: ProductDetailSuccessType.deleted)), // No product to pass for delete
     );
   }
 }
