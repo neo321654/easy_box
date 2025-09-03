@@ -39,6 +39,10 @@ class _LoginPageState extends State<LoginPage> {
         );
   }
 
+  void _loginAnonymously() {
+    context.read<AuthBloc>().add(AnonymousLoginButtonPressed());
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +96,12 @@ class _LoginPageState extends State<LoginPage> {
                             double.infinity, AppDimensions.buttonHeight), // full width
                       ),
                       child: Text(context.S.loginButtonText),
+                    ),
+                    const SizedBox(height: AppDimensions.small),
+                    TextButton(
+                      onPressed: state is AuthLoading ? null : _loginAnonymously,
+                      // TODO: Localize this string
+                      child: const Text('Continue as Guest'),
                     ),
                   ],
                 ),

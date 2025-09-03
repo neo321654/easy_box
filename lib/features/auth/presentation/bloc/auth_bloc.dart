@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/features/auth/domain/entities/user.dart';
 import 'package:easy_box/features/auth/domain/usecases/get_me_usecase.dart';
+import 'package:easy_box/features/auth/domain/usecases/login_anonymously_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 
@@ -12,17 +13,21 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final LoginUseCase _loginUseCase;
   final GetMeUseCase _getMeUseCase;
   final LogoutUseCase _logoutUseCase;
+  final LoginAnonymouslyUseCase _loginAnonymouslyUseCase;
 
   AuthBloc({
     required LoginUseCase loginUseCase,
     required GetMeUseCase getMeUseCase,
     required LogoutUseCase logoutUseCase,
+    required LoginAnonymouslyUseCase loginAnonymouslyUseCase,
   })  : _loginUseCase = loginUseCase,
         _getMeUseCase = getMeUseCase,
         _logoutUseCase = logoutUseCase,
+        _loginAnonymouslyUseCase = loginAnonymouslyUseCase,
         super(AuthInitial()) {
     on<AppStarted>(_onAppStarted);
     on<LoginButtonPressed>(_onLoginButtonPressed);
+    on<AnonymousLoginButtonPressed>(_onAnonymousLoginButtonPressed);
     on<LoggedOut>(_onLoggedOut);
   }
 
@@ -33,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       // Wait for both a minimum delay and the user check to complete.
       final results = await Future.wait([
-        Future.delayed(const Duration(seconds: 1)),
+        Future.delayed(const Duration(seconds: 2)),
         _getMeUseCase(),
       ]);
 
@@ -60,6 +65,19 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         email: event.email,
         password: event.password,
       );
+      emit(AuthSuccess(user));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
+
+  Future<void> _onAnonymousLoginButtonPressed(
+    AnonymousLoginButtonPressed event,
+    Emitter<AuthState> emit,
+  ) async {
+    emit(AuthLoading());
+    try {
+      final user = await _loginAnonymouslyUseCase();
       emit(AuthSuccess(user));
     } catch (e) {
       emit(AuthFailure(e.toString()));

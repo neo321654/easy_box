@@ -24,5 +24,8 @@ class LoginButtonPressed extends AuthEvent {
   List<Object> get props => [email, password];
 }
 
+// Dispatched when the user presses the anonymous login button
+class AnonymousLoginButtonPressed extends AuthEvent {}
+
 // Dispatched when the user logs out
 class LoggedOut extends AuthEvent {}
