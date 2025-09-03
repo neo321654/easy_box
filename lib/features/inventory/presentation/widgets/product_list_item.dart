@@ -31,7 +31,7 @@ class ProductListItem extends StatelessWidget {
       },
       child: ListTile(
         title: Text(product.name),
-        subtitle: Text(product.sku),
+        subtitle: Text('${product.sku} - ${product.location ?? ''}'),
         trailing: Text(
           context.S.nPieces(product.quantity),
           style: Theme.of(context).textTheme.bodyLarge,
