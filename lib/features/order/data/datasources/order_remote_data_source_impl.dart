@@ -48,4 +48,15 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
     await Future.delayed(const Duration(seconds: 1));
     return _mockOrders;
   }
+
+  @override
+  Future<void> updateOrder(OrderModel order) async {
+    // Simulate network delay
+    await Future.delayed(const Duration(milliseconds: 500));
+    final index = _mockOrders.indexWhere((o) => o.id == order.id);
+    if (index != -1) {
+      _mockOrders[index] = order;
+    }
+    // In a real app, this would throw an error if not found
+  }
 }
