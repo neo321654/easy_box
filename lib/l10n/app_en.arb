@@ -29,5 +29,8 @@
   "addStockButtonText": "Add Stock",
   "scanBarcodePageTitle": "Scan Barcode",
   "productNotFound": "Product not found",
-  "okButtonText": "OK"
+  "okButtonText": "OK",
+  "pleaseEnterSkuError": "Please enter a SKU",
+  "pleaseEnterQuantityError": "Please enter a quantity",
+  "quantityMustBePositiveError": "Quantity must be positive"
 }

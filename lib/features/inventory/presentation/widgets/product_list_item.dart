@@ -16,7 +16,7 @@ class ProductListItem extends StatelessWidget {
       title: Text(product.name),
       subtitle: Text(product.sku),
       trailing: Text(
-        '${product.quantity} pcs', // TODO: Localize "pcs"
+        context.S.nPieces(product.quantity),
         style: Theme.of(context).textTheme.bodyLarge,
       ),
     );

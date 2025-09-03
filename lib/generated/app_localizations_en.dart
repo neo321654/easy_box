@@ -90,4 +90,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get okButtonText => 'OK';
+
+  @override
+  String get pleaseEnterSkuError => 'Please enter a SKU';
+
+  @override
+  String get pleaseEnterQuantityError => 'Please enter a quantity';
+
+  @override
+  String get quantityMustBePositiveError => 'Quantity must be positive';
 }

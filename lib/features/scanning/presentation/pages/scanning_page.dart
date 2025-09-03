@@ -39,7 +39,7 @@ class _ScanningViewState extends State<_ScanningView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Scan Barcode'), // TODO: Localize
+        title: Text(context.S.scanBarcodePageTitle),
       ),
       body: BlocListener<ScanningBloc, ScanningState>(
         listener: (context, state) {
@@ -56,8 +56,8 @@ class _ScanningViewState extends State<_ScanningView> {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
-                const SnackBar(
-                  content: Text('Product not found'), // TODO: Localize
+                SnackBar(
+                  content: Text(context.S.productNotFound),
                   backgroundColor: Colors.red,
                 ),
               );
@@ -96,7 +96,7 @@ class _ScanningViewState extends State<_ScanningView> {
               builder: (context, state) {
                 if (state is ScanningLoading) {
                   return Container(
-                    color: Colors.black.withOpacity(0.5),
+                    color: Colors.black.withAlpha((255 * 0.5).round()),
                     child: const Center(
                       child: CircularProgressIndicator(),
                     ),
@@ -121,14 +121,14 @@ class _ScanningViewState extends State<_ScanningView> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('SKU: ${product.sku}'),
+            Text('${context.S.productSkuLabel}: ${product.sku}'),
             const SizedBox(height: 8),
-            Text('Quantity: ${product.quantity}'),
+            Text('${context.S.quantityLabel}: ${product.quantity}'),
           ],
         ),
         actions: [
           TextButton(
-            child: const Text('OK'), // TODO: Localize
+            child: Text(context.S.okButtonText),
             onPressed: () {
               Navigator.of(ctx).pop();
             },

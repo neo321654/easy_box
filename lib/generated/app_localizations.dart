@@ -247,6 +247,24 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'ОК'**
   String get okButtonText;
+
+  /// No description provided for @pleaseEnterSkuError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите SKU'**
+  String get pleaseEnterSkuError;
+
+  /// No description provided for @pleaseEnterQuantityError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите количество'**
+  String get pleaseEnterQuantityError;
+
+  /// No description provided for @quantityMustBePositiveError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество должно быть положительным'**
+  String get quantityMustBePositiveError;
 }
 
 class _AppLocalizationsDelegate
