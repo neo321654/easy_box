@@ -102,6 +102,56 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 
+  @override
+  Future<Either<Failure, void>> updateProduct(Product product) async {
+    final productModel = ProductModel(
+      id: product.id,
+      name: product.name,
+      sku: product.sku,
+      quantity: product.quantity,
+    );
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.updateProduct(productModel);
+        await localDataSource.updateProduct(productModel);
+        return const Right(null);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      // Offline update - queue it
+      try {
+        await localDataSource.addProductUpdateToQueue(productModel);
+        await localDataSource.updateProduct(productModel);
+        return const Right(null);
+      } on Exception {
+        return Left(CacheFailure());
+      }
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> deleteProduct(String id) async {
+    if (await networkInfo.isConnected) {
+      try {
+        await remoteDataSource.deleteProduct(id);
+        await localDataSource.deleteProduct(id);
+        return const Right(null);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      // Offline delete - queue it
+      try {
+        await localDataSource.addProductDeletionToQueue(id);
+        await localDataSource.deleteProduct(id);
+        return const Right(null);
+      } on Exception {
+        return Left(CacheFailure());
+      }
+    }
+  }
+
   Future<void> _syncPendingUpdates() async {
     // Sync product creations first
     final pendingCreations = await localDataSource.getQueuedProductCreations();

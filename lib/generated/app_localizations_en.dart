@@ -111,4 +111,35 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get createAndAddStockButtonText => 'Create & Add Stock';
+
+  @override
+  String get editProductDialogTitle => 'Edit Product';
+
+  @override
+  String get saveButtonText => 'Save';
+
+  @override
+  String get deleteProductDialogTitle => 'Delete Product';
+
+  @override
+  String deleteConfirmationMessage(String productName) {
+    return 'Are you sure you want to delete $productName?';
+  }
+
+  @override
+  String get deleteButtonText => 'Delete';
+
+  @override
+  String get failedToUpdateProductMessage => 'Failed to update product.';
+
+  @override
+  String get productUpdatedSuccessfullyMessage =>
+      'Product updated successfully.';
+
+  @override
+  String get failedToDeleteProductMessage => 'Failed to delete product.';
+
+  @override
+  String get productDeletedSuccessfullyMessage =>
+      'Product deleted successfully.';
 }

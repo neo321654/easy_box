@@ -5,6 +5,8 @@ import 'package:sqflite/sqflite.dart';
 const String _tableProducts = 'products';
 const String _tableStockUpdatesQueue = 'stock_updates_queue';
 const String _tableProductCreationsQueue = 'product_creations_queue';
+const String _tableProductUpdatesQueue = 'product_updates_queue';
+const String _tableProductDeletionsQueue = 'product_deletions_queue';
 
 class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
   final Database database;
@@ -93,5 +95,64 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
       'UPDATE $_tableProducts SET id = ? WHERE id = ?',
       [newId, oldId],
     );
+  }
+
+  @override
+  Future<void> updateProduct(ProductModel product) async {
+    await database.update(
+      _tableProducts,
+      product.toJson(),
+      where: 'id = ?',
+      whereArgs: [product.id],
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    await database.delete(
+      _tableProducts,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
+  @override
+  Future<void> addProductUpdateToQueue(ProductModel product) async {
+    await database.insert(_tableProductUpdatesQueue, {
+      'product_id': product.id,
+      'name': product.name,
+      'sku': product.sku,
+      'quantity': product.quantity,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getQueuedProductUpdates() async {
+    return await database.query(_tableProductUpdatesQueue, orderBy: 'timestamp ASC');
+  }
+
+  @override
+  Future<void> clearQueuedProductUpdates() async {
+    await database.delete(_tableProductUpdatesQueue);
+  }
+
+  @override
+  Future<void> addProductDeletionToQueue(String id) async {
+    await database.insert(_tableProductDeletionsQueue, {
+      'product_id': id,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getQueuedProductDeletions() async {
+    return await database.query(_tableProductDeletionsQueue, orderBy: 'timestamp ASC');
+  }
+
+  @override
+  Future<void> clearQueuedProductDeletions() async {
+    await database.delete(_tableProductDeletionsQueue);
   }
 }

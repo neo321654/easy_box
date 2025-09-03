@@ -36,5 +36,19 @@
   "productNotFoundDialogTitle": "Товар не найден",
   "productNameLabel": "Название товара",
   "cancelButtonText": "Отмена",
-  "createAndAddStockButtonText": "Создать и добавить на склад"
+  "createAndAddStockButtonText": "Создать и добавить на склад",
+  "editProductDialogTitle": "Редактировать товар",
+  "saveButtonText": "Сохранить",
+  "deleteProductDialogTitle": "Удалить товар",
+  "deleteConfirmationMessage": "Вы уверены, что хотите удалить {productName}?",
+  "@deleteConfirmationMessage": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "deleteButtonText": "Удалить",
+  "failedToUpdateProductMessage": "Не удалось обновить товар.",
+  "productUpdatedSuccessfullyMessage": "Товар успешно обновлен.",
+  "failedToDeleteProductMessage": "Не удалось удалить товар.",
+  "productDeletedSuccessfullyMessage": "Товар успешно удален."
 }

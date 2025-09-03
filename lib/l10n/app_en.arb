@@ -36,5 +36,19 @@
   "productNotFoundDialogTitle": "Product Not Found",
   "productNameLabel": "Product Name",
   "cancelButtonText": "Cancel",
-  "createAndAddStockButtonText": "Create & Add Stock"
+  "createAndAddStockButtonText": "Create & Add Stock",
+  "editProductDialogTitle": "Edit Product",
+  "saveButtonText": "Save",
+  "deleteProductDialogTitle": "Delete Product",
+  "deleteConfirmationMessage": "Are you sure you want to delete {productName}?",
+  "@deleteConfirmationMessage": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "deleteButtonText": "Delete",
+  "failedToUpdateProductMessage": "Failed to update product.",
+  "productUpdatedSuccessfullyMessage": "Product updated successfully.",
+  "failedToDeleteProductMessage": "Failed to delete product.",
+  "productDeletedSuccessfullyMessage": "Product deleted successfully."
 }
