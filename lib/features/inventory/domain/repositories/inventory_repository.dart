@@ -6,4 +6,5 @@ abstract class InventoryRepository {
   Future<Either<Failure, List<Product>>> getProducts();
   Future<Either<Failure, Product?>> findProductBySku(String sku);
   Future<Either<Failure, void>> addStock(String sku, int quantityToAdd);
+  Future<Either<Failure, Product>> createProduct({required String name, required String sku});
 }

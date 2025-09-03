@@ -12,6 +12,7 @@ import 'package:easy_box/features/inventory/domain/repositories/inventory_reposi
 import 'package:easy_box/features/inventory/domain/usecases/add_stock_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/find_product_by_sku_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/get_products_usecase.dart';
+import 'package:easy_box/features/inventory/domain/usecases/create_product_usecase.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
@@ -43,7 +44,7 @@ Future<void> init() async {
   //region Receiving
   //--------------------
   // Blocs
-  sl.registerFactory(() => ReceivingBloc(addStockUseCase: sl()));
+  sl.registerFactory(() => ReceivingBloc(addStockUseCase: sl(), createProductUseCase: sl()));
   //endregion
 
   //--------------------
@@ -63,6 +64,7 @@ Future<void> init() async {
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
   sl.registerLazySingleton(() => FindProductBySkuUseCase(sl()));
   sl.registerLazySingleton(() => AddStockUseCase(sl()));
+  sl.registerLazySingleton(() => CreateProductUseCase(sl()));
 
   // Repositories
   sl.registerLazySingleton<InventoryRepository>(

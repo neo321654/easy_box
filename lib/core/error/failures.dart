@@ -14,3 +14,12 @@ class CacheFailure extends Failure {
   @override
   List<Object?> get props => [];
 }
+
+class ProductNotFoundFailure extends Failure {
+  final String sku;
+
+  const ProductNotFoundFailure(this.sku);
+
+  @override
+  List<Object?> get props => [sku];
+}
