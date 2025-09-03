@@ -39,7 +39,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String get settingsPageTitle => 'Настройки';
 
   @override
-  String get settingsThemeTitle => 'Тёмная тема';
+  String get settingsThemeTitle => 'Тема';
+
+  @override
+  String get settingsThemeSystem => 'Системная';
+
+  @override
+  String get settingsThemeLight => 'Светлая';
+
+  @override
+  String get settingsThemeDark => 'Темная';
 
   @override
   String get settingsLanguageTitle => 'Язык';

@@ -43,14 +43,41 @@ class SettingsPage extends StatelessWidget {
                 },
               ),
               const Divider(),
-              SwitchListTile(
-                title: Text(context.S.settingsThemeTitle),
-                value: settingsState.themeMode == ThemeMode.dark,
-                onChanged: (isDark) {
-                  final themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
-                  context
-                      .read<SettingsBloc>()
-                      .add(ThemeModeChanged(themeMode));
+              Padding(
+                padding: const EdgeInsets.all(AppDimensions.medium),
+                child: Text(
+                  context.S.settingsThemeTitle,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+              ),
+              RadioListTile<ThemeMode>(
+                title: Text(context.S.settingsThemeLight),
+                value: ThemeMode.light,
+                groupValue: settingsState.themeMode,
+                onChanged: (themeMode) {
+                  if (themeMode != null) {
+                    context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
+                  }
+                },
+              ),
+              RadioListTile<ThemeMode>(
+                title: Text(context.S.settingsThemeDark),
+                value: ThemeMode.dark,
+                groupValue: settingsState.themeMode,
+                onChanged: (themeMode) {
+                  if (themeMode != null) {
+                    context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
+                  }
+                },
+              ),
+              RadioListTile<ThemeMode>(
+                title: Text(context.S.settingsThemeSystem),
+                value: ThemeMode.system,
+                groupValue: settingsState.themeMode,
+                onChanged: (themeMode) {
+                  if (themeMode != null) {
+                    context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
+                  }
                 },
               ),
               const Divider(),
