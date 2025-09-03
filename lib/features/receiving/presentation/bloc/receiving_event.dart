@@ -4,7 +4,7 @@ abstract class ReceivingEvent extends Equatable {
   const ReceivingEvent();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class StockAdded extends ReceivingEvent {
