@@ -17,6 +17,7 @@ import 'package:easy_box/features/inventory/domain/usecases/update_product_useca
 import 'package:easy_box/features/inventory/domain/usecases/delete_product_usecase.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
+import 'package:easy_box/features/inventory/data/models/product_model.dart'; // Added for initial mock data
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
@@ -39,6 +40,15 @@ import 'package:easy_box/features/inventory/data/datasources/inventory_local_dat
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // Initial mock data for the persistent mock backend
+  final List<ProductModel> initialMockProducts = [
+    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150),
+    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85),
+    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110),
+    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200),
+    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350),
+  ];
+
   //####################
   //region Features
   //####################
@@ -82,7 +92,7 @@ Future<void> init() async {
   );
 
   // Data Sources
-  sl.registerLazySingleton<InventoryRemoteDataSource>(() => InventoryRemoteDataSourceImpl());
+  sl.registerLazySingleton<InventoryRemoteDataSource>(() => InventoryRemoteDataSourceImpl(database: sl(instanceName: 'mockBackendDb')));
 
   // Local Data Sources
   sl.registerLazySingleton<InventoryLocalDataSource>(
@@ -145,7 +155,8 @@ Future<void> init() async {
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
 
-  final db = await openDatabase(
+  // App's local cache database
+  final appDb = await openDatabase(
     join(await getDatabasesPath(), 'easy_box_database.db'),
     onCreate: (db, version) {
       db.execute(
@@ -186,7 +197,24 @@ Future<void> init() async {
       }
     },
   );
-  sl.registerLazySingleton<Database>(() => db);
+  sl.registerLazySingleton<Database>(() => appDb); // Register app's DB
+
+  // Mock backend database
+  final mockBackendDb = await openDatabase(
+    join(await getDatabasesPath(), 'easy_box_mock_backend_database.db'),
+    onCreate: (db, version) async {
+      await db.execute(
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER)',
+      );
+      // Populate with initial mock data
+      for (final product in initialMockProducts) {
+        await db.insert('products', product.toJson());
+      }
+    },
+    version: 1, // Separate version for mock backend DB
+  );
+  sl.registerLazySingleton<Database>(
+      () => mockBackendDb, instanceName: 'mockBackendDb'); // Register mock backend DB
 
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
