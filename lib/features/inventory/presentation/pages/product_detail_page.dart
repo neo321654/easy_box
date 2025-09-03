@@ -120,6 +120,12 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
                 '${context.S.quantityLabel}: ${widget.product.quantity}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
+              const SizedBox(height: 8),
+              if (widget.product.location != null && widget.product.location!.isNotEmpty)
+                Text(
+                  context.S.productLocationLabelWithColon(widget.product.location!),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               // TODO: Add more product details if available
             ],
           ),

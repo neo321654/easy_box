@@ -122,6 +122,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get productNameLabel => 'Название товара';
 
   @override
+  String get productLocationLabel => 'Местоположение';
+
+  @override
   String get cancelButtonText => 'Отмена';
 
   @override
@@ -174,6 +177,11 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String quantityLabelWithColon(Object quantityLabel, Object quantity) {
     return '$quantityLabel: $quantity';
+  }
+
+  @override
+  String productLocationLabelWithColon(Object location) {
+    return 'Местоположение: $location';
   }
 
   @override

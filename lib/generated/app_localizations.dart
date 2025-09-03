@@ -304,6 +304,12 @@ abstract class AppLocalizations {
   /// **'Название товара'**
   String get productNameLabel;
 
+  /// No description provided for @productLocationLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местоположение'**
+  String get productLocationLabel;
+
   /// No description provided for @cancelButtonText.
   ///
   /// In ru, this message translates to:
@@ -393,6 +399,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'{quantityLabel}: {quantity}'**
   String quantityLabelWithColon(Object quantityLabel, Object quantity);
+
+  /// No description provided for @productLocationLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местоположение: {location}'**
+  String productLocationLabelWithColon(Object location);
 
   /// No description provided for @serverError.
   ///

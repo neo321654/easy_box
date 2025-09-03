@@ -119,6 +119,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productNameLabel => 'Product Name';
 
   @override
+  String get productLocationLabel => 'Location';
+
+  @override
   String get cancelButtonText => 'Cancel';
 
   @override
@@ -173,6 +176,11 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String quantityLabelWithColon(Object quantityLabel, Object quantity) {
     return '$quantityLabel: $quantity';
+  }
+
+  @override
+  String productLocationLabelWithColon(Object location) {
+    return 'Location: $location';
   }
 
   @override
