@@ -1,4 +1,4 @@
-import 'package:dartz/dartz.dart';
+import 'package:dartz/dartz.dart' hide Order;
 import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/features/order/domain/entities/order.dart';
 import 'package:easy_box/features/order/domain/repositories/order_repository.dart';

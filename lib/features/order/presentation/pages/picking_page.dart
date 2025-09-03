@@ -61,7 +61,7 @@ class _PickingViewState extends State<_PickingView> {
                 final line = state.order!.lines[index];
                 final isPicked = line.quantityPicked >= line.quantityToPick;
                 return ListTile(
-                  tileColor: isPicked ? Colors.green.withOpacity(0.2) : null,
+                  tileColor: isPicked ? Colors.green.withAlpha(51) : null,
                   title: Text(line.productName),
                   subtitle: Text(
                       '${context.S.pickingPageSkuLabel}: ${line.sku}\n${context.S.pickingPageLocationLabel}: ${line.location ?? 'N/A'}'),

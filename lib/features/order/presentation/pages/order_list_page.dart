@@ -1,7 +1,7 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
-import 'package:easy_box/features/order/domain/entities/entities.dart';
+
 import 'package:easy_box/features/order/presentation/bloc/order_list_bloc.dart';
 import 'package:easy_box/features/order/presentation/pages/picking_page.dart';
 import 'package:flutter/material.dart';
