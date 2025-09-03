@@ -1,4 +1,5 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_list_item.dart';
@@ -19,25 +20,15 @@ class InventoryPage extends StatelessWidget {
         body: BlocBuilder<InventoryBloc, InventoryState>(
           builder: (context, state) {
             if (state is InventoryLoading || state is InventoryInitial) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
+              return const Center(child: LoadingIndicator());
             }
             if (state is InventoryFailure) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(context.S.serverError),
-                    const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () {
-                        context.read<InventoryBloc>().add(FetchProductsRequested());
-                      },
-                      child: Text(context.S.retryButtonText),
-                    ),
-                  ],
-                ),
+              return ErrorDisplay(
+                message: context.S.serverError,
+                retryButtonText: context.S.retryButtonText,
+                onRetry: () {
+                  context.read<InventoryBloc>().add(FetchProductsRequested());
+                },
               );
             }
             if (state is InventorySuccess) {

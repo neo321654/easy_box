@@ -1,4 +1,5 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
@@ -124,7 +125,8 @@ class _ReceivingViewState extends State<_ReceivingView> {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                    content: Text(message + (state.isQueued ? context.S.offlineIndicator : '')),
+                    content: Text(
+                        message + (state.isQueued ? context.S.offlineIndicator : '')),
                     backgroundColor: Colors.green),
               );
             _skuController.clear();
@@ -174,8 +176,9 @@ class _ReceivingViewState extends State<_ReceivingView> {
                       onPressed: _scanBarcode,
                     ),
                   ),
-                  validator: (value) =>
-                      (value?.isEmpty ?? true) ? context.S.pleaseEnterSkuError : null,
+                  validator: (value) => (value?.isEmpty ?? true)
+                      ? context.S.pleaseEnterSkuError
+                      : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -200,14 +203,11 @@ class _ReceivingViewState extends State<_ReceivingView> {
                 BlocBuilder<ReceivingBloc, ReceivingState>(
                   builder: (context, state) {
                     if (state is ReceivingLoading) {
-                      return const CircularProgressIndicator();
+                      return const LoadingIndicator();
                     }
-                    return ElevatedButton(
+                    return PrimaryButton(
                       onPressed: _addStock,
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      child: Text(context.S.addStockButtonText),
+                      text: context.S.addStockButtonText,
                     );
                   },
                 ),

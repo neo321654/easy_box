@@ -1,4 +1,5 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
@@ -98,7 +99,7 @@ class _ScanningViewState extends State<_ScanningView> {
                   return Container(
                     color: Colors.black.withAlpha((255 * 0.5).round()),
                     child: const Center(
-                      child: CircularProgressIndicator(),
+                      child: LoadingIndicator(),
                     ),
                   );
                 }
@@ -121,9 +122,11 @@ class _ScanningViewState extends State<_ScanningView> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(context.S.productSkuLabelWithColon(context.S.productSkuLabel, product.sku)),
+            Text(context.S
+                .productSkuLabelWithColon(context.S.productSkuLabel, product.sku)),
             const SizedBox(height: 8),
-            Text(context.S.quantityLabelWithColon(context.S.quantityLabel, product.quantity)),
+            Text(context.S.quantityLabelWithColon(
+                context.S.quantityLabel, product.quantity)),
           ],
         ),
         actions: [
