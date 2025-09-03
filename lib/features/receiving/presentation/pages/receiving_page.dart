@@ -119,11 +119,19 @@ class _ReceivingViewState extends State<_ReceivingView> {
                       style: ElevatedButton.styleFrom(
                         minimumSize: const Size(double.infinity, 50),
                       ),
-                      child: const Text('Add Stock'), // TODO: Localize
+                      child: Text(context.S.addStockButtonText),
                     );
                   },
                 ),
               ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+         ],
             ),
           ),
         ),

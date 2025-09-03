@@ -100,8 +100,7 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: AppDimensions.small),
                     TextButton(
                       onPressed: state is AuthLoading ? null : _loginAnonymously,
-                      // TODO: Localize this string
-                      child: const Text('Continue as Guest'),
+                      child: Text(context.S.loginAnonymousButtonText),
                     ),
                   ],
                 ),

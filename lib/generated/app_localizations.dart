@@ -181,6 +181,72 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Английский'**
   String get languageEnglish;
+
+  /// No description provided for @loginAnonymousButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить как гость'**
+  String get loginAnonymousButtonText;
+
+  /// No description provided for @inventoryPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Инвентарь'**
+  String get inventoryPageTitle;
+
+  /// No description provided for @retryButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторить'**
+  String get retryButtonText;
+
+  /// No description provided for @nPieces.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count,plural, =1{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
+  String nPieces(num count);
+
+  /// No description provided for @receiveStockPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приемка товара'**
+  String get receiveStockPageTitle;
+
+  /// No description provided for @productSkuLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU товара'**
+  String get productSkuLabel;
+
+  /// No description provided for @quantityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество'**
+  String get quantityLabel;
+
+  /// No description provided for @addStockButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить на склад'**
+  String get addStockButtonText;
+
+  /// No description provided for @scanBarcodePageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сканировать штрих-код'**
+  String get scanBarcodePageTitle;
+
+  /// No description provided for @productNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар не найден'**
+  String get productNotFound;
+
+  /// No description provided for @okButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'ОК'**
+  String get okButtonText;
 }
 
 class _AppLocalizationsDelegate
