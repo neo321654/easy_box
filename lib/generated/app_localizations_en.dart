@@ -33,6 +33,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeMenuScanning => 'Scanning';
 
   @override
+  String get homeMenuPicking => 'Picking';
+
+  @override
   String get homeMenuSettings => 'Settings';
 
   @override

@@ -5,6 +5,7 @@ import 'package:easy_box/features/inventory/presentation/pages/inventory_page.da
 import 'package:easy_box/features/receiving/presentation/pages/receiving_page.dart';
 import 'package:easy_box/features/scanning/presentation/pages/scanning_page.dart';
 import 'package:easy_box/features/settings/presentation/pages/settings_page.dart';
+import 'package:easy_box/features/order/presentation/pages/order_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
@@ -46,6 +47,10 @@ void initializeRouter(AuthBloc authBloc) {
       GoRoute(
         path: '/receiving',
         builder: (context, state) => const ReceivingPage(),
+      ),
+      GoRoute(
+        path: '/orders',
+        builder: (context, state) => const OrderListPage(),
       ),
     ],
     redirect: (context, state) {

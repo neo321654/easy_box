@@ -8,6 +8,7 @@
   "homeMenuInventory": "Inventory",
   "homeMenuReceiving": "Receiving",
   "homeMenuScanning": "Scanning",
+  "homeMenuPicking": "Picking",
   "homeMenuSettings": "Settings",
   "settingsPageTitle": "Settings",
   "settingsThemeTitle": "Theme",
