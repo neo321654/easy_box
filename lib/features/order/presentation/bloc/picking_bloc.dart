@@ -1,12 +1,17 @@
 import 'package:bloc/bloc.dart';
 import 'package:easy_box/features/order/domain/entities/entities.dart';
+import 'package:easy_box/features/order/domain/usecases/update_order_usecase.dart';
 import 'package:equatable/equatable.dart';
 
 part 'picking_event.dart';
 part 'picking_state.dart';
 
 class PickingBloc extends Bloc<PickingEvent, PickingState> {
-  PickingBloc() : super(const PickingState()) {
+  final UpdateOrderUseCase _updateOrderUseCase;
+
+  PickingBloc({required UpdateOrderUseCase updateOrderUseCase})
+      : _updateOrderUseCase = updateOrderUseCase,
+        super(const PickingState()) {
     on<InitializePicking>(_onInitializePicking);
     on<LineItemPicked>(_onLineItemPicked);
     on<PickingCompleted>(_onPickingCompleted);
@@ -19,7 +24,7 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
     // Sort lines by location for an efficient picking path
     final sortedLines = List<OrderLine>.from(event.order.lines)
       ..sort((a, b) => (a.location ?? '').compareTo(b.location ?? ''));
-    
+
     final sortedOrder = Order(
       id: event.order.id,
       customerName: event.order.customerName,
@@ -53,18 +58,33 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
     final updatedOrder = Order(
       id: state.order!.id,
       customerName: state.order!.customerName,
-      status: state.order!.status,
+      status: OrderStatus.inProgress, // Update status
       lines: updatedLines,
     );
 
     emit(state.copyWith(order: updatedOrder));
   }
 
-  void _onPickingCompleted(
+  Future<void> _onPickingCompleted(
     PickingCompleted event,
     Emitter<PickingState> emit,
-  ) {
-    // Here you would typically call a use case to save the updated order status
-    emit(state.copyWith(isCompleted: true));
+  ) async {
+    if (state.order == null) return;
+
+    emit(state.copyWith(isLoading: true));
+
+    final completedOrder = Order(
+      id: state.order!.id,
+      customerName: state.order!.customerName,
+      status: OrderStatus.picked, // Set status to picked
+      lines: state.order!.lines,
+    );
+
+    final result = await _updateOrderUseCase(completedOrder);
+
+    result.fold(
+      (failure) => emit(state.copyWith(isLoading: false)), // TODO: Handle failure
+      (_) => emit(state.copyWith(isLoading: false, isCompleted: true)),
+    );
   }
 }

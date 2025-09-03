@@ -4,4 +4,5 @@ import 'package:easy_box/features/order/domain/entities/order.dart';
 
 abstract class OrderRepository {
   Future<Either<Failure, List<Order>>> getOrders();
+  Future<Either<Failure, void>> updateOrder(Order order);
 }

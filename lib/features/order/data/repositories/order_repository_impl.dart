@@ -3,6 +3,7 @@ import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source.dart';
+import 'package:easy_box/features/order/data/models/order_model.dart';
 import 'package:easy_box/features/order/domain/entities/order.dart';
 import 'package:easy_box/features/order/domain/repositories/order_repository.dart';
 
@@ -21,6 +22,27 @@ class OrderRepositoryImpl implements OrderRepository {
       try {
         final remoteOrders = await remoteDataSource.getOrders();
         return Right(remoteOrders);
+      } on ServerException {
+        return Left(ServerFailure());
+      }
+    } else {
+      // TODO: Implement local data source for offline support
+      return Left(ServerFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateOrder(Order order) async {
+    if (await networkInfo.isConnected) {
+      try {
+        final orderModel = OrderModel(
+          id: order.id,
+          customerName: order.customerName,
+          status: order.status,
+          lines: order.lines,
+        );
+        await remoteDataSource.updateOrder(orderModel);
+        return const Right(null);
       } on ServerException {
         return Left(ServerFailure());
       }

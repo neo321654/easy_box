@@ -40,10 +40,16 @@ class OrderListPage extends StatelessWidget {
                     title: Text('${order.id} - ${order.customerName}'),
                     subtitle: Text('Status: ${order.status.name}'),
                     trailing: Text('${order.lines.length} lines'),
-                    onTap: () {
-                      Navigator.of(context).push(MaterialPageRoute(
-                        builder: (_) => PickingPage(order: order),
-                      ));
+                    onTap: () async {
+                      final result = await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => PickingPage(order: order),
+                        ),
+                      );
+                      if (result == true && context.mounted) {
+                        // If picking was completed, refresh the list
+                        context.read<OrderListBloc>().add(FetchOrdersRequested());
+                      }
                     },
                   );
                 },
