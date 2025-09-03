@@ -28,10 +28,8 @@ class ScanningProductNotFound extends ScanningState {}
 
 // An error occurred during the process
 class ScanningFailure extends ScanningState {
-  final String message;
-
-  const ScanningFailure(this.message);
+  const ScanningFailure();
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [];
 }

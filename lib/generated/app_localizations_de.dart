@@ -167,4 +167,30 @@ class AppLocalizationsDe extends AppLocalizations {
   String quantityLabelWithColon(Object quantityLabel, Object quantity) {
     return '$quantityLabel: $quantity';
   }
+
+  @override
+  String get serverError => 'Serverfehler';
+
+  @override
+  String get offlineIndicator => ' (Offline)';
+
+  @override
+  String get failedToAddStock => 'Bestand konnte nicht hinzugefügt werden.';
+
+  @override
+  String stockAddedSuccessfully(Object sku) {
+    return 'Bestand für SKU: $sku erfolgreich hinzugefügt';
+  }
+
+  @override
+  String get failedToCreateProduct => 'Produkt konnte nicht erstellt werden.';
+
+  @override
+  String get failedToAddStockAfterCreatingProduct =>
+      'Bestand konnte nach dem Erstellen des Produkts nicht hinzugefügt werden.';
+
+  @override
+  String productCreatedAndStockAddedSuccessfully(Object sku) {
+    return 'Produkt erstellt und Bestand für SKU: $sku erfolgreich hinzugefügt';
+  }
 }

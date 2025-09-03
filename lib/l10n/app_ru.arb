@@ -77,5 +77,26 @@
       "quantityLabel": {},
       "quantity": {}
     }
+  },
+  "serverError": "Ошибка сервера",
+  "failedToUpdateProductMessage": "Не удалось обновить товар.",
+  "productUpdatedSuccessfullyMessage": "Товар успешно обновлен.",
+  "failedToDeleteProductMessage": "Не удалось удалить товар.",
+  "productDeletedSuccessfullyMessage": "Товар успешно удален.",
+  "offlineIndicator": " (Офлайн)",
+  "failedToAddStock": "Не удалось добавить товар на склад.",
+  "stockAddedSuccessfully": "Товар для SKU: {sku} успешно добавлен на склад",
+  "@stockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "failedToCreateProduct": "Не удалось создать товар.",
+  "failedToAddStockAfterCreatingProduct": "Не удалось добавить товар на склад после создания товара.",
+  "productCreatedAndStockAddedSuccessfully": "Товар создан и успешно добавлен на склад для SKU: {sku}",
+  "@productCreatedAndStockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
   }
 }

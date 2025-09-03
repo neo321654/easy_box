@@ -17,22 +17,27 @@ class ProductDetailInitial extends ProductDetailState {}
 class ProductDetailLoading extends ProductDetailState {}
 
 class ProductDetailSuccess extends ProductDetailState {
-  final String message;
   final ProductDetailSuccessType type;
   final Product? updatedProduct;
   final bool isQueued; // Added
 
-  const ProductDetailSuccess(this.message, {required this.type, this.updatedProduct, this.isQueued = false}); // Added
+  const ProductDetailSuccess({required this.type, this.updatedProduct, this.isQueued = false}); // Added
 
   @override
-  List<Object> get props => [message, type, updatedProduct ?? 'null', isQueued]; // Added isQueued
+  List<Object> get props => [type, updatedProduct ?? 'null', isQueued]; // Added isQueued
 }
 
-class ProductDetailFailure extends ProductDetailState {
-  final String message;
-
-  const ProductDetailFailure(this.message);
+abstract class ProductDetailFailure extends ProductDetailState {
+  const ProductDetailFailure();
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [];
+}
+
+class ProductUpdateFailure extends ProductDetailFailure {
+  const ProductUpdateFailure();
+}
+
+class ProductDeleteFailure extends ProductDetailFailure {
+  const ProductDeleteFailure();
 }

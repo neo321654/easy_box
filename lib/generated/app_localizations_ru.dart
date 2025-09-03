@@ -166,4 +166,30 @@ class AppLocalizationsRu extends AppLocalizations {
   String quantityLabelWithColon(Object quantityLabel, Object quantity) {
     return '$quantityLabel: $quantity';
   }
+
+  @override
+  String get serverError => 'Ошибка сервера';
+
+  @override
+  String get offlineIndicator => ' (Офлайн)';
+
+  @override
+  String get failedToAddStock => 'Не удалось добавить товар на склад.';
+
+  @override
+  String stockAddedSuccessfully(Object sku) {
+    return 'Товар для SKU: $sku успешно добавлен на склад';
+  }
+
+  @override
+  String get failedToCreateProduct => 'Не удалось создать товар.';
+
+  @override
+  String get failedToAddStockAfterCreatingProduct =>
+      'Не удалось добавить товар на склад после создания товара.';
+
+  @override
+  String productCreatedAndStockAddedSuccessfully(Object sku) {
+    return 'Товар создан и успешно добавлен на склад для SKU: $sku';
+  }
 }

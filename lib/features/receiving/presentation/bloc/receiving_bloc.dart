@@ -38,10 +38,10 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
         if (failure is ProductNotFoundFailure) {
           emit(ReceivingProductNotFound(failure.sku));
         } else {
-          emit(const ReceivingFailure('Failed to add stock.')); // TODO: Localize
+          emit(const AddStockFailure());
         }
       },
-      (result) => emit(ReceivingSuccess('Stock added successfully for SKU: ${event.sku}', isQueued: result.isQueued)), // Pass isQueued
+      (result) => emit(ReceivingSuccess(sku: event.sku, isQueued: result.isQueued)),
     );
   }
 
@@ -58,7 +58,7 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
 
     await failureOrCreateResult.fold(
       (failure) async {
-        emit(const ReceivingFailure('Failed to create product.')); // TODO: Localize
+        emit(const CreateProductFailure());
       },
       (createResult) async {
         final failureOrAddStockResult = await _addStockUseCase(
@@ -67,8 +67,12 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
         );
 
         failureOrAddStockResult.fold(
-          (failure) => emit(const ReceivingFailure('Failed to add stock after creating product.')), // TODO: Localize
-          (addStockResult) => emit(ReceivingSuccess('Product created and stock added successfully for SKU: ${event.sku}', isQueued: createResult.isQueued || addStockResult.isQueued)), // Pass isQueued
+          (failure) => emit(const AddStockAfterCreateFailure()),
+          (addStockResult) => emit(ReceivingSuccess(
+            sku: event.sku,
+            isQueued: createResult.isQueued || addStockResult.isQueued,
+            productCreated: true,
+          )),
         );
       },
     );

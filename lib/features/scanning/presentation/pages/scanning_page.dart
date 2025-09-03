@@ -66,7 +66,7 @@ class _ScanningViewState extends State<_ScanningView> {
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                  content: Text(state.message),
+                  content: Text(context.S.serverError),
                   backgroundColor: Colors.red,
                 ),
               );

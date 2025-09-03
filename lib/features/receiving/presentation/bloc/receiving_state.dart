@@ -12,22 +12,33 @@ class ReceivingInitial extends ReceivingState {}
 class ReceivingLoading extends ReceivingState {}
 
 class ReceivingSuccess extends ReceivingState {
-  final String successMessage;
-  final bool isQueued; // Added
+  final String sku;
+  final bool isQueued;
+  final bool productCreated;
 
-  const ReceivingSuccess(this.successMessage, {this.isQueued = false}); // Added
+  const ReceivingSuccess({required this.sku, this.isQueued = false, this.productCreated = false});
 
   @override
-  List<Object> get props => [successMessage, isQueued]; // Added isQueued
+  List<Object> get props => [sku, isQueued, productCreated];
 }
 
-class ReceivingFailure extends ReceivingState {
-  final String errorMessage;
-
-  const ReceivingFailure(this.errorMessage);
+abstract class ReceivingFailure extends ReceivingState {
+  const ReceivingFailure();
 
   @override
-  List<Object> get props => [errorMessage];
+  List<Object> get props => [];
+}
+
+class AddStockFailure extends ReceivingFailure {
+  const AddStockFailure();
+}
+
+class CreateProductFailure extends ReceivingFailure {
+  const CreateProductFailure();
+}
+
+class AddStockAfterCreateFailure extends ReceivingFailure {
+  const AddStockAfterCreateFailure();
 }
 
 class ReceivingProductNotFound extends ReceivingState {

@@ -116,25 +116,44 @@ class _ReceivingViewState extends State<_ReceivingView> {
       ),
       body: BlocListener<ReceivingBloc, ReceivingState>(
         listener: (context, state) {
-          if (state is ReceivingFailure) {
+          if (state is ReceivingSuccess) {
+            final message = state.productCreated
+                ? context.S.productCreatedAndStockAddedSuccessfully(state.sku)
+                : context.S.stockAddedSuccessfully(state.sku);
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
               ..showSnackBar(
                 SnackBar(
-                    content: Text(state.errorMessage),
-                    backgroundColor: Colors.red),
-              );
-          } else if (state is ReceivingSuccess) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(
-                    content: Text(state.successMessage + (state.isQueued ? ' (Offline)' : '')), // Added offline indicator
+                    content: Text(message + (state.isQueued ? context.S.offlineIndicator : '')),
                     backgroundColor: Colors.green),
               );
             _skuController.clear();
             _quantityController.clear();
             FocusScope.of(context).unfocus();
+          } else if (state is AddStockFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                    content: Text(context.S.failedToAddStock),
+                    backgroundColor: Colors.red),
+              );
+          } else if (state is CreateProductFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                    content: Text(context.S.failedToCreateProduct),
+                    backgroundColor: Colors.red),
+              );
+          } else if (state is AddStockAfterCreateFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                    content: Text(context.S.failedToAddStockAfterCreatingProduct),
+                    backgroundColor: Colors.red),
+              );
           } else if (state is ReceivingProductNotFound) {
             _showCreateProductDialog(state.sku);
           }

@@ -28,7 +28,7 @@ class InventoryPage extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(state.message),
+                    Text(context.S.serverError),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () {

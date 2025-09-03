@@ -375,6 +375,48 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'{quantityLabel}: {quantity}'**
   String quantityLabelWithColon(Object quantityLabel, Object quantity);
+
+  /// No description provided for @serverError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка сервера'**
+  String get serverError;
+
+  /// No description provided for @offlineIndicator.
+  ///
+  /// In ru, this message translates to:
+  /// **' (Офлайн)'**
+  String get offlineIndicator;
+
+  /// No description provided for @failedToAddStock.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить товар на склад.'**
+  String get failedToAddStock;
+
+  /// No description provided for @stockAddedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар для SKU: {sku} успешно добавлен на склад'**
+  String stockAddedSuccessfully(Object sku);
+
+  /// No description provided for @failedToCreateProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось создать товар.'**
+  String get failedToCreateProduct;
+
+  /// No description provided for @failedToAddStockAfterCreatingProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить товар на склад после создания товара.'**
+  String get failedToAddStockAfterCreatingProduct;
+
+  /// No description provided for @productCreatedAndStockAddedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар создан и успешно добавлен на склад для SKU: {sku}'**
+  String productCreatedAndStockAddedSuccessfully(Object sku);
 }
 
 class _AppLocalizationsDelegate

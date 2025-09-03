@@ -141,19 +141,31 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
       body: BlocListener<ProductDetailBloc, ProductDetailState>(
         listener: (context, state) {
           if (state is ProductDetailSuccess) {
+            final message = state.type == ProductDetailSuccessType.updated
+                ? context.S.productUpdatedSuccessfullyMessage
+                : context.S.productDeletedSuccessfullyMessage;
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.message + (state.isQueued ? ' (Offline)' : '')), backgroundColor: Colors.green)); // Added offline indicator
-            // If update was successful, pop the detail page and return the updated product
+              ..showSnackBar(SnackBar(
+                  content: Text(message + (state.isQueued ? context.S.offlineIndicator : '')),
+                  backgroundColor: Colors.green));
             if (state.type == ProductDetailSuccessType.updated) {
               Navigator.of(context).pop(state.updatedProduct);
             } else if (state.type == ProductDetailSuccessType.deleted) {
-              Navigator.of(context).pop(true); // Pop detail page after deletion
+              Navigator.of(context).pop(true);
             }
-          } else if (state is ProductDetailFailure) {
+          } else if (state is ProductUpdateFailure) {
             ScaffoldMessenger.of(context)
               ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text(state.message), backgroundColor: Colors.red));
+              ..showSnackBar(SnackBar(
+                  content: Text(context.S.failedToUpdateProductMessage),
+                  backgroundColor: Colors.red));
+          } else if (state is ProductDeleteFailure) {
+            ScaffoldMessenger.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(SnackBar(
+                  content: Text(context.S.failedToDeleteProductMessage),
+                  backgroundColor: Colors.red));
           }
         },
         child: Padding(

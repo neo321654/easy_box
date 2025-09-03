@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
         title: BlocBuilder<AuthBloc, AuthState>(
           builder: (context, state) {
             if (state is AuthSuccess) {
-              return Text('Welcome, ${state.user.name}');
+              return Text(context.S.welcomeMessage(state.user.name));
             }
             return Text(context.S.appTitle);
           },

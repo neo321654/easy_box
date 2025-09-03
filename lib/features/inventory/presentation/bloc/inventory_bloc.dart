@@ -22,7 +22,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     emit(InventoryLoading());
     final failureOrProducts = await _getProductsUseCase();
     failureOrProducts.fold(
-      (failure) => emit(const InventoryFailure('Server Error')), // TODO: Localize error message
+      (failure) => emit(const InventoryFailure()),
       (products) => emit(InventorySuccess(products)),
     );
   }

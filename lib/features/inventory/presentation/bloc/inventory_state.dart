@@ -21,10 +21,8 @@ class InventorySuccess extends InventoryState {
 }
 
 class InventoryFailure extends InventoryState {
-  final String message;
-
-  const InventoryFailure(this.message);
+  const InventoryFailure();
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [];
 }

@@ -23,7 +23,7 @@ class ScanningBloc extends Bloc<ScanningEvent, ScanningState> {
     final failureOrProduct = await _findProductBySkuUseCase(event.sku);
 
     failureOrProduct.fold(
-      (failure) => emit(const ScanningFailure('Server Error')), // TODO: Localize
+      (failure) => emit(const ScanningFailure()),
       (product) {
         if (product != null) {
           emit(ScanningProductFound(product));

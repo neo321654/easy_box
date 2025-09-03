@@ -77,5 +77,26 @@
       "quantityLabel": {},
       "quantity": {}
     }
+  },
+  "serverError": "Server Error",
+  "failedToUpdateProductMessage": "Failed to update product.",
+  "productUpdatedSuccessfullyMessage": "Product updated successfully.",
+  "failedToDeleteProductMessage": "Failed to delete product.",
+  "productDeletedSuccessfullyMessage": "Product deleted successfully.",
+  "offlineIndicator": " (Offline)",
+  "failedToAddStock": "Failed to add stock.",
+  "stockAddedSuccessfully": "Stock added successfully for SKU: {sku}",
+  "@stockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "failedToCreateProduct": "Failed to create product.",
+  "failedToAddStockAfterCreatingProduct": "Failed to add stock after creating product.",
+  "productCreatedAndStockAddedSuccessfully": "Product created and stock added successfully for SKU: {sku}",
+  "@productCreatedAndStockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
   }
 }

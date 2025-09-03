@@ -165,4 +165,30 @@ class AppLocalizationsEn extends AppLocalizations {
   String quantityLabelWithColon(Object quantityLabel, Object quantity) {
     return '$quantityLabel: $quantity';
   }
+
+  @override
+  String get serverError => 'Server Error';
+
+  @override
+  String get offlineIndicator => ' (Offline)';
+
+  @override
+  String get failedToAddStock => 'Failed to add stock.';
+
+  @override
+  String stockAddedSuccessfully(Object sku) {
+    return 'Stock added successfully for SKU: $sku';
+  }
+
+  @override
+  String get failedToCreateProduct => 'Failed to create product.';
+
+  @override
+  String get failedToAddStockAfterCreatingProduct =>
+      'Failed to add stock after creating product.';
+
+  @override
+  String productCreatedAndStockAddedSuccessfully(Object sku) {
+    return 'Product created and stock added successfully for SKU: $sku';
+  }
 }
