@@ -32,17 +32,36 @@ class InventoryPage extends StatelessWidget {
               );
             }
             if (state is InventorySuccess) {
-              return RefreshIndicator(
-                onRefresh: () async {
-                  context.read<InventoryBloc>().add(FetchProductsRequested());
-                },
-                child: ListView.builder(
-                  itemCount: state.products.length,
-                  itemBuilder: (context, index) {
-                    final product = state.products[index];
-                    return ProductListItem(product: product);
-                  },
-                ),
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: context.S.inventorySearchHint,
+                        border: OutlineInputBorder(),
+                        prefixIcon: Icon(Icons.search),
+                      ),
+                      onChanged: (value) {
+                        context.read<InventoryBloc>().add(SearchTermChanged(value));
+                      },
+                    ),
+                  ),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: () async {
+                        context.read<InventoryBloc>().add(FetchProductsRequested());
+                      },
+                      child: ListView.builder(
+                        itemCount: state.filteredProducts.length,
+                        itemBuilder: (context, index) {
+                          final product = state.filteredProducts[index];
+                          return ProductListItem(product: product);
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               );
             }
             return const SizedBox.shrink();

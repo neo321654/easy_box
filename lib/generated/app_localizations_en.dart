@@ -69,6 +69,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get inventoryPageTitle => 'Inventory';
 
   @override
+  String get inventorySearchHint => 'Search by name, SKU, or location...';
+
+  @override
   String get retryButtonText => 'Retry';
 
   @override
