@@ -20,6 +20,8 @@ class AuthSuccess extends AuthState {
   List<Object> get props => [user];
 }
 
+class AuthUnauthenticated extends AuthState {}
+
 class AuthFailure extends AuthState {
   final String message;
 

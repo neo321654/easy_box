@@ -10,18 +10,32 @@ import 'generated/app_localizations.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await init();
-  runApp(const MyApp());
+
+  // Get the AuthBloc instance from the service locator
+  final authBloc = sl<AuthBloc>();
+  // Initialize the router with the bloc instance
+  initializeRouter(authBloc);
+  // Dispatch the initial event
+  authBloc.add(AppStarted());
+
+  runApp(MyApp(authBloc: authBloc));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthBloc authBloc;
+
+  const MyApp({
+    super.key,
+    required this.authBloc,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => sl<SettingsBloc>()),
-        BlocProvider(create: (context) => sl<AuthBloc>()),
+        // Provide the existing bloc instance to the widget tree
+        BlocProvider.value(value: authBloc),
       ],
       child: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, state) {

@@ -1,6 +1,8 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
+import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
@@ -12,6 +14,14 @@ class HomePage extends StatelessWidget {
       appBar: AppBar(
         title: Text(context.S.appTitle),
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthBloc>().add(LoggedOut());
+            },
+          ),
+        ],
       ),
       body: GridView.count(
         crossAxisCount: 2,

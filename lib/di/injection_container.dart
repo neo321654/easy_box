@@ -1,6 +1,8 @@
 import 'package:easy_box/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
+import 'package:easy_box/features/auth/domain/usecases/get_me_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
+import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:easy_box/features/settings/domain/repositories/settings_repository.dart';
@@ -49,13 +51,19 @@ Future<void> init() async {
   //region Auth
   //--------------------
   // Blocs
-  sl.registerFactory(() => AuthBloc(loginUseCase: sl()));
+  sl.registerLazySingleton(() => AuthBloc(
+        loginUseCase: sl(),
+        getMeUseCase: sl(),
+        logoutUseCase: sl(),
+      ));
 
   // Use Cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
+  sl.registerLazySingleton(() => GetMeUseCase(sl()));
+  sl.registerLazySingleton(() => LogoutUseCase(sl()));
 
   // Repositories
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl());
+  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
   //endregion
 
   //endregion
