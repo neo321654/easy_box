@@ -5,6 +5,10 @@ import 'package:easy_box/features/auth/domain/usecases/login_anonymously_usecase
 import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:easy_box/features/inventory/data/repositories/inventory_repository_impl.dart';
+import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
+import 'package:easy_box/features/inventory/domain/usecases/get_products_usecase.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
 import 'package:easy_box/features/settings/domain/repositories/settings_repository.dart';
 import 'package:easy_box/features/settings/domain/usecases/load_locale_usecase.dart';
@@ -21,6 +25,19 @@ Future<void> init() async {
   //####################
   //region Features
   //####################
+
+  //--------------------
+  //region Inventory
+  //--------------------
+  // Blocs
+  sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl()));
+
+  // Use Cases
+  sl.registerLazySingleton(() => GetProductsUseCase(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<InventoryRepository>(() => InventoryRepositoryImpl());
+  //endregion
 
   //--------------------
   //region Settings

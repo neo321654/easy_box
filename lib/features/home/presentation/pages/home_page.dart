@@ -40,7 +40,7 @@ class HomePage extends StatelessWidget {
             icon: Icons.inventory_2_outlined,
             title: context.S.homeMenuInventory,
             onTap: () {
-              // TODO: Navigate to inventory
+              context.push('/inventory');
             },
           ),
           _HomeMenuItem(
