@@ -51,6 +51,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get languageEnglish => 'Englisch';
 
   @override
+  String get languageGerman => 'Немецкий';
+
+  @override
   String get loginAnonymousButtonText => 'Als Gast fortfahren';
 
   @override
