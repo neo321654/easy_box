@@ -1,6 +1,7 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
+import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -54,6 +55,15 @@ class _ReceivingViewState extends State<_ReceivingView> {
     }
   }
 
+  Future<void> _scanBarcode() async {
+    final sku = await Navigator.of(context).push<String>(
+      MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
+    );
+    if (sku != null && mounted) {
+      _skuController.text = sku;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,6 +105,10 @@ class _ReceivingViewState extends State<_ReceivingView> {
                   decoration: InputDecoration(
                     labelText: context.S.productSkuLabel,
                     border: const OutlineInputBorder(),
+                    suffixIcon: IconButton(
+                      icon: const Icon(Icons.qr_code_scanner),
+                      onPressed: _scanBarcode,
+                    ),
                   ),
                   validator: (value) =>
                       (value?.isEmpty ?? true) ? context.S.pleaseEnterSkuError : null,
