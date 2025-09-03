@@ -14,13 +14,14 @@
   "settingsLanguageTitle": "Язык",
   "languageRussian": "Русский",
   "languageEnglish": "Английский",
+  "languageGerman": "Немецкий",
   "loginAnonymousButtonText": "Продолжить как гость",
   "inventoryPageTitle": "Инвентарь",
     "retryButtonText": "Повторить",
   "nPieces": "{count,plural, one{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
   "@nPieces": {
     "placeholders": {
-      "count": {} 
+      "count": {}
     }
   },
   "receiveStockPageTitle": "Приемка товара",

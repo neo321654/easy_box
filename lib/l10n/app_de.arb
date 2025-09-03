@@ -1,0 +1,54 @@
+{
+  "@@locale": "de",
+  "appTitle": "Easy Box",
+  "loginPageTitle": "Anmelden",
+  "loginEmailLabel": "E-Mail",
+  "loginPasswordLabel": "Passwort",
+  "loginButtonText": "Anmelden",
+  "homeMenuInventory": "Inventar",
+  "homeMenuReceiving": "Wareneingang",
+  "homeMenuScanning": "Scannen",
+  "homeMenuSettings": "Einstellungen",
+  "settingsPageTitle": "Einstellungen",
+  "settingsThemeTitle": "Dunkles Design",
+  "settingsLanguageTitle": "Sprache",
+  "languageRussian": "Russisch",
+  "languageEnglish": "Englisch",
+  "loginAnonymousButtonText": "Als Gast fortfahren",
+  "inventoryPageTitle": "Inventar",
+    "retryButtonText": "Wiederholen",
+  "nPieces": "{count,plural, one{1 Stück} other{{count} Stücke}}",
+  "@nPieces": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "receiveStockPageTitle": "Wareneingang",
+  "productSkuLabel": "Produkt-SKU",
+  "quantityLabel": "Menge",
+  "addStockButtonText": "Bestand hinzufügen",
+  "scanBarcodePageTitle": "Barcode scannen",
+  "productNotFound": "Produkt nicht gefunden",
+  "okButtonText": "OK",
+  "pleaseEnterSkuError": "Bitte SKU eingeben",
+  "pleaseEnterQuantityError": "Bitte Menge eingeben",
+  "quantityMustBePositiveError": "Menge muss positiv sein",
+  "productNotFoundDialogTitle": "Produkt nicht gefunden",
+  "productNameLabel": "Produktname",
+  "cancelButtonText": "Abbrechen",
+  "createAndAddStockButtonText": "Erstellen & Bestand hinzufügen",
+  "editProductDialogTitle": "Produkt bearbeiten",
+  "saveButtonText": "Speichern",
+  "deleteProductDialogTitle": "Produkt löschen",
+  "deleteConfirmationMessage": "Sind Sie sicher, dass Sie {productName} löschen möchten?",
+  "@deleteConfirmationMessage": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "deleteButtonText": "Löschen",
+  "failedToUpdateProductMessage": "Produkt konnte nicht aktualisiert werden.",
+  "productUpdatedSuccessfullyMessage": "Produkt erfolgreich aktualisiert.",
+  "failedToDeleteProductMessage": "Produkt konnte nicht gelöscht werden.",
+  "productDeletedSuccessfullyMessage": "Produkt erfolgreich gelöscht."
+}

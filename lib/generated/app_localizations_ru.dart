@@ -67,7 +67,7 @@ class AppLocalizationsRu extends AppLocalizations {
       other: '$count штуки',
       many: '$count штук',
       few: '$count штуки',
-      one: '1 штука',
+      one: '$count штука',
     );
     return '$_temp0';
   }
