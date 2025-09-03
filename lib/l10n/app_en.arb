@@ -13,5 +13,21 @@
   "settingsThemeTitle": "Dark Theme",
   "settingsLanguageTitle": "Language",
   "languageRussian": "Russian",
-  "languageEnglish": "English"
+  "languageEnglish": "English",
+  "loginAnonymousButtonText": "Continue as Guest",
+  "inventoryPageTitle": "Inventory",
+    "retryButtonText": "Retry",
+  "nPieces": "{count,plural, =1{1 piece} other{{count} pieces}}",
+  "@nPieces": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "receiveStockPageTitle": "Receive Stock",
+  "productSkuLabel": "Product SKU",
+  "quantityLabel": "Quantity",
+  "addStockButtonText": "Add Stock",
+  "scanBarcodePageTitle": "Scan Barcode",
+  "productNotFound": "Product not found",
+  "okButtonText": "OK"
 }

@@ -13,7 +13,7 @@ class InventoryPage extends StatelessWidget {
       create: (context) => sl<InventoryBloc>()..add(FetchProductsRequested()),
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Inventory'), // TODO: Localize
+          title: Text(context.S.inventoryPageTitle),
         ),
         body: BlocBuilder<InventoryBloc, InventoryState>(
           builder: (context, state) {
@@ -49,6 +49,14 @@ class InventoryPage extends StatelessWidget {
               );
             }
             return const SizedBox.shrink();
+          },
+        ),
+      ),
+    );
+  }
+}
+
+ const SizedBox.shrink();
           },
         ),
       ),

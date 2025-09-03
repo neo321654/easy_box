@@ -1,3 +1,4 @@
+import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:flutter/material.dart';
 

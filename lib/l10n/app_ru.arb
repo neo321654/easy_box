@@ -13,5 +13,21 @@
   "settingsThemeTitle": "Тёмная тема",
   "settingsLanguageTitle": "Язык",
   "languageRussian": "Русский",
-  "languageEnglish": "Английский"
+  "languageEnglish": "Английский",
+  "loginAnonymousButtonText": "Продолжить как гость",
+  "inventoryPageTitle": "Инвентарь",
+    "retryButtonText": "Повторить",
+  "nPieces": "{count,plural, =1{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
+  "@nPieces": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "receiveStockPageTitle": "Приемка товара",
+  "productSkuLabel": "SKU товара",
+  "quantityLabel": "Количество",
+  "addStockButtonText": "Добавить на склад",
+  "scanBarcodePageTitle": "Сканировать штрих-код",
+  "productNotFound": "Товар не найден",
+  "okButtonText": "ОК"
 }

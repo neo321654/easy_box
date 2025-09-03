@@ -49,4 +49,47 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get languageEnglish => 'Английский';
+
+  @override
+  String get loginAnonymousButtonText => 'Продолжить как гость';
+
+  @override
+  String get inventoryPageTitle => 'Инвентарь';
+
+  @override
+  String get retryButtonText => 'Повторить';
+
+  @override
+  String nPieces(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count штуки',
+      many: '$count штук',
+      few: '$count штуки',
+      one: '1 штука',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get receiveStockPageTitle => 'Приемка товара';
+
+  @override
+  String get productSkuLabel => 'SKU товара';
+
+  @override
+  String get quantityLabel => 'Количество';
+
+  @override
+  String get addStockButtonText => 'Добавить на склад';
+
+  @override
+  String get scanBarcodePageTitle => 'Сканировать штрих-код';
+
+  @override
+  String get productNotFound => 'Товар не найден';
+
+  @override
+  String get okButtonText => 'ОК';
 }
