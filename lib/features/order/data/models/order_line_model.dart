@@ -8,6 +8,7 @@ class OrderLineModel extends OrderLine {
     super.location,
     required super.quantityToPick,
     super.quantityPicked,
+    super.imageUrl,
   });
 
   factory OrderLineModel.fromJson(Map<String, dynamic> json) {
@@ -18,6 +19,7 @@ class OrderLineModel extends OrderLine {
       location: json['location'],
       quantityToPick: json['quantity_to_pick'],
       quantityPicked: json['quantity_picked'],
+      imageUrl: json['image_url'],
     );
   }
 
@@ -29,6 +31,7 @@ class OrderLineModel extends OrderLine {
       'location': location,
       'quantity_to_pick': quantityToPick,
       'quantity_picked': quantityPicked,
+      'image_url': imageUrl,
     };
   }
 }

@@ -16,6 +16,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
           sku: 'SKU-TS-RED-L',
           location: 'A1-01-01',
           quantityToPick: 2,
+          imageUrl: 'https://picsum.photos/id/10/50/50',
         ),
         const OrderLineModel(
           productId: '3',
@@ -23,6 +24,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
           sku: 'SKU-HD-GRN-M',
           location: 'A2-03-05',
           quantityToPick: 1,
+          imageUrl: 'https://picsum.photos/id/30/50/50',
         ),
       ],
     ),
@@ -37,6 +39,7 @@ class OrderRemoteDataSourceImpl implements OrderRemoteDataSource {
           sku: 'SKU-SN-BLK-42',
           location: 'C4-02-01',
           quantityToPick: 1,
+          imageUrl: 'https://picsum.photos/id/40/50/50',
         ),
       ],
     ),

@@ -7,6 +7,7 @@ class OrderLine extends Equatable {
   final String? location;
   final int quantityToPick;
   final int quantityPicked;
+  final String? imageUrl;
 
   const OrderLine({
     required this.productId,
@@ -15,6 +16,7 @@ class OrderLine extends Equatable {
     this.location,
     required this.quantityToPick,
     this.quantityPicked = 0,
+    this.imageUrl,
   });
 
   @override
@@ -25,5 +27,6 @@ class OrderLine extends Equatable {
         location,
         quantityToPick,
         quantityPicked,
+        imageUrl,
       ];
 }
