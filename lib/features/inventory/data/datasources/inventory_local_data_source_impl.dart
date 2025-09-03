@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 
 const String _tableProducts = 'products';
 const String _tableStockUpdatesQueue = 'stock_updates_queue';
+const String _tableProductCreationsQueue = 'product_creations_queue';
 
 class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
   final Database database;
@@ -64,5 +65,25 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
       product.toJson(),
       conflictAlgorithm: ConflictAlgorithm.replace,
     );
+  }
+
+  @override
+  Future<void> addProductCreationToQueue(String name, String sku, String localId) async {
+    await database.insert(_tableProductCreationsQueue, {
+      'name': name,
+      'sku': sku,
+      'local_id': localId,
+      'timestamp': DateTime.now().millisecondsSinceEpoch,
+    });
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getQueuedProductCreations() async {
+    return await database.query(_tableProductCreationsQueue, orderBy: 'timestamp ASC');
+  }
+
+  @override
+  Future<void> clearQueuedProductCreations() async {
+    await database.delete(_tableProductCreationsQueue);
   }
 }

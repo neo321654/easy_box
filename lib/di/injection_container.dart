@@ -148,12 +148,20 @@ Future<void> init() async {
       db.execute(
         'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
       );
+      db.execute(
+        'CREATE TABLE product_creations_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sku TEXT, local_id TEXT, timestamp INTEGER)',
+      );
     },
-    version: 2,
+    version: 3,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(
           'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
+        );
+      }
+      if (oldVersion < 3) {
+        db.execute(
+          'CREATE TABLE product_creations_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sku TEXT, local_id TEXT, timestamp INTEGER)',
         );
       }
     },
