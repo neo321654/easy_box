@@ -1,0 +1,102 @@
+{
+  "@@locale": "de",
+  "appTitle": "Easy Box",
+  "loginPageTitle": "Anmelden",
+  "loginEmailLabel": "E-Mail",
+  "loginPasswordLabel": "Passwort",
+  "loginButtonText": "Anmelden",
+  "homeMenuInventory": "Inventar",
+  "homeMenuReceiving": "Wareneingang",
+  "homeMenuScanning": "Scannen",
+  "homeMenuSettings": "Einstellungen",
+  "settingsPageTitle": "Einstellungen",
+  "settingsThemeTitle": "Dunkles Design",
+  "settingsLanguageTitle": "Sprache",
+  "languageRussian": "Russisch",
+  "languageEnglish": "Englisch",
+  "languageGerman": "Deutsch",
+  "loginAnonymousButtonText": "Als Gast fortfahren",
+  "inventoryPageTitle": "Inventar",
+    "retryButtonText": "Wiederholen",
+  "nPieces": "{count,plural, one{1 Stück} other{{count} Stücke}}",
+  "@nPieces": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "receiveStockPageTitle": "Wareneingang",
+  "productSkuLabel": "Produkt-SKU",
+  "quantityLabel": "Menge",
+  "addStockButtonText": "Bestand hinzufügen",
+  "scanBarcodePageTitle": "Barcode scannen",
+  "productNotFound": "Produkt nicht gefunden",
+  "okButtonText": "OK",
+  "pleaseEnterSkuError": "Bitte SKU eingeben",
+  "pleaseEnterQuantityError": "Bitte Menge eingeben",
+  "quantityMustBePositiveError": "Menge muss positiv sein",
+  "productNotFoundDialogTitle": "Produkt nicht gefunden",
+  "productNameLabel": "Produktname",
+  "cancelButtonText": "Abbrechen",
+  "createAndAddStockButtonText": "Erstellen & Bestand hinzufügen",
+  "editProductDialogTitle": "Produkt bearbeiten",
+  "saveButtonText": "Speichern",
+  "deleteProductDialogTitle": "Produkt löschen",
+  "deleteConfirmationMessage": "Sind Sie sicher, dass Sie {productName} löschen möchten?",
+  "@deleteConfirmationMessage": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "deleteButtonText": "Löschen",
+  "failedToUpdateProductMessage": "Produkt konnte nicht aktualisiert werden.",
+  "productUpdatedSuccessfullyMessage": "Produkt erfolgreich aktualisiert.",
+  "failedToDeleteProductMessage": "Produkt konnte nicht gelöscht werden.",
+  "productDeletedSuccessfullyMessage": "Produkt erfolgreich gelöscht.",
+  "welcomeMessage": "Willkommen, {userName}",
+  "@welcomeMessage": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+  "skuLabelWithColon": "SKU: {sku}",
+  "@skuLabelWithColon": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "productSkuLabelWithColon": "{productSkuLabel}: {sku}",
+  "@productSkuLabelWithColon": {
+    "placeholders": {
+      "productSkuLabel": {},
+      "sku": {}
+    }
+  },
+  "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "@quantityLabelWithColon": {
+    "placeholders": {
+      "quantityLabel": {},
+      "quantity": {}
+    }
+  },
+  "serverError": "Serverfehler",
+  "failedToUpdateProductMessage": "Produkt konnte nicht aktualisiert werden.",
+  "productUpdatedSuccessfullyMessage": "Produkt erfolgreich aktualisiert.",
+  "failedToDeleteProductMessage": "Produkt konnte nicht gelöscht werden.",
+  "productDeletedSuccessfullyMessage": "Produkt erfolgreich gelöscht.",
+  "offlineIndicator": " (Offline)",
+  "failedToAddStock": "Bestand konnte nicht hinzugefügt werden.",
+  "stockAddedSuccessfully": "Bestand für SKU: {sku} erfolgreich hinzugefügt",
+  "@stockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "failedToCreateProduct": "Produkt konnte nicht erstellt werden.",
+  "failedToAddStockAfterCreatingProduct": "Bestand konnte nach dem Erstellen des Produkts nicht hinzugefügt werden.",
+  "productCreatedAndStockAddedSuccessfully": "Produkt erstellt und Bestand für SKU: {sku} erfolgreich hinzugefügt",
+  "@productCreatedAndStockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
+  }
+}

@@ -13,5 +13,90 @@
   "settingsThemeTitle": "Тёмная тема",
   "settingsLanguageTitle": "Язык",
   "languageRussian": "Русский",
-  "languageEnglish": "Английский"
+  "languageEnglish": "Английский",
+  "languageGerman": "Немецкий",
+  "loginAnonymousButtonText": "Продолжить как гость",
+  "inventoryPageTitle": "Инвентарь",
+    "retryButtonText": "Повторить",
+  "nPieces": "{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
+  "@nPieces": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "receiveStockPageTitle": "Приемка товара",
+  "productSkuLabel": "SKU товара",
+  "quantityLabel": "Количество",
+  "addStockButtonText": "Добавить на склад",
+  "scanBarcodePageTitle": "Сканировать штрих-код",
+  "productNotFound": "Товар не найден",
+  "okButtonText": "ОК",
+  "pleaseEnterSkuError": "Пожалуйста, введите SKU",
+  "pleaseEnterQuantityError": "Пожалуйста, введите количество",
+  "quantityMustBePositiveError": "Количество должно быть положительным",
+  "productNotFoundDialogTitle": "Товар не найден",
+  "productNameLabel": "Название товара",
+  "cancelButtonText": "Отмена",
+  "createAndAddStockButtonText": "Создать и добавить на склад",
+  "editProductDialogTitle": "Редактировать товар",
+  "saveButtonText": "Сохранить",
+  "deleteProductDialogTitle": "Удалить товар",
+  "deleteConfirmationMessage": "Вы уверены, что хотите удалить {productName}?",
+  "@deleteConfirmationMessage": {
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "deleteButtonText": "Удалить",
+  "failedToUpdateProductMessage": "Не удалось обновить товар.",
+  "productUpdatedSuccessfullyMessage": "Товар успешно обновлен.",
+  "failedToDeleteProductMessage": "Не удалось удалить товар.",
+  "productDeletedSuccessfullyMessage": "Товар успешно удален.",
+  "welcomeMessage": "Добро пожаловать, {userName}",
+  "@welcomeMessage": {
+    "placeholders": {
+      "userName": {}
+    }
+  },
+  "skuLabelWithColon": "SKU: {sku}",
+  "@skuLabelWithColon": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "productSkuLabelWithColon": "{productSkuLabel}: {sku}",
+  "@productSkuLabelWithColon": {
+    "placeholders": {
+      "productSkuLabel": {},
+      "sku": {}
+    }
+  },
+  "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "@quantityLabelWithColon": {
+    "placeholders": {
+      "quantityLabel": {},
+      "quantity": {}
+    }
+  },
+  "serverError": "Ошибка сервера",
+  "failedToUpdateProductMessage": "Не удалось обновить товар.",
+  "productUpdatedSuccessfullyMessage": "Товар успешно обновлен.",
+  "failedToDeleteProductMessage": "Не удалось удалить товар.",
+  "productDeletedSuccessfullyMessage": "Товар успешно удален.",
+  "offlineIndicator": " (Офлайн)",
+  "failedToAddStock": "Не удалось добавить товар на склад.",
+  "stockAddedSuccessfully": "Товар для SKU: {sku} успешно добавлен на склад",
+  "@stockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
+  },
+  "failedToCreateProduct": "Не удалось создать товар.",
+  "failedToAddStockAfterCreatingProduct": "Не удалось добавить товар на склад после создания товара.",
+  "productCreatedAndStockAddedSuccessfully": "Товар создан и успешно добавлен на склад для SKU: {sku}",
+  "@productCreatedAndStockAddedSuccessfully": {
+    "placeholders": {
+      "sku": {}
+    }
+  }
 }

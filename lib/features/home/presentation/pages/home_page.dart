@@ -1,6 +1,8 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
+import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
@@ -10,8 +12,23 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(context.S.appTitle),
+        title: BlocBuilder<AuthBloc, AuthState>(
+          builder: (context, state) {
+            if (state is AuthSuccess) {
+              return Text(context.S.welcomeMessage(state.user.name));
+            }
+            return Text(context.S.appTitle);
+          },
+        ),
         automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: () {
+              context.read<AuthBloc>().add(LoggedOut());
+            },
+          ),
+        ],
       ),
       body: GridView.count(
         crossAxisCount: 2,
@@ -23,21 +40,21 @@ class HomePage extends StatelessWidget {
             icon: Icons.inventory_2_outlined,
             title: context.S.homeMenuInventory,
             onTap: () {
-              // TODO: Navigate to inventory
+              context.push('/inventory');
             },
           ),
           _HomeMenuItem(
             icon: Icons.archive_outlined,
             title: context.S.homeMenuReceiving,
             onTap: () {
-              // TODO: Navigate to receiving
+              context.push('/receiving');
             },
           ),
           _HomeMenuItem(
             icon: Icons.qr_code_scanner,
             title: context.S.homeMenuScanning,
             onTap: () {
-              // TODO: Navigate to scanning
+              context.push('/scanning');
             },
           ),
           _HomeMenuItem(

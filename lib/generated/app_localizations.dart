@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_ru.dart';
 
@@ -94,6 +95,7 @@ abstract class AppLocalizations {
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en'),
     Locale('ru'),
   ];
@@ -181,6 +183,240 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Английский'**
   String get languageEnglish;
+
+  /// No description provided for @languageGerman.
+  ///
+  /// In ru, this message translates to:
+  /// **'Немецкий'**
+  String get languageGerman;
+
+  /// No description provided for @loginAnonymousButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Продолжить как гость'**
+  String get loginAnonymousButtonText;
+
+  /// No description provided for @inventoryPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Инвентарь'**
+  String get inventoryPageTitle;
+
+  /// No description provided for @retryButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Повторить'**
+  String get retryButtonText;
+
+  /// No description provided for @nPieces.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
+  String nPieces(num count);
+
+  /// No description provided for @receiveStockPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Приемка товара'**
+  String get receiveStockPageTitle;
+
+  /// No description provided for @productSkuLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU товара'**
+  String get productSkuLabel;
+
+  /// No description provided for @quantityLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество'**
+  String get quantityLabel;
+
+  /// No description provided for @addStockButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить на склад'**
+  String get addStockButtonText;
+
+  /// No description provided for @scanBarcodePageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сканировать штрих-код'**
+  String get scanBarcodePageTitle;
+
+  /// No description provided for @productNotFound.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар не найден'**
+  String get productNotFound;
+
+  /// No description provided for @okButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'ОК'**
+  String get okButtonText;
+
+  /// No description provided for @pleaseEnterSkuError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите SKU'**
+  String get pleaseEnterSkuError;
+
+  /// No description provided for @pleaseEnterQuantityError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите количество'**
+  String get pleaseEnterQuantityError;
+
+  /// No description provided for @quantityMustBePositiveError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Количество должно быть положительным'**
+  String get quantityMustBePositiveError;
+
+  /// No description provided for @productNotFoundDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар не найден'**
+  String get productNotFoundDialogTitle;
+
+  /// No description provided for @productNameLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Название товара'**
+  String get productNameLabel;
+
+  /// No description provided for @cancelButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Отмена'**
+  String get cancelButtonText;
+
+  /// No description provided for @createAndAddStockButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Создать и добавить на склад'**
+  String get createAndAddStockButtonText;
+
+  /// No description provided for @editProductDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Редактировать товар'**
+  String get editProductDialogTitle;
+
+  /// No description provided for @saveButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сохранить'**
+  String get saveButtonText;
+
+  /// No description provided for @deleteProductDialogTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить товар'**
+  String get deleteProductDialogTitle;
+
+  /// No description provided for @deleteConfirmationMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите удалить {productName}?'**
+  String deleteConfirmationMessage(String productName);
+
+  /// No description provided for @deleteButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Удалить'**
+  String get deleteButtonText;
+
+  /// No description provided for @failedToUpdateProductMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось обновить товар.'**
+  String get failedToUpdateProductMessage;
+
+  /// No description provided for @productUpdatedSuccessfullyMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно обновлен.'**
+  String get productUpdatedSuccessfullyMessage;
+
+  /// No description provided for @failedToDeleteProductMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось удалить товар.'**
+  String get failedToDeleteProductMessage;
+
+  /// No description provided for @productDeletedSuccessfullyMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно удален.'**
+  String get productDeletedSuccessfullyMessage;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добро пожаловать, {userName}'**
+  String welcomeMessage(Object userName);
+
+  /// No description provided for @skuLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU: {sku}'**
+  String skuLabelWithColon(Object sku);
+
+  /// No description provided for @productSkuLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'{productSkuLabel}: {sku}'**
+  String productSkuLabelWithColon(Object productSkuLabel, Object sku);
+
+  /// No description provided for @quantityLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'{quantityLabel}: {quantity}'**
+  String quantityLabelWithColon(Object quantityLabel, Object quantity);
+
+  /// No description provided for @serverError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка сервера'**
+  String get serverError;
+
+  /// No description provided for @offlineIndicator.
+  ///
+  /// In ru, this message translates to:
+  /// **' (Офлайн)'**
+  String get offlineIndicator;
+
+  /// No description provided for @failedToAddStock.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить товар на склад.'**
+  String get failedToAddStock;
+
+  /// No description provided for @stockAddedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар для SKU: {sku} успешно добавлен на склад'**
+  String stockAddedSuccessfully(Object sku);
+
+  /// No description provided for @failedToCreateProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось создать товар.'**
+  String get failedToCreateProduct;
+
+  /// No description provided for @failedToAddStockAfterCreatingProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить товар на склад после создания товара.'**
+  String get failedToAddStockAfterCreatingProduct;
+
+  /// No description provided for @productCreatedAndStockAddedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар создан и успешно добавлен на склад для SKU: {sku}'**
+  String productCreatedAndStockAddedSuccessfully(Object sku);
 }
 
 class _AppLocalizationsDelegate
@@ -194,7 +430,7 @@ class _AppLocalizationsDelegate
 
   @override
   bool isSupported(Locale locale) =>
-      <String>['en', 'ru'].contains(locale.languageCode);
+      <String>['de', 'en', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
@@ -203,6 +439,8 @@ class _AppLocalizationsDelegate
 AppLocalizations lookupAppLocalizations(Locale locale) {
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
+    case 'de':
+      return AppLocalizationsDe();
     case 'en':
       return AppLocalizationsEn();
     case 'ru':

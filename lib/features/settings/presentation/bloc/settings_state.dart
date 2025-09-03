@@ -3,11 +3,11 @@ part of 'settings_bloc.dart';
 class SettingsState extends Equatable {
   const SettingsState({
     this.themeMode = ThemeMode.system,
-    this.locale = const Locale('ru'), // Default to Russian
+    this.locale, // Make it nullable
   });
 
   final ThemeMode themeMode;
-  final Locale locale;
+  final Locale? locale; // Make it nullable
 
   SettingsState copyWith({
     ThemeMode? themeMode,
@@ -20,5 +20,5 @@ class SettingsState extends Equatable {
   }
 
   @override
-  List<Object> get props => [themeMode, locale];
+  List<Object?> get props => [themeMode, locale];
 }
