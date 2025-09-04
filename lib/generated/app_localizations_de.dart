@@ -115,6 +115,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get retryButtonText => 'Wiederholen';
 
   @override
+  String get pickingCompleteConfirmation => 'Möchten Sie diese Kommissionierung wirklich abschließen?';
+
+  @override
   String nPieces(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

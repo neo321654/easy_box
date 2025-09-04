@@ -116,6 +116,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get retryButtonText => 'Повторить';
 
   @override
+  String get pickingCompleteConfirmation => 'Вы уверены, что хотите завершить сборку этого заказа?';
+
+  @override
   String nPieces(num count) {
     String _temp0 = intl.Intl.pluralLogic(
       count,

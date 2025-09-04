@@ -2,6 +2,7 @@ import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/order/domain/entities/entities.dart';
 import 'package:easy_box/features/order/presentation/bloc/picking_bloc.dart';
+import 'package:easy_box/core/widgets/confirmation_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
@@ -105,11 +106,13 @@ class _PickingViewState extends State<_PickingView> {
                 FloatingActionButton.extended(
                   heroTag: 'scanFab', // Unique tag for multiple FABs
                   onPressed: () async {
+                    final pickingBloc = context.read<PickingBloc>(); // Get bloc before async gap
                     final sku = await Navigator.of(context).push<String>(
                       MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
                     );
-                    if (sku != null && mounted) {
-                      context.read<PickingBloc>().add(BarcodeScanned(sku));
+                    if (!mounted) return; // Check mounted after async operation
+                    if (sku != null) {
+                      pickingBloc.add(BarcodeScanned(sku));
                     }
                   },
                   label: Text(context.S.scanBarcodePageTitle),
