@@ -1,0 +1,19 @@
+name: SSH Test
+
+on:
+  workflow_dispatch: # запуск вручную
+
+jobs:
+  test-ssh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo "✅ Успешное подключение к серверу!"
+            hostname
+            whoami
