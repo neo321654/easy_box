@@ -9,14 +9,26 @@ import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_pa
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InventoryPage extends StatefulWidget {
+class InventoryPage extends StatelessWidget {
   const InventoryPage({super.key});
 
   @override
-  State<InventoryPage> createState() => _InventoryPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => sl<InventoryBloc>()..add(FetchProductsRequested()),
+      child: const _InventoryView(),
+    );
+  }
 }
 
-class _InventoryPageState extends State<InventoryPage> {
+class _InventoryView extends StatefulWidget {
+  const _InventoryView();
+
+  @override
+  State<_InventoryView> createState() => _InventoryViewState();
+}
+
+class _InventoryViewState extends State<_InventoryView> {
   late final TextEditingController _searchController;
 
   @override
@@ -31,7 +43,7 @@ class _InventoryPageState extends State<InventoryPage> {
     super.dispose();
   }
 
-  void _showAddProductSheet(BuildContext context, {String? initialSku}) {
+  void _showAddProductSheet({String? initialSku}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -42,7 +54,7 @@ class _InventoryPageState extends State<InventoryPage> {
         );
       },
     ).then((result) {
-      if (result == true && context.mounted) {
+      if (result == true && mounted) {
         context.read<InventoryBloc>().add(FetchProductsRequested());
       }
     });
@@ -65,7 +77,7 @@ class _InventoryPageState extends State<InventoryPage> {
         title: Text(context.S.inventoryPageTitle),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddProductSheet(this.context),
+        onPressed: () => _showAddProductSheet(),
         label: Text(context.S.addProductButtonText),
         icon: const Icon(Icons.add),
       ),
@@ -82,7 +94,8 @@ class _InventoryPageState extends State<InventoryPage> {
                 context.read<InventoryBloc>().add(FetchProductsRequested());
               },
             );
-          } else if (state is InventorySuccess) {
+          }
+          if (state is InventorySuccess) {
             return Column(
               children: [
                 Padding(
@@ -127,7 +140,7 @@ class _InventoryPageState extends State<InventoryPage> {
                   Text(context.S.productNotFound),
                   const SizedBox(height: 16),
                   PrimaryButton(
-                    onPressed: () => _showAddProductSheet(this.context, initialSku: state.sku),
+                    onPressed: () => _showAddProductSheet(initialSku: state.sku),
                     text: context.S.addProductButtonText,
                   ),
                 ],
