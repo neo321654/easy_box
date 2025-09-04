@@ -1,43 +1,19 @@
-name: Deploy Backend to Server
+name: SSH Test
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'easy_box_backend/**'
+  workflow_dispatch: # запуск вручную
 
 jobs:
-  build-and-deploy:
+  test-ssh:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: ./easy_box_backend
-          push: true
-          tags: 321654neo/easy_box_backend:latest
-
-      - name: Deploy to Server
-        uses: appleboy/ssh-action@master
+      - name: Test SSH connection
+        uses: appleboy/ssh-action@v1.0.0
         with:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd ~/easy_box/easy_box_backend
-            docker pull 321654neo/easy_box_backend:latest
-            docker-compose up -d
+            echo "✅ Успешное подключение к серверу!"
+            hostname
+            whoami
