@@ -1,16 +1,21 @@
 name: SSH Test
 
 on:
-  workflow_dispatch: # запуск вручную
+  workflow_dispatch:
 
 jobs:
   test-ssh:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Debug SSH key (first lines)
+      - name: Check SSH private key length
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -5
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | wc -l
+
+      - name: Debug SSH key format
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | grep "BEGIN" || true
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | grep "END" || true
 
       - name: Test SSH connection
         uses: appleboy/ssh-action@v1.0.0
