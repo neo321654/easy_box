@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/image_source_sheet.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
@@ -52,43 +53,16 @@ class _EditProductDialogState extends State<EditProductDialog> {
     super.dispose();
   }
 
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _pickImage() async {
+    final source = await showImageSourceSheet(context);
+    if (source == null) return;
+
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
         _imageFile = File(pickedFile.path);
       });
     }
-  }
-
-  void _showImageSourceDialog() {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(dialogContext.S.selectImageSource),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(dialogContext.S.camera),
-              onTap: () {
-                Navigator.of(dialogContext).pop();
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(dialogContext.S.gallery),
-              onTap: () {
-                Navigator.of(dialogContext).pop();
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
   }
 
   @override
@@ -100,7 +74,7 @@ class _EditProductDialogState extends State<EditProductDialog> {
           mainAxisSize: MainAxisSize.min,
           children: [
             GestureDetector(
-              onTap: _showImageSourceDialog,
+              onTap: _pickImage,
               child: Container(
                 height: 150,
                 width: 150,
@@ -127,12 +101,14 @@ class _EditProductDialogState extends State<EditProductDialog> {
             const SizedBox(height: 16),
             TextFormField(
               controller: _nameController,
-              decoration: InputDecoration(labelText: context.S.productNameLabel),
+              decoration:
+                  InputDecoration(labelText: context.S.productNameLabel),
             ),
             const SizedBox(height: 16),
             TextFormField(
               controller: _skuController,
-              decoration: InputDecoration(labelText: context.S.productSkuLabel),
+              decoration:
+                  InputDecoration(labelText: context.S.productSkuLabel),
             ),
             const SizedBox(height: 16),
             TextFormField(
