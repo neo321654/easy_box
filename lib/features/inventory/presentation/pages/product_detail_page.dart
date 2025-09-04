@@ -39,7 +39,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
       builder: (ctx) => EditProductDialog(
         product: widget.product,
         onUpdate: (updatedProduct) {
-          context.read<ProductDetailBloc>().add(ProductUpdated(updatedProduct));
+          context.read<ProductDetailBloc>().add(UpdateProductRequested(updatedProduct));
         },
       ),
     );
@@ -55,7 +55,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
         onConfirm: () {
           context
               .read<ProductDetailBloc>()
-              .add(ProductDeleted(widget.product.id));
+              .add(DeleteProductRequested(widget.product.id));
         },
       ),
     );

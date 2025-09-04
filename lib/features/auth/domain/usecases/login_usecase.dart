@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/features/auth/domain/entities/user.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
 
@@ -6,7 +8,7 @@ class LoginUseCase {
 
   LoginUseCase(this.repository);
 
-  Future<User> call({
+  Future<Either<Failure, User>> call({
     required String email,
     required String password,
   }) {
