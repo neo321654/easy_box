@@ -8,15 +8,49 @@
   "homeMenuInventory": "Inventar",
   "homeMenuReceiving": "Wareneingang",
   "homeMenuScanning": "Scannen",
+  "homeMenuPicking": "Kommissionierung",
   "homeMenuSettings": "Einstellungen",
+  "homeMenuAddProduct": "Produkt hinzufügen",
   "settingsPageTitle": "Einstellungen",
-  "settingsThemeTitle": "Dunkles Design",
+  "settingsThemeTitle": "Design",
+  "settingsThemeSystem": "System",
+  "settingsThemeLight": "Hell",
+  "settingsThemeDark": "Dunkel",
   "settingsLanguageTitle": "Sprache",
   "languageRussian": "Russisch",
   "languageEnglish": "Englisch",
   "languageGerman": "Deutsch",
   "loginAnonymousButtonText": "Als Gast fortfahren",
   "inventoryPageTitle": "Inventar",
+  "inventorySearchHint": "Suche nach Name, SKU oder Standort...",
+  "addProductPageTitle": "Neues Produkt hinzufügen",
+  "addProductButtonText": "Produkt hinzufügen",
+  "pleaseEnterProductNameError": "Bitte Produktnamen eingeben",
+  "productCreatedSuccessfully": "Produkt erfolgreich erstellt",
+  "orderListPageTitle": "Bestellungen",
+  "orderListFailedToLoad": "Bestellungen konnten nicht geladen werden",
+  "orderStatusLabel": "Status: {status}",
+  "@orderStatusLabel": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "orderLinesLabel": "{count,plural, one{1 Position} other{{count} Positionen}}",
+  "@orderLinesLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "pickingPageTitle": "Bestellung kommissionieren: {orderId}",
+  "@pickingPageTitle": {
+    "placeholders": {
+      "orderId": {}
+    }
+  },
+  "pickingPageLocationLabel": "Standort",
+  "pickingPageSkuLabel": "SKU",
+  "pickingPageCompleteButton": "Kommissionierung abschließen",
+  "pickingCompleteConfirmation": "Möchten Sie diese Kommissionierung wirklich abschließen?",
     "retryButtonText": "Wiederholen",
   "nPieces": "{count,plural, one{1 Stück} other{{count} Stücke}}",
   "@nPieces": {
@@ -36,6 +70,8 @@
   "quantityMustBePositiveError": "Menge muss positiv sein",
   "productNotFoundDialogTitle": "Produkt nicht gefunden",
   "productNameLabel": "Produktname",
+  "productLocationLabel": "Standort",
+  "productImageUrlLabel": "Bild-URL",
   "cancelButtonText": "Abbrechen",
   "createAndAddStockButtonText": "Erstellen & Bestand hinzufügen",
   "editProductDialogTitle": "Produkt bearbeiten",
@@ -72,6 +108,7 @@
     }
   },
   "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "productLocationLabelWithColon": "Standort: {location}",
   "@quantityLabelWithColon": {
     "placeholders": {
       "quantityLabel": {},
@@ -79,10 +116,6 @@
     }
   },
   "serverError": "Serverfehler",
-  "failedToUpdateProductMessage": "Produkt konnte nicht aktualisiert werden.",
-  "productUpdatedSuccessfullyMessage": "Produkt erfolgreich aktualisiert.",
-  "failedToDeleteProductMessage": "Produkt konnte nicht gelöscht werden.",
-  "productDeletedSuccessfullyMessage": "Produkt erfolgreich gelöscht.",
   "offlineIndicator": " (Offline)",
   "failedToAddStock": "Bestand konnte nicht hinzugefügt werden.",
   "stockAddedSuccessfully": "Bestand für SKU: {sku} erfolgreich hinzugefügt",
@@ -98,5 +131,9 @@
     "placeholders": {
       "sku": {}
     }
-  }
+  },
+  "selectImageSource": "Bildquelle auswählen",
+  "camera": "Kamera",
+  "gallery": "Galerie",
+  "addProductImage": "Produktbild hinzufügen"
 }

@@ -148,11 +148,23 @@ abstract class AppLocalizations {
   /// **'Сканирование'**
   String get homeMenuScanning;
 
+  /// No description provided for @homeMenuPicking.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сборка'**
+  String get homeMenuPicking;
+
   /// No description provided for @homeMenuSettings.
   ///
   /// In ru, this message translates to:
   /// **'Настройки'**
   String get homeMenuSettings;
+
+  /// No description provided for @homeMenuAddProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить товар'**
+  String get homeMenuAddProduct;
 
   /// No description provided for @settingsPageTitle.
   ///
@@ -163,8 +175,26 @@ abstract class AppLocalizations {
   /// No description provided for @settingsThemeTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Тёмная тема'**
+  /// **'Тема'**
   String get settingsThemeTitle;
+
+  /// No description provided for @settingsThemeSystem.
+  ///
+  /// In ru, this message translates to:
+  /// **'Системная'**
+  String get settingsThemeSystem;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In ru, this message translates to:
+  /// **'Светлая'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In ru, this message translates to:
+  /// **'Темная'**
+  String get settingsThemeDark;
 
   /// No description provided for @settingsLanguageTitle.
   ///
@@ -201,6 +231,90 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Инвентарь'**
   String get inventoryPageTitle;
+
+  /// No description provided for @inventorySearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по имени, SKU или местоположению...'**
+  String get inventorySearchHint;
+
+  /// No description provided for @addProductPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить новый товар'**
+  String get addProductPageTitle;
+
+  /// No description provided for @addProductButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить товар'**
+  String get addProductButtonText;
+
+  /// No description provided for @pleaseEnterProductNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите название товара'**
+  String get pleaseEnterProductNameError;
+
+  /// No description provided for @productCreatedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно создан'**
+  String get productCreatedSuccessfully;
+
+  /// No description provided for @orderListPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заказы'**
+  String get orderListPageTitle;
+
+  /// No description provided for @orderListFailedToLoad.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить заказы'**
+  String get orderListFailedToLoad;
+
+  /// No description provided for @orderStatusLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус: {status}'**
+  String orderStatusLabel(Object status);
+
+  /// No description provided for @orderLinesLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count,plural, one{{count} позиция} few{{count} позиции} many{{count} позиций} other{{count} позиции}}'**
+  String orderLinesLabel(num count);
+
+  /// No description provided for @pickingPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сборка заказа: {orderId}'**
+  String pickingPageTitle(Object orderId);
+
+  /// No description provided for @pickingPageLocationLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Место'**
+  String get pickingPageLocationLabel;
+
+  /// No description provided for @pickingPageSkuLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU'**
+  String get pickingPageSkuLabel;
+
+  /// No description provided for @pickingPageCompleteButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Завершить сборку'**
+  String get pickingPageCompleteButton;
+
+  /// No description provided for @pickingCompleteConfirmation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите завершить сборку этого заказа?'**
+  String get pickingCompleteConfirmation;
 
   /// No description provided for @retryButtonText.
   ///
@@ -285,6 +399,18 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Название товара'**
   String get productNameLabel;
+
+  /// No description provided for @productLocationLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местоположение'**
+  String get productLocationLabel;
+
+  /// No description provided for @productImageUrlLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'URL изображения'**
+  String get productImageUrlLabel;
 
   /// No description provided for @cancelButtonText.
   ///
@@ -376,6 +502,12 @@ abstract class AppLocalizations {
   /// **'{quantityLabel}: {quantity}'**
   String quantityLabelWithColon(Object quantityLabel, Object quantity);
 
+  /// No description provided for @productLocationLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местоположение: {location}'**
+  String productLocationLabelWithColon(Object location);
+
   /// No description provided for @serverError.
   ///
   /// In ru, this message translates to:
@@ -417,6 +549,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Товар создан и успешно добавлен на склад для SKU: {sku}'**
   String productCreatedAndStockAddedSuccessfully(Object sku);
+
+  /// No description provided for @selectImageSource.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите источник изображения'**
+  String get selectImageSource;
+
+  /// No description provided for @camera.
+  ///
+  /// In ru, this message translates to:
+  /// **'Камера'**
+  String get camera;
+
+  /// No description provided for @gallery.
+  ///
+  /// In ru, this message translates to:
+  /// **'Галерея'**
+  String get gallery;
+
+  /// No description provided for @addProductImage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить изображение товара'**
+  String get addProductImage;
 }
 
 class _AppLocalizationsDelegate

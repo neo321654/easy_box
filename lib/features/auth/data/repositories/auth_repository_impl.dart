@@ -1,7 +1,8 @@
+import 'package:dartz/dartz.dart';
+import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/features/auth/domain/entities/user.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 
 class AuthRepositoryImpl implements AuthRepository {
   final SharedPreferences _prefs;
@@ -11,7 +12,7 @@ class AuthRepositoryImpl implements AuthRepository {
   AuthRepositoryImpl(this._prefs);
 
   @override
-  Future<User> login({
+  Future<Either<Failure, User>> login({
     required String email,
     required String password,
   }) async {
@@ -23,13 +24,13 @@ class AuthRepositoryImpl implements AuthRepository {
       // Here, we'll just use the user's ID as a mock token.
       const mockToken = 'user-id-1';
       await _prefs.setString(_userTokenKey, mockToken);
-      return const User(
+      return const Right(User(
         id: '1',
         name: 'Admin User',
         email: 'admin@example.com',
-      );
+      ));
     } else {
-      throw Exception('Invalid credentials');
+      return const Left(LogInFailure('Invalid credentials'));
     }
   }
 

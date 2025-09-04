@@ -10,7 +10,7 @@ abstract class InventoryLocalDataSource {
   Future<void> saveProduct(ProductModel product);
 
   // New methods for product creation queue
-  Future<void> addProductCreationToQueue(String name, String sku, String localId);
+  Future<void> addProductCreationToQueue(String name, String sku, String? location, String? imageUrl, String localId);
   Future<List<Map<String, dynamic>>> getQueuedProductCreations();
   Future<void> clearQueuedProductCreations();
   Future<void> updateProductId(String oldId, String newId);

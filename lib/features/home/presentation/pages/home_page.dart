@@ -1,12 +1,28 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/widgets/add_product_form.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
+
+  void _showAddProductSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) {
+        return BlocProvider(
+          create: (_) => sl<ProductCreationBloc>(),
+          child: const AddProductForm(),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +60,11 @@ class HomePage extends StatelessWidget {
             },
           ),
           _HomeMenuItem(
+            icon: Icons.add_box_outlined,
+            title: context.S.homeMenuAddProduct,
+            onTap: () => _showAddProductSheet(context),
+          ),
+          _HomeMenuItem(
             icon: Icons.archive_outlined,
             title: context.S.homeMenuReceiving,
             onTap: () {
@@ -62,6 +83,13 @@ class HomePage extends StatelessWidget {
             title: context.S.homeMenuSettings,
             onTap: () {
               context.push('/settings');
+            },
+          ),
+          _HomeMenuItem(
+            icon: Icons.shopping_basket_outlined,
+            title: context.S.homeMenuPicking,
+            onTap: () {
+              context.push('/orders');
             },
           ),
         ],

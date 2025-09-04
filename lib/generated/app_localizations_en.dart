@@ -33,13 +33,28 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeMenuScanning => 'Scanning';
 
   @override
+  String get homeMenuPicking => 'Picking';
+
+  @override
   String get homeMenuSettings => 'Settings';
+
+  @override
+  String get homeMenuAddProduct => 'Add Product';
 
   @override
   String get settingsPageTitle => 'Settings';
 
   @override
-  String get settingsThemeTitle => 'Dark Theme';
+  String get settingsThemeTitle => 'Theme';
+
+  @override
+  String get settingsThemeSystem => 'System';
+
+  @override
+  String get settingsThemeLight => 'Light';
+
+  @override
+  String get settingsThemeDark => 'Dark';
 
   @override
   String get settingsLanguageTitle => 'Language';
@@ -58,6 +73,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get inventoryPageTitle => 'Inventory';
+
+  @override
+  String get inventorySearchHint => 'Search by name, SKU, or location...';
+
+  @override
+  String get addProductPageTitle => 'Add New Product';
+
+  @override
+  String get addProductButtonText => 'Add Product';
+
+  @override
+  String get pleaseEnterProductNameError => 'Please enter product name';
+
+  @override
+  String get productCreatedSuccessfully => 'Product created successfully';
+
+  @override
+  String get orderListPageTitle => 'Orders';
+
+  @override
+  String get orderListFailedToLoad => 'Failed to load orders';
+
+  @override
+  String orderStatusLabel(Object status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String orderLinesLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lines',
+      one: '1 line',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickingPageTitle(Object orderId) {
+    return 'Picking Order: $orderId';
+  }
+
+  @override
+  String get pickingPageLocationLabel => 'Location';
+
+  @override
+  String get pickingPageSkuLabel => 'SKU';
+
+  @override
+  String get pickingPageCompleteButton => 'Complete Picking';
+
+  @override
+  String get pickingCompleteConfirmation =>
+      'Are you sure you want to complete this picking order?';
 
   @override
   String get retryButtonText => 'Retry';
@@ -108,6 +178,12 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get productNameLabel => 'Product Name';
+
+  @override
+  String get productLocationLabel => 'Location';
+
+  @override
+  String get productImageUrlLabel => 'Image URL';
 
   @override
   String get cancelButtonText => 'Cancel';
@@ -167,6 +243,11 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
+  String productLocationLabelWithColon(Object location) {
+    return 'Location: $location';
+  }
+
+  @override
   String get serverError => 'Server Error';
 
   @override
@@ -191,4 +272,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String productCreatedAndStockAddedSuccessfully(Object sku) {
     return 'Product created and stock added successfully for SKU: $sku';
   }
+
+  @override
+  String get selectImageSource => 'Select Image Source';
+
+  @override
+  String get camera => 'Camera';
+
+  @override
+  String get gallery => 'Gallery';
+
+  @override
+  String get addProductImage => 'Add Product Image';
 }

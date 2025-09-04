@@ -23,3 +23,12 @@ class ProductNotFoundFailure extends Failure {
   @override
   List<Object?> get props => [sku];
 }
+
+class LogInFailure extends Failure {
+  final String message;
+
+  const LogInFailure(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}

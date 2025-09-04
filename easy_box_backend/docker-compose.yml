@@ -1,0 +1,14 @@
+version: '3.8'
+
+services:
+  api:
+    image: 321654neo/easy_box_backend:latest
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      # Этот том сохраняет базу данных SQLite на вашем сервере,
+      # чтобы данные не терялись при перезапуске контейнера.
+      - ./db_data:/easy_box_backend/db_data
+    env_file:
+      - ./.env

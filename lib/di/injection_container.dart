@@ -1,4 +1,6 @@
-import 'package:easy_box/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:easy_box/features/order/data/datasources/order_remote_data_source_api_impl.dart';
+import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source_api_impl.dart';
+import 'package:easy_box/features/auth/data/repositories/auth_repository_api_impl.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
 import 'package:easy_box/features/auth/domain/usecases/get_me_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/login_anonymously_usecase.dart';
@@ -6,7 +8,6 @@ import 'package:easy_box/features/auth/domain/usecases/login_usecase.dart';
 import 'package:easy_box/features/auth/domain/usecases/logout_usecase.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
-import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source_impl.dart';
 import 'package:easy_box/features/inventory/data/repositories/inventory_repository_impl.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
 import 'package:easy_box/features/inventory/domain/usecases/add_stock_usecase.dart';
@@ -17,7 +18,16 @@ import 'package:easy_box/features/inventory/domain/usecases/update_product_useca
 import 'package:easy_box/features/inventory/domain/usecases/delete_product_usecase.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart'; // Added for initial mock data
+import 'package:easy_box/features/order/data/datasources/order_remote_data_source.dart';
+import 'package:easy_box/features/order/data/datasources/order_local_data_source.dart';
+import 'package:easy_box/features/order/data/datasources/order_local_data_source_impl.dart';
+import 'package:easy_box/features/order/data/repositories/order_repository_impl.dart';
+import 'package:easy_box/features/order/domain/repositories/order_repository.dart';
+import 'package:easy_box/features/order/domain/usecases/get_orders_usecase.dart';
+import 'package:easy_box/features/order/domain/usecases/update_order_usecase.dart';
+import 'package:easy_box/features/order/presentation/bloc/order_list_bloc.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/scanning/presentation/bloc/scanning_bloc.dart';
 import 'package:easy_box/features/settings/data/repositories/settings_repository_impl.dart';
@@ -36,22 +46,50 @@ import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source_impl.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 final sl = GetIt.instance;
 
 Future<void> init({Locale? systemLocale}) async {
   // Initial mock data for the persistent mock backend
   final List<ProductModel> initialMockProducts = [
-    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150),
-    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85),
-    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110),
-    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200),
-    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350),
+    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150, location: 'A1-01-01'),
+    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85, location: 'A1-01-02'),
+    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110, location: 'A2-03-05'),
+    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200, location: 'C4-02-01'),
+    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350, location: 'C4-02-02'),
   ];
 
   //####################
   //region Features
   //####################
+
+  //--------------------
+  //region Order
+  //--------------------
+  // Blocs
+  sl.registerFactory(() => OrderListBloc(getOrdersUseCase: sl()));
+
+  // Use Cases
+  sl.registerLazySingleton(() => GetOrdersUseCase(sl()));
+  sl.registerLazySingleton(() => UpdateOrderUseCase(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<OrderRepository>(
+    () => OrderRepositoryImpl(
+      remoteDataSource: sl(),
+      localDataSource: sl(),
+      networkInfo: sl(),
+    ),
+  );
+
+  // Data Sources
+  sl.registerLazySingleton<OrderRemoteDataSource>(
+      () => OrderRemoteDataSourceApiImpl(client: sl(), prefs: sl()));
+  sl.registerLazySingleton<OrderLocalDataSource>(
+    () => OrderLocalDataSourceImpl(database: sl()),
+  );
+  //endregion
 
   //--------------------
   //region Receiving
@@ -71,8 +109,9 @@ Future<void> init({Locale? systemLocale}) async {
   //region Inventory
   //--------------------
   // Blocs
-  sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl()));
+  sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl(), findProductBySkuUseCase: sl()));
   sl.registerFactory(() => ProductDetailBloc(updateProductUseCase: sl(), deleteProductUseCase: sl()));
+  sl.registerFactory(() => ProductCreationBloc(createProductUseCase: sl()));
 
   // Use Cases
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
@@ -92,7 +131,8 @@ Future<void> init({Locale? systemLocale}) async {
   );
 
   // Data Sources
-  sl.registerLazySingleton<InventoryRemoteDataSource>(() => InventoryRemoteDataSourceImpl(database: sl(instanceName: 'mockBackendDb')));
+  sl.registerLazySingleton<InventoryRemoteDataSource>(
+      () => InventoryRemoteDataSourceApiImpl(client: sl(), prefs: sl()));
 
   // Local Data Sources
   sl.registerLazySingleton<InventoryLocalDataSource>(
@@ -145,7 +185,8 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton(() => LoginAnonymouslyUseCase(sl()));
 
   // Repositories
-  sl.registerLazySingleton<AuthRepository>(() => AuthRepositoryImpl(sl()));
+  sl.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryApiImpl(client: sl(), prefs: sl()));
   //endregion
 
   //endregion
@@ -155,28 +196,38 @@ Future<void> init({Locale? systemLocale}) async {
   //####################
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton(() => http.Client());
 
   // App's local cache database
   final appDb = await openDatabase(
     join(await getDatabasesPath(), 'easy_box_database.db'),
     onCreate: (db, version) {
       db.execute(
-        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER)',
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT)',
       );
       db.execute(
         'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
       );
       db.execute(
-        'CREATE TABLE product_creations_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sku TEXT, local_id TEXT, timestamp INTEGER)',
+        'CREATE TABLE product_creations_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, sku TEXT, location TEXT, local_id TEXT, timestamp INTEGER)',
       );
       db.execute(
-        'CREATE TABLE product_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, name TEXT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
+        'CREATE TABLE product_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, name TEXT, sku TEXT, quantity INTEGER, location TEXT, timestamp INTEGER)',
       );
       db.execute(
         'CREATE TABLE product_deletions_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, timestamp INTEGER)',
       );
+      db.execute(
+        'CREATE TABLE orders(id TEXT PRIMARY KEY, customer_name TEXT, status INTEGER)',
+      );
+      db.execute(
+        'CREATE TABLE order_lines(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, product_id TEXT, product_name TEXT, sku TEXT, location TEXT, quantity_to_pick INTEGER, quantity_picked INTEGER, image_url TEXT)',
+      );
+      db.execute(
+        'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
+      );
     },
-    version: 4,
+    version: 7,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(
@@ -196,6 +247,25 @@ Future<void> init({Locale? systemLocale}) async {
           'CREATE TABLE product_deletions_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, timestamp INTEGER)',
         );
       }
+      if (oldVersion < 5) {
+        db.execute('ALTER TABLE products ADD COLUMN location TEXT');
+        db.execute('ALTER TABLE product_creations_queue ADD COLUMN location TEXT');
+        db.execute('ALTER TABLE product_updates_queue ADD COLUMN location TEXT');
+      }
+      if (oldVersion < 6) {
+        db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
+      }
+      if (oldVersion < 7) {
+        db.execute(
+          'CREATE TABLE orders(id TEXT PRIMARY KEY, customer_name TEXT, status INTEGER)',
+        );
+        db.execute(
+          'CREATE TABLE order_lines(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, product_id TEXT, product_name TEXT, sku TEXT, location TEXT, quantity_to_pick INTEGER, quantity_picked INTEGER, image_url TEXT)',
+        );
+        db.execute(
+          'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
+        );
+      }
     },
   );
   sl.registerLazySingleton<Database>(() => appDb); // Register app's DB
@@ -205,14 +275,22 @@ Future<void> init({Locale? systemLocale}) async {
     join(await getDatabasesPath(), 'easy_box_mock_backend_database.db'),
     onCreate: (db, version) async {
       await db.execute(
-        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER)',
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT)',
       );
       // Populate with initial mock data
       for (final product in initialMockProducts) {
         await db.insert('products', product.toJson());
       }
     },
-    version: 1, // Separate version for mock backend DB
+    version: 3, // Separate version for mock backend DB
+    onUpgrade: (db, oldVersion, newVersion) {
+      if (oldVersion < 2) {
+        db.execute('ALTER TABLE products ADD COLUMN location TEXT');
+      }
+      if (oldVersion < 3) {
+        db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
+      }
+    },
   );
   sl.registerLazySingleton<Database>(
       () => mockBackendDb, instanceName: 'mockBackendDb'); // Register mock backend DB
@@ -221,3 +299,5 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   //endregion
 }
+
+

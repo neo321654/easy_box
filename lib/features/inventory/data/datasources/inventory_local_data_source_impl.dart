@@ -70,10 +70,12 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
   }
 
   @override
-  Future<void> addProductCreationToQueue(String name, String sku, String localId) async {
+  Future<void> addProductCreationToQueue(String name, String sku, String? location, String? imageUrl, String localId) async {
     await database.insert(_tableProductCreationsQueue, {
       'name': name,
       'sku': sku,
+      'location': location,
+      'image_url': imageUrl,
       'local_id': localId,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
@@ -124,6 +126,8 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
       'name': product.name,
       'sku': product.sku,
       'quantity': product.quantity,
+      'location': product.location,
+      'image_url': product.imageUrl,
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
   }

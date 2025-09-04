@@ -33,13 +33,28 @@ class AppLocalizationsDe extends AppLocalizations {
   String get homeMenuScanning => 'Scannen';
 
   @override
+  String get homeMenuPicking => 'Kommissionierung';
+
+  @override
   String get homeMenuSettings => 'Einstellungen';
+
+  @override
+  String get homeMenuAddProduct => 'Produkt hinzufügen';
 
   @override
   String get settingsPageTitle => 'Einstellungen';
 
   @override
-  String get settingsThemeTitle => 'Dunkles Design';
+  String get settingsThemeTitle => 'Design';
+
+  @override
+  String get settingsThemeSystem => 'System';
+
+  @override
+  String get settingsThemeLight => 'Hell';
+
+  @override
+  String get settingsThemeDark => 'Dunkel';
 
   @override
   String get settingsLanguageTitle => 'Sprache';
@@ -58,6 +73,62 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get inventoryPageTitle => 'Inventar';
+
+  @override
+  String get inventorySearchHint => 'Suche nach Name, SKU oder Standort...';
+
+  @override
+  String get addProductPageTitle => 'Neues Produkt hinzufügen';
+
+  @override
+  String get addProductButtonText => 'Produkt hinzufügen';
+
+  @override
+  String get pleaseEnterProductNameError => 'Bitte Produktnamen eingeben';
+
+  @override
+  String get productCreatedSuccessfully => 'Produkt erfolgreich erstellt';
+
+  @override
+  String get orderListPageTitle => 'Bestellungen';
+
+  @override
+  String get orderListFailedToLoad =>
+      'Bestellungen konnten nicht geladen werden';
+
+  @override
+  String orderStatusLabel(Object status) {
+    return 'Status: $status';
+  }
+
+  @override
+  String orderLinesLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count Positionen',
+      one: '1 Position',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickingPageTitle(Object orderId) {
+    return 'Bestellung kommissionieren: $orderId';
+  }
+
+  @override
+  String get pickingPageLocationLabel => 'Standort';
+
+  @override
+  String get pickingPageSkuLabel => 'SKU';
+
+  @override
+  String get pickingPageCompleteButton => 'Kommissionierung abschließen';
+
+  @override
+  String get pickingCompleteConfirmation =>
+      'Möchten Sie diese Kommissionierung wirklich abschließen?';
 
   @override
   String get retryButtonText => 'Wiederholen';
@@ -108,6 +179,12 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get productNameLabel => 'Produktname';
+
+  @override
+  String get productLocationLabel => 'Standort';
+
+  @override
+  String get productImageUrlLabel => 'Bild-URL';
 
   @override
   String get cancelButtonText => 'Abbrechen';
@@ -169,6 +246,11 @@ class AppLocalizationsDe extends AppLocalizations {
   }
 
   @override
+  String productLocationLabelWithColon(Object location) {
+    return 'Standort: $location';
+  }
+
+  @override
   String get serverError => 'Serverfehler';
 
   @override
@@ -193,4 +275,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String productCreatedAndStockAddedSuccessfully(Object sku) {
     return 'Produkt erstellt und Bestand für SKU: $sku erfolgreich hinzugefügt';
   }
+
+  @override
+  String get selectImageSource => 'Bildquelle auswählen';
+
+  @override
+  String get camera => 'Kamera';
+
+  @override
+  String get gallery => 'Galerie';
+
+  @override
+  String get addProductImage => 'Produktbild hinzufügen';
 }

@@ -1,3 +1,4 @@
+import 'package:easy_box/core/error/failures.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/features/auth/domain/entities/user.dart';
@@ -60,15 +61,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     emit(AuthLoading());
-    try {
-      final user = await _loginUseCase(
-        email: event.email,
-        password: event.password,
-      );
-      emit(AuthSuccess(user));
-    } catch (e) {
-      emit(AuthFailure(e.toString()));
-    }
+    final failureOrUser = await _loginUseCase(
+      email: event.email,
+      password: event.password,
+    );
+    failureOrUser.fold(
+      (failure) {
+        if (failure is LogInFailure) {
+          emit(AuthFailure(failure.message));
+        } else {
+          emit(const AuthFailure('An unexpected error occurred.'));
+        }
+      },
+      (user) => emit(AuthSuccess(user)),
+    );
   }
 
   Future<void> _onAnonymousLoginButtonPressed(

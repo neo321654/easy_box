@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/core/error/failures.dart';
@@ -8,6 +10,9 @@ import 'package:easy_box/features/inventory/data/datasources/inventory_remote_da
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 class InventoryRepositoryImpl implements InventoryRepository {
   final InventoryRemoteDataSource remoteDataSource;
@@ -55,12 +60,41 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 
+  Future<String?> _copyImageToPermanentStorage(String? imagePath) async {
+    if (imagePath == null) return null;
+
+    try {
+      final file = File(imagePath);
+      if (!await file.exists()) return null;
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final fileName = p.basename(imagePath);
+      final newPath = p.join(appDir.path, 'product_images', fileName);
+
+      final newFile = File(newPath);
+      await newFile.create(recursive: true);
+      await file.copy(newFile.path);
+
+      return newPath;
+    } catch (e) {
+      // Handle exceptions, e.g., file system errors
+      return null;
+    }
+  }
+
   @override
   Future<Either<Failure, OperationResult>> createProduct(
-      {required String name, required String sku}) async {
+      {required String name, required String sku, String? location, String? imageUrl}) async {
     if (await networkInfo.isConnected) {
       try {
-        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku);
+        // First, create the product without the image URL
+        ProductModel newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location);
+
+        // If an image is provided, upload it now
+        if (imageUrl != null) {
+          newProduct = await remoteDataSource.uploadProductImage(newProduct.id, imageUrl);
+        }
+
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
@@ -69,13 +103,14 @@ class InventoryRepositoryImpl implements InventoryRepository {
     } else {
       // Offline creation
       try {
-        final localId = DateTime.now().millisecondsSinceEpoch.toString(); // Generate a temporary local ID
-        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0);
+        final permanentImageUrl = await _copyImageToPermanentStorage(imageUrl);
+        final localId = const Uuid().v4(); // Generate a temporary local ID
+        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0, location: location, imageUrl: permanentImageUrl);
         await localDataSource.saveProduct(newProduct);
-        await localDataSource.addProductCreationToQueue(name, sku, localId);
-        return const Right(OperationResult(isQueued: true)); // Fixed: return OperationResult
+        await localDataSource.addProductCreationToQueue(name, sku, location, permanentImageUrl, localId);
+        return const Right(OperationResult(isQueued: true));
       } on Exception {
-        return Left(CacheFailure()); // Or a more specific failure
+        return Left(CacheFailure());
       }
     }
   }
@@ -105,12 +140,48 @@ class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
   Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
+    Product productToUpdate = product;
+
+    // Check if the imageUrl is a new local file path
+    if (product.imageUrl != null && !product.imageUrl!.startsWith('http')) {
+      if (await networkInfo.isConnected) {
+        try {
+          final uploadedProduct = await remoteDataSource.uploadProductImage(product.id, product.imageUrl!);
+          // Update the product instance with the new remote image URL
+          productToUpdate = Product(
+            id: product.id,
+            name: product.name,
+            sku: product.sku,
+            quantity: product.quantity,
+            location: product.location,
+            imageUrl: uploadedProduct.imageUrl,
+          );
+        } on ServerException {
+          return Left(ServerFailure());
+        }
+      } else {
+        // Cannot upload new image offline, but we can save the local path for later sync
+        final permanentImageUrl = await _copyImageToPermanentStorage(product.imageUrl);
+        productToUpdate = Product(
+          id: product.id,
+          name: product.name,
+          sku: product.sku,
+          quantity: product.quantity,
+          location: product.location,
+          imageUrl: permanentImageUrl,
+        );
+      }
+    }
+
     final productModel = ProductModel(
-      id: product.id,
-      name: product.name,
-      sku: product.sku,
-      quantity: product.quantity,
+      id: productToUpdate.id,
+      name: productToUpdate.name,
+      sku: productToUpdate.sku,
+      quantity: productToUpdate.quantity,
+      location: productToUpdate.location,
+      imageUrl: productToUpdate.imageUrl,
     );
+
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.updateProduct(productModel);
@@ -138,7 +209,8 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await remoteDataSource.deleteProduct(id);
         await localDataSource.deleteProduct(id);
         return const Right(OperationResult(isQueued: false));
-      } on ServerException {
+      }
+      on ServerException {
         return Left(ServerFailure());
       }
     } else {
@@ -147,7 +219,8 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await localDataSource.addProductDeletionToQueue(id);
         await localDataSource.deleteProduct(id);
         return const Right(OperationResult(isQueued: true));
-      } on Exception {
+      }
+      on Exception {
         return Left(CacheFailure());
       }
     }
@@ -158,16 +231,14 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingCreations = await localDataSource.getQueuedProductCreations();
     if (pendingCreations.isNotEmpty) {
       for (final creation in pendingCreations) {
-        try {
-          final remoteProduct = await remoteDataSource.createProduct(
-            name: creation['name'],
-            sku: creation['sku'],
-          );
-          // Update local product with real server ID
-          await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
-        } catch (e) {
-          // Handle creation sync failure (e.g., log, retry later)
-        }
+        final remoteProduct = await remoteDataSource.createProduct(
+          name: creation['name'],
+          sku: creation['sku'],
+          location: creation['location'],
+          imageUrl: creation['image_url'],
+        );
+        // Update local product with real server ID
+        await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
       }
       await localDataSource.clearQueuedProductCreations();
     }
@@ -176,11 +247,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingStockUpdates = await localDataSource.getQueuedStockUpdates();
     if (pendingStockUpdates.isNotEmpty) {
       for (final update in pendingStockUpdates) {
-        try {
-          await remoteDataSource.addStock(update['sku'], update['quantity']);
-        } catch (e) {
-          // Handle stock update sync failure
-        }
+        await remoteDataSource.addStock(update['sku'], update['quantity']);
       }
       await localDataSource.clearQueuedStockUpdates();
     }
@@ -189,17 +256,15 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingUpdates = await localDataSource.getQueuedProductUpdates();
     if (pendingUpdates.isNotEmpty) {
       for (final update in pendingUpdates) {
-        try {
-          final productModel = ProductModel(
-            id: update['product_id'],
-            name: update['name'],
-            sku: update['sku'],
-            quantity: update['quantity'],
-          );
-          await remoteDataSource.updateProduct(productModel);
-        } catch (e) {
-          // Handle update sync failure
-        }
+        final productModel = ProductModel(
+          id: update['product_id'],
+          name: update['name'],
+          sku: update['sku'],
+          quantity: update['quantity'],
+          location: update['location'],
+          imageUrl: update['image_url'],
+        );
+        await remoteDataSource.updateProduct(productModel);
       }
       await localDataSource.clearQueuedProductUpdates();
     }
@@ -208,13 +273,11 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingDeletions = await localDataSource.getQueuedProductDeletions();
     if (pendingDeletions.isNotEmpty) {
       for (final deletion in pendingDeletions) {
-        try {
-          await remoteDataSource.deleteProduct(deletion['product_id']);
-        } catch (e) {
-          // Handle deletion sync failure
-        }
+        await remoteDataSource.deleteProduct(deletion['product_id']);
       }
       await localDataSource.clearQueuedProductDeletions();
     }
   }
 }
+
+

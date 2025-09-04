@@ -8,15 +8,49 @@
   "homeMenuInventory": "Inventory",
   "homeMenuReceiving": "Receiving",
   "homeMenuScanning": "Scanning",
+  "homeMenuPicking": "Picking",
   "homeMenuSettings": "Settings",
+  "homeMenuAddProduct": "Add Product",
   "settingsPageTitle": "Settings",
-  "settingsThemeTitle": "Dark Theme",
+  "settingsThemeTitle": "Theme",
+  "settingsThemeSystem": "System",
+  "settingsThemeLight": "Light",
+  "settingsThemeDark": "Dark",
   "settingsLanguageTitle": "Language",
   "languageRussian": "Russian",
   "languageEnglish": "English",
   "languageGerman": "German",
   "loginAnonymousButtonText": "Continue as Guest",
   "inventoryPageTitle": "Inventory",
+  "inventorySearchHint": "Search by name, SKU, or location...",
+  "addProductPageTitle": "Add New Product",
+  "addProductButtonText": "Add Product",
+  "pleaseEnterProductNameError": "Please enter product name",
+  "productCreatedSuccessfully": "Product created successfully",
+  "orderListPageTitle": "Orders",
+  "orderListFailedToLoad": "Failed to load orders",
+  "orderStatusLabel": "Status: {status}",
+  "@orderStatusLabel": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "orderLinesLabel": "{count,plural, =1{1 line} other{{count} lines}}",
+  "@orderLinesLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "pickingPageTitle": "Picking Order: {orderId}",
+  "@pickingPageTitle": {
+    "placeholders": {
+      "orderId": {}
+    }
+  },
+  "pickingPageLocationLabel": "Location",
+  "pickingPageSkuLabel": "SKU",
+  "pickingPageCompleteButton": "Complete Picking",
+  "pickingCompleteConfirmation": "Are you sure you want to complete this picking order?",
     "retryButtonText": "Retry",
   "nPieces": "{count,plural, =1{1 piece} other{{count} pieces}}",
   "@nPieces": {
@@ -36,6 +70,8 @@
   "quantityMustBePositiveError": "Quantity must be positive",
   "productNotFoundDialogTitle": "Product Not Found",
   "productNameLabel": "Product Name",
+  "productLocationLabel": "Location",
+  "productImageUrlLabel": "Image URL",
   "cancelButtonText": "Cancel",
   "createAndAddStockButtonText": "Create & Add Stock",
   "editProductDialogTitle": "Edit Product",
@@ -72,6 +108,7 @@
     }
   },
   "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "productLocationLabelWithColon": "Location: {location}",
   "@quantityLabelWithColon": {
     "placeholders": {
       "quantityLabel": {},
@@ -79,10 +116,6 @@
     }
   },
   "serverError": "Server Error",
-  "failedToUpdateProductMessage": "Failed to update product.",
-  "productUpdatedSuccessfullyMessage": "Product updated successfully.",
-  "failedToDeleteProductMessage": "Failed to delete product.",
-  "productDeletedSuccessfullyMessage": "Product deleted successfully.",
   "offlineIndicator": " (Offline)",
   "failedToAddStock": "Failed to add stock.",
   "stockAddedSuccessfully": "Stock added successfully for SKU: {sku}",
@@ -98,5 +131,9 @@
     "placeholders": {
       "sku": {}
     }
-  }
+  },
+  "selectImageSource": "Select Image Source",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "addProductImage": "Add Product Image"
 }

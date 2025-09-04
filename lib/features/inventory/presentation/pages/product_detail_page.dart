@@ -1,9 +1,12 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/utils/app_dimensions.dart';
+import 'package:easy_box/core/widgets/app_snack_bar.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/edit_product_dialog.dart';
+import 'package:easy_box/features/inventory/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -37,7 +40,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
       builder: (ctx) => EditProductDialog(
         product: widget.product,
         onUpdate: (updatedProduct) {
-          context.read<ProductDetailBloc>().add(ProductUpdated(updatedProduct));
+          context.read<ProductDetailBloc>().add(UpdateProductRequested(updatedProduct));
         },
       ),
     );
@@ -53,7 +56,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
         onConfirm: () {
           context
               .read<ProductDetailBloc>()
-              .add(ProductDeleted(widget.product.id));
+              .add(DeleteProductRequested(widget.product.id));
         },
       ),
     );
@@ -81,45 +84,49 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             final message = state.type == ProductDetailSuccessType.updated
                 ? context.S.productUpdatedSuccessfullyMessage
                 : context.S.productDeletedSuccessfullyMessage;
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(
-                      message + (state.isQueued ? context.S.offlineIndicator : '')),
-                  backgroundColor: Colors.green));
+            showAppSnackBar(
+                context,
+                message +
+                    (state.isQueued ? context.S.offlineIndicator : ''));
             if (state.type == ProductDetailSuccessType.updated) {
               Navigator.of(context).pop(state.updatedProduct);
             } else if (state.type == ProductDetailSuccessType.deleted) {
               Navigator.of(context).pop(true);
             }
           } else if (state is ProductUpdateFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(context.S.failedToUpdateProductMessage),
-                  backgroundColor: Colors.red));
+            showAppSnackBar(
+                context, context.S.failedToUpdateProductMessage, isError: true);
           } else if (state is ProductDeleteFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(context.S.failedToDeleteProductMessage),
-                  backgroundColor: Colors.red));
+            showAppSnackBar(
+                context, context.S.failedToDeleteProductMessage, isError: true);
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppDimensions.medium),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ProductImage(
+                imageUrl: widget.product.imageUrl,
+                width: MediaQuery.of(context).size.width - (AppDimensions.medium * 2),
+                height: AppDimensions.productImageHeight,
+              ),
+              const SizedBox(height: AppDimensions.medium),
               Text(
                 '${context.S.productSkuLabel}: ${widget.product.sku}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.small),
               Text(
                 '${context.S.quantityLabel}: ${widget.product.quantity}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
+              const SizedBox(height: AppDimensions.small),
+              if (widget.product.location != null && widget.product.location!.isNotEmpty)
+                Text(
+                  context.S.productLocationLabelWithColon(widget.product.location!),
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
               // TODO: Add more product details if available
             ],
           ),

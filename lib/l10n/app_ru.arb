@@ -8,15 +8,49 @@
   "homeMenuInventory": "Инвентаризация",
   "homeMenuReceiving": "Приёмка товара",
   "homeMenuScanning": "Сканирование",
+  "homeMenuPicking": "Сборка",
   "homeMenuSettings": "Настройки",
+  "homeMenuAddProduct": "Добавить товар",
   "settingsPageTitle": "Настройки",
-  "settingsThemeTitle": "Тёмная тема",
+  "settingsThemeTitle": "Тема",
+  "settingsThemeSystem": "Системная",
+  "settingsThemeLight": "Светлая",
+  "settingsThemeDark": "Темная",
   "settingsLanguageTitle": "Язык",
   "languageRussian": "Русский",
   "languageEnglish": "Английский",
   "languageGerman": "Немецкий",
   "loginAnonymousButtonText": "Продолжить как гость",
   "inventoryPageTitle": "Инвентарь",
+  "inventorySearchHint": "Поиск по имени, SKU или местоположению...",
+  "addProductPageTitle": "Добавить новый товар",
+  "addProductButtonText": "Добавить товар",
+  "pleaseEnterProductNameError": "Пожалуйста, введите название товара",
+  "productCreatedSuccessfully": "Товар успешно создан",
+  "orderListPageTitle": "Заказы",
+  "orderListFailedToLoad": "Не удалось загрузить заказы",
+  "orderStatusLabel": "Статус: {status}",
+  "@orderStatusLabel": {
+    "placeholders": {
+      "status": {}
+    }
+  },
+  "orderLinesLabel": "{count,plural, one{{count} позиция} few{{count} позиции} many{{count} позиций} other{{count} позиции}}",
+  "@orderLinesLabel": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "pickingPageTitle": "Сборка заказа: {orderId}",
+  "@pickingPageTitle": {
+    "placeholders": {
+      "orderId": {}
+    }
+  },
+  "pickingPageLocationLabel": "Место",
+  "pickingPageSkuLabel": "SKU",
+  "pickingPageCompleteButton": "Завершить сборку",
+  "pickingCompleteConfirmation": "Вы уверены, что хотите завершить сборку этого заказа?",
     "retryButtonText": "Повторить",
   "nPieces": "{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
   "@nPieces": {
@@ -36,6 +70,8 @@
   "quantityMustBePositiveError": "Количество должно быть положительным",
   "productNotFoundDialogTitle": "Товар не найден",
   "productNameLabel": "Название товара",
+  "productLocationLabel": "Местоположение",
+  "productImageUrlLabel": "URL изображения",
   "cancelButtonText": "Отмена",
   "createAndAddStockButtonText": "Создать и добавить на склад",
   "editProductDialogTitle": "Редактировать товар",
@@ -72,6 +108,7 @@
     }
   },
   "quantityLabelWithColon": "{quantityLabel}: {quantity}",
+  "productLocationLabelWithColon": "Местоположение: {location}",
   "@quantityLabelWithColon": {
     "placeholders": {
       "quantityLabel": {},
@@ -79,10 +116,6 @@
     }
   },
   "serverError": "Ошибка сервера",
-  "failedToUpdateProductMessage": "Не удалось обновить товар.",
-  "productUpdatedSuccessfullyMessage": "Товар успешно обновлен.",
-  "failedToDeleteProductMessage": "Не удалось удалить товар.",
-  "productDeletedSuccessfullyMessage": "Товар успешно удален.",
   "offlineIndicator": " (Офлайн)",
   "failedToAddStock": "Не удалось добавить товар на склад.",
   "stockAddedSuccessfully": "Товар для SKU: {sku} успешно добавлен на склад",
@@ -98,5 +131,9 @@
     "placeholders": {
       "sku": {}
     }
-  }
+  },
+  "selectImageSource": "Выберите источник изображения",
+  "camera": "Камера",
+  "gallery": "Галерея",
+  "addProductImage": "Добавить изображение товара"
 }

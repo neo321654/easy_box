@@ -33,13 +33,28 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeMenuScanning => 'Сканирование';
 
   @override
+  String get homeMenuPicking => 'Сборка';
+
+  @override
   String get homeMenuSettings => 'Настройки';
+
+  @override
+  String get homeMenuAddProduct => 'Добавить товар';
 
   @override
   String get settingsPageTitle => 'Настройки';
 
   @override
-  String get settingsThemeTitle => 'Тёмная тема';
+  String get settingsThemeTitle => 'Тема';
+
+  @override
+  String get settingsThemeSystem => 'Системная';
+
+  @override
+  String get settingsThemeLight => 'Светлая';
+
+  @override
+  String get settingsThemeDark => 'Темная';
 
   @override
   String get settingsLanguageTitle => 'Язык';
@@ -58,6 +73,64 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get inventoryPageTitle => 'Инвентарь';
+
+  @override
+  String get inventorySearchHint => 'Поиск по имени, SKU или местоположению...';
+
+  @override
+  String get addProductPageTitle => 'Добавить новый товар';
+
+  @override
+  String get addProductButtonText => 'Добавить товар';
+
+  @override
+  String get pleaseEnterProductNameError =>
+      'Пожалуйста, введите название товара';
+
+  @override
+  String get productCreatedSuccessfully => 'Товар успешно создан';
+
+  @override
+  String get orderListPageTitle => 'Заказы';
+
+  @override
+  String get orderListFailedToLoad => 'Не удалось загрузить заказы';
+
+  @override
+  String orderStatusLabel(Object status) {
+    return 'Статус: $status';
+  }
+
+  @override
+  String orderLinesLabel(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count позиции',
+      many: '$count позиций',
+      few: '$count позиции',
+      one: '$count позиция',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String pickingPageTitle(Object orderId) {
+    return 'Сборка заказа: $orderId';
+  }
+
+  @override
+  String get pickingPageLocationLabel => 'Место';
+
+  @override
+  String get pickingPageSkuLabel => 'SKU';
+
+  @override
+  String get pickingPageCompleteButton => 'Завершить сборку';
+
+  @override
+  String get pickingCompleteConfirmation =>
+      'Вы уверены, что хотите завершить сборку этого заказа?';
 
   @override
   String get retryButtonText => 'Повторить';
@@ -111,6 +184,12 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get productNameLabel => 'Название товара';
+
+  @override
+  String get productLocationLabel => 'Местоположение';
+
+  @override
+  String get productImageUrlLabel => 'URL изображения';
 
   @override
   String get cancelButtonText => 'Отмена';
@@ -168,6 +247,11 @@ class AppLocalizationsRu extends AppLocalizations {
   }
 
   @override
+  String productLocationLabelWithColon(Object location) {
+    return 'Местоположение: $location';
+  }
+
+  @override
   String get serverError => 'Ошибка сервера';
 
   @override
@@ -192,4 +276,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String productCreatedAndStockAddedSuccessfully(Object sku) {
     return 'Товар создан и успешно добавлен на склад для SKU: $sku';
   }
+
+  @override
+  String get selectImageSource => 'Выберите источник изображения';
+
+  @override
+  String get camera => 'Камера';
+
+  @override
+  String get gallery => 'Галерея';
+
+  @override
+  String get addProductImage => 'Добавить изображение товара';
 }

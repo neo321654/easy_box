@@ -18,12 +18,12 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
       : _updateProductUseCase = updateProductUseCase,
         _deleteProductUseCase = deleteProductUseCase,
         super(ProductDetailInitial()) {
-    on<ProductUpdated>(_onProductUpdated);
-    on<ProductDeleted>(_onProductDeleted);
+    on<UpdateProductRequested>(_onUpdateProductRequested);
+    on<DeleteProductRequested>(_onDeleteProductRequested);
   }
 
-  Future<void> _onProductUpdated(
-    ProductUpdated event,
+  Future<void> _onUpdateProductRequested(
+    UpdateProductRequested event,
     Emitter<ProductDetailState> emit,
   ) async {
     emit(ProductDetailLoading());
@@ -34,8 +34,8 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     );
   }
 
-  Future<void> _onProductDeleted(
-    ProductDeleted event,
+  Future<void> _onDeleteProductRequested(
+    DeleteProductRequested event,
     Emitter<ProductDetailState> emit,
   ) async {
     emit(ProductDetailLoading());

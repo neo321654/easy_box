@@ -5,14 +5,18 @@ class Product extends Equatable {
   final String name;
   final String sku;
   final int quantity;
+  final String? location;
+  final String? imageUrl;
 
   const Product({
     required this.id,
     required this.name,
     required this.sku,
     required this.quantity,
+    this.location,
+    this.imageUrl,
   });
 
   @override
-  List<Object> get props => [id, name, sku, quantity];
+  List<Object?> get props => [id, name, sku, quantity, location, imageUrl];
 }

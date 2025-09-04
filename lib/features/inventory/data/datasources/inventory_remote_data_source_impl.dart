@@ -58,7 +58,7 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
   }
 
   @override
-  Future<ProductModel> createProduct({required String name, required String sku}) async {
+  Future<ProductModel> createProduct({required String name, required String sku, String? location, String? imageUrl}) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 400));
     final newProduct = ProductModel(
@@ -66,6 +66,8 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
       name: name,
       sku: sku,
       quantity: 0, // Initial quantity is 0
+      location: location,
+      imageUrl: imageUrl,
     );
     await database.insert('products', newProduct.toJson());
     return newProduct;
@@ -98,5 +100,12 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
     if (rowsAffected == 0) {
       throw ServerException(); // Product not found on remote
     }
+  }
+
+  @override
+  Future<ProductModel> uploadProductImage(String productId, String imagePath) {
+    // This is a mock implementation, so we don't actually upload anything.
+    // We can just return the product as is, or throw an error.
+    throw UnimplementedError();
   }
 }
