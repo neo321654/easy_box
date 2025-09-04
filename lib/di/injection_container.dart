@@ -20,6 +20,8 @@ import 'package:easy_box/features/inventory/presentation/bloc/product_detail_blo
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart'; // Added for initial mock data
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source.dart';
+import 'package:easy_box/features/order/data/datasources/order_local_data_source.dart';
+import 'package:easy_box/features/order/data/datasources/order_local_data_source_impl.dart';
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source_impl.dart';
 import 'package:easy_box/features/order/data/repositories/order_repository_impl.dart';
 import 'package:easy_box/features/order/domain/repositories/order_repository.dart';
@@ -75,12 +77,16 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<OrderRepository>(
     () => OrderRepositoryImpl(
       remoteDataSource: sl(),
+      localDataSource: sl(),
       networkInfo: sl(),
     ),
   );
 
   // Data Sources
   sl.registerLazySingleton<OrderRemoteDataSource>(() => OrderRemoteDataSourceImpl());
+  sl.registerLazySingleton<OrderLocalDataSource>(
+    () => OrderLocalDataSourceImpl(database: sl()),
+  );
   //endregion
 
   //--------------------
@@ -206,8 +212,17 @@ Future<void> init({Locale? systemLocale}) async {
       db.execute(
         'CREATE TABLE product_deletions_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, timestamp INTEGER)',
       );
+      db.execute(
+        'CREATE TABLE orders(id TEXT PRIMARY KEY, customer_name TEXT, status INTEGER)',
+      );
+      db.execute(
+        'CREATE TABLE order_lines(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, product_id TEXT, product_name TEXT, sku TEXT, location TEXT, quantity_to_pick INTEGER, quantity_picked INTEGER, image_url TEXT)',
+      );
+      db.execute(
+        'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
+      );
     },
-    version: 6,
+    version: 7,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(
@@ -234,6 +249,17 @@ Future<void> init({Locale? systemLocale}) async {
       }
       if (oldVersion < 6) {
         db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
+      }
+      if (oldVersion < 7) {
+        db.execute(
+          'CREATE TABLE orders(id TEXT PRIMARY KEY, customer_name TEXT, status INTEGER)',
+        );
+        db.execute(
+          'CREATE TABLE order_lines(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, product_id TEXT, product_name TEXT, sku TEXT, location TEXT, quantity_to_pick INTEGER, quantity_picked INTEGER, image_url TEXT)',
+        );
+        db.execute(
+          'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
+        );
       }
     },
   );
