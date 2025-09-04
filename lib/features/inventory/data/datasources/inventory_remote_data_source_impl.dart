@@ -101,4 +101,11 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
       throw ServerException(); // Product not found on remote
     }
   }
+
+  @override
+  Future<ProductModel> uploadProductImage(String productId, String imagePath) {
+    // This is a mock implementation, so we don't actually upload anything.
+    // We can just return the product as is, or throw an error.
+    throw UnimplementedError();
+  }
 }

@@ -48,8 +48,11 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         where: 'order_id = ?',
         whereArgs: [orderMap['id']],
       );
-      final lines = lineMaps.map((lineMap) => OrderLineModel.fromJson(lineMap)).toList();
-      orders.add(OrderModel.fromJson(orderMap, lines));
+      // The fromJson method on OrderModel expects the lines to be in the map.
+      // The local database stores them separately, so we add them to the map here.
+      final fullOrderMap = Map<String, dynamic>.from(orderMap);
+      fullOrderMap['lines'] = lineMaps;
+      orders.add(OrderModel.fromJson(fullOrderMap));
     }
     return orders;
   }

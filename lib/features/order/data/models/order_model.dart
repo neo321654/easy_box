@@ -9,11 +9,14 @@ class OrderModel extends Order {
     required super.lines,
   });
 
-  factory OrderModel.fromJson(Map<String, dynamic> json, List<OrderLineModel> lines) {
+  factory OrderModel.fromJson(Map<String, dynamic> json) {
+    var linesList = json['lines'] as List? ?? [];
+    List<OrderLineModel> lines = linesList.map((i) => OrderLineModel.fromJson(i)).toList();
+
     return OrderModel(
-      id: json['id'],
+      id: json['id'].toString(),
       customerName: json['customer_name'],
-      status: OrderStatus.values[json['status']],
+      status: OrderStatus.values.firstWhere((e) => e.name == json['status'], orElse: () => OrderStatus.open),
       lines: lines,
     );
   }
@@ -22,7 +25,8 @@ class OrderModel extends Order {
     return {
       'id': id,
       'customer_name': customerName,
-      'status': status.index,
+      'status': status.name,
+      'lines': lines.map((line) => (line as OrderLineModel).toJson()).toList(),
     };
   }
 }

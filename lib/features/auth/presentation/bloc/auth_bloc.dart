@@ -1,4 +1,3 @@
-import 'package:dartz/dartz.dart';
 import 'package:easy_box/core/error/failures.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
