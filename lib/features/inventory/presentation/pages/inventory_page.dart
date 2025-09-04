@@ -2,13 +2,31 @@ import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/widgets/add_product_form.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_list_item.dart';
-import 'package:easy_box/features/inventory/presentation/pages/add_product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class InventoryPage extends StatelessWidget {
   const InventoryPage({super.key});
+
+  void _showAddProductSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (_) {
+        return BlocProvider(
+          create: (_) => sl<ProductCreationBloc>(),
+          child: const AddProductForm(),
+        );
+      },
+    ).then((result) {
+      if (result == true && context.mounted) {
+        context.read<InventoryBloc>().add(FetchProductsRequested());
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -19,15 +37,7 @@ class InventoryPage extends StatelessWidget {
           title: Text(context.S.inventoryPageTitle),
         ),
         floatingActionButton: FloatingActionButton.extended(
-          onPressed: () async {
-            await Navigator.of(context).push(
-              MaterialPageRoute(builder: (_) => const AddProductPage()),
-            );
-            // Refresh the inventory list after returning from AddProductPage
-            if (context.mounted) {
-              context.read<InventoryBloc>().add(FetchProductsRequested());
-            }
-          },
+          onPressed: () => _showAddProductSheet(context),
           label: Text(context.S.addProductButtonText),
           icon: const Icon(Icons.add),
         ),
@@ -53,8 +63,8 @@ class InventoryPage extends StatelessWidget {
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: context.S.inventorySearchHint,
-                        border: OutlineInputBorder(),
-                        prefixIcon: Icon(Icons.search),
+                        border: const OutlineInputBorder(),
+                        prefixIcon: const Icon(Icons.search),
                       ),
                       onChanged: (value) {
                         context.read<InventoryBloc>().add(SearchTermChanged(value));
