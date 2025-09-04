@@ -9,7 +9,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddProductForm extends StatefulWidget {
-  const AddProductForm({super.key});
+  final String? initialSku;
+
+  const AddProductForm({super.key, this.initialSku});
 
   @override
   State<AddProductForm> createState() => _AddProductFormState();
@@ -26,7 +28,7 @@ class _AddProductFormState extends State<AddProductForm> {
   void initState() {
     super.initState();
     _nameController = TextEditingController();
-    _skuController = TextEditingController();
+    _skuController = TextEditingController(text: widget.initialSku);
     _locationController = TextEditingController();
   }
 
@@ -184,12 +186,13 @@ class _AddProductFormState extends State<AddProductForm> {
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: _skuController,
+                  readOnly: widget.initialSku != null, // Make read-only if initialSku is provided
                   decoration: InputDecoration(
                     labelText: context.S.productSkuLabel,
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.qr_code_scanner),
-                      onPressed: _scanBarcode,
+                      onPressed: widget.initialSku != null ? null : _scanBarcode, // Disable scan if read-only
                     ),
                   ),
                   validator: (value) => (value?.isEmpty ?? true)

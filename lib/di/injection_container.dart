@@ -101,7 +101,7 @@ Future<void> init({Locale? systemLocale}) async {
   //region Inventory
   //--------------------
   // Blocs
-  sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl()));
+  sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl(), findProductBySkuUseCase: sl()));
   sl.registerFactory(() => ProductDetailBloc(updateProductUseCase: sl(), deleteProductUseCase: sl()));
   sl.registerFactory(() => ProductCreationBloc(createProductUseCase: sl()));
 

@@ -31,14 +31,14 @@ class _InventoryPageState extends State<InventoryPage> {
     super.dispose();
   }
 
-  void _showAddProductSheet(BuildContext context) {
+  void _showAddProductSheet(BuildContext context, {String? initialSku}) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       builder: (_) {
         return BlocProvider(
           create: (_) => sl<ProductCreationBloc>(),
-          child: const AddProductForm(),
+          child: AddProductForm(initialSku: initialSku),
         );
       },
     ).then((result) {
@@ -65,7 +65,7 @@ class _InventoryPageState extends State<InventoryPage> {
         title: Text(context.S.inventoryPageTitle),
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => _showAddProductSheet(context),
+        onPressed: () => _showAddProductSheet(this.context),
         label: Text(context.S.addProductButtonText),
         icon: const Icon(Icons.add),
       ),
@@ -82,8 +82,7 @@ class _InventoryPageState extends State<InventoryPage> {
                 context.read<InventoryBloc>().add(FetchProductsRequested());
               },
             );
-          }
-          if (state is InventorySuccess) {
+          } else if (state is InventorySuccess) {
             return Column(
               children: [
                 Padding(
@@ -120,6 +119,20 @@ class _InventoryPageState extends State<InventoryPage> {
                 ),
               ],
             );
+          } else if (state is InventoryProductNotFound) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(context.S.productNotFound),
+                  const SizedBox(height: 16),
+                  PrimaryButton(
+                    onPressed: () => _showAddProductSheet(this.context, initialSku: state.sku),
+                    text: context.S.addProductButtonText,
+                  ),
+                ],
+              ),
+            );
           }
           return const SizedBox.shrink();
         },
@@ -127,4 +140,3 @@ class _InventoryPageState extends State<InventoryPage> {
     );
   }
 }
-

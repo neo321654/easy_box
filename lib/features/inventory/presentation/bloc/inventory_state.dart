@@ -50,3 +50,12 @@ class InventoryFailure extends InventoryState {
   @override
   List<Object> get props => [];
 }
+
+class InventoryProductNotFound extends InventoryState {
+  final String sku;
+
+  const InventoryProductNotFound({required this.sku});
+
+  @override
+  List<Object> get props => [sku];
+}
