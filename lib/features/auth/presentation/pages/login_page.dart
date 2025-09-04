@@ -1,5 +1,6 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
+import 'package:easy_box/core/widgets/app_snack_bar.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
@@ -53,11 +54,7 @@ class _LoginPageState extends State<LoginPage> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+            showAppSnackBar(context, state.message, isError: true);
           }
           if (state is AuthSuccess) {
             context.go('/home');

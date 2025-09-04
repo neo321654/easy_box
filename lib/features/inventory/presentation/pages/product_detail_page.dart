@@ -1,4 +1,5 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/app_snack_bar.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
@@ -82,29 +83,21 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             final message = state.type == ProductDetailSuccessType.updated
                 ? context.S.productUpdatedSuccessfullyMessage
                 : context.S.productDeletedSuccessfullyMessage;
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(
-                      message + (state.isQueued ? context.S.offlineIndicator : '')),
-                  backgroundColor: Colors.green));
+            showAppSnackBar(
+                context,
+                message +
+                    (state.isQueued ? context.S.offlineIndicator : ''));
             if (state.type == ProductDetailSuccessType.updated) {
               Navigator.of(context).pop(state.updatedProduct);
             } else if (state.type == ProductDetailSuccessType.deleted) {
               Navigator.of(context).pop(true);
             }
           } else if (state is ProductUpdateFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(context.S.failedToUpdateProductMessage),
-                  backgroundColor: Colors.red));
+            showAppSnackBar(
+                context, context.S.failedToUpdateProductMessage, isError: true);
           } else if (state is ProductDeleteFailure) {
-            ScaffoldMessenger.of(context)
-              ..hideCurrentSnackBar()
-              ..showSnackBar(SnackBar(
-                  content: Text(context.S.failedToDeleteProductMessage),
-                  backgroundColor: Colors.red));
+            showAppSnackBar(
+                context, context.S.failedToDeleteProductMessage, isError: true);
           }
         },
         child: Padding(

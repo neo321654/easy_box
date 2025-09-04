@@ -1,9 +1,11 @@
 import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/app_snack_bar.dart';
+import 'package:easy_box/core/widgets/image_source_sheet.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
-import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
+import 'package:easy_box/core/utils/scanner_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -40,7 +42,10 @@ class _AddProductFormState extends State<AddProductForm> {
     super.dispose();
   }
 
-  Future<void> _pickImage(ImageSource source) async {
+  Future<void> _pickImage() async {
+    final source = await showImageSourceSheet(context);
+    if (source == null) return;
+
     final pickedFile = await ImagePicker().pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
@@ -49,40 +54,8 @@ class _AddProductFormState extends State<AddProductForm> {
     }
   }
 
-  void _showImageSourceDialog() {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        title: Text(dialogContext.S.selectImageSource),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: const Icon(Icons.camera_alt),
-              title: Text(dialogContext.S.camera),
-              onTap: () {
-                Navigator.of(dialogContext).pop();
-                _pickImage(ImageSource.camera);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.photo_library),
-              title: Text(dialogContext.S.gallery),
-              onTap: () {
-                Navigator.of(dialogContext).pop();
-                _pickImage(ImageSource.gallery);
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Future<void> _scanBarcode() async {
-    final sku = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
-    );
+    final sku = await scanBarcode(context);
     if (sku != null && mounted) {
       _skuController.text = sku;
     }
@@ -108,42 +81,33 @@ class _AddProductFormState extends State<AddProductForm> {
     return BlocListener<ProductCreationBloc, ProductCreationState>(
       listener: (context, state) {
         if (state is ProductCreationSuccess) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                  content: Text(context.S.productCreatedSuccessfully +
-                      (state.isQueued ? context.S.offlineIndicator : '')),
-                  backgroundColor: Colors.green),
-            );
+          showAppSnackBar(
+              context,
+              context.S.productCreatedSuccessfully +
+                  (state.isQueued ? context.S.offlineIndicator : ''));
           Navigator.of(context).pop(true); // Go back after successful creation
         } else if (state is ProductCreationFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                  content: Text(context.S.failedToCreateProduct),
-                  backgroundColor: Colors.red),
-            );
+          showAppSnackBar(context, context.S.failedToCreateProduct, isError: true);
         }
       },
       child: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.only(
-            bottom: MediaQuery.of(context).viewInsets.bottom, 
-            left: 16, 
-            right: 16, 
-            top: 16
+            bottom: MediaQuery.of(context).viewInsets.bottom,
+            left: 16,
+            right: 16,
+            top: 16,
           ),
           child: Form(
             key: _formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(context.S.addProductPageTitle, style: Theme.of(context).textTheme.headlineSmall),
+                Text(context.S.addProductPageTitle,
+                    style: Theme.of(context).textTheme.headlineSmall),
                 const SizedBox(height: 24),
                 GestureDetector(
-                  onTap: _showImageSourceDialog,
+                  onTap: _pickImage,
                   child: Container(
                     height: 150,
                     width: 150,
@@ -192,7 +156,9 @@ class _AddProductFormState extends State<AddProductForm> {
                     border: const OutlineInputBorder(),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.qr_code_scanner),
-                      onPressed: widget.initialSku != null ? null : _scanBarcode, // Disable scan if read-only
+                      onPressed: widget.initialSku != null
+                          ? null
+                          : _scanBarcode, // Disable scan if read-only
                     ),
                   ),
                   validator: (value) => (value?.isEmpty ?? true)
