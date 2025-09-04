@@ -370,6 +370,12 @@ abstract class AppLocalizations {
   /// **'Местоположение'**
   String get productLocationLabel;
 
+  /// No description provided for @productImageUrlLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'URL изображения'**
+  String get productImageUrlLabel;
+
   /// No description provided for @cancelButtonText.
   ///
   /// In ru, this message translates to:

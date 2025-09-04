@@ -164,6 +164,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get productLocationLabel => 'Location';
 
   @override
+  String get productImageUrlLabel => 'Image URL';
+
+  @override
   String get cancelButtonText => 'Cancel';
 
   @override
