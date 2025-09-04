@@ -1,4 +1,4 @@
-name: SSH Test
+name: SSH Test1
 
 on:
   workflow_dispatch:
@@ -6,16 +6,12 @@ on:
 jobs:
   test-ssh:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Check SSH private key length
+      - name: Debug key fingerprint
         run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | wc -l
-
-      - name: Debug SSH key format
-        run: |
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | grep "BEGIN" || true
-          echo "${{ secrets.SSH_PRIVATE_KEY }}" | grep "END" || true
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > key.pem
+          chmod 600 key.pem
+          ssh-keygen -lf key.pem
 
       - name: Test SSH connection
         uses: appleboy/ssh-action@v1.0.0
@@ -23,8 +19,6 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          port: 22
-          debug: true
           script: |
             echo "✅ Успешное подключение к серверу!"
             hostname
