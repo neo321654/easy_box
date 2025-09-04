@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 class ProductImage extends StatelessWidget {
@@ -22,22 +23,25 @@ class ProductImage extends StatelessWidget {
       return Icon(Icons.image, size: width, color: Colors.grey);
     }
 
-    return imageUrl!.startsWith('http')
-        ? Image.network(
-            imageUrl!,
-            width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (context, error, stackTrace) =>
-                Icon(Icons.broken_image, size: width, color: Colors.grey),
-          )
-        : Image.file(
-            File(imageUrl!),
-            width: width,
-            height: height,
-            fit: fit,
-            errorBuilder: (context, error, stackTrace) =>
-                Icon(Icons.broken_image, size: width, color: Colors.grey),
-          );
+    // The image URL from the backend will be a relative path, e.g., /images/some_image.jpg
+    // We need to prepend the base URL of the backend to make it a full URL.
+    final fullImageUrl = imageUrl!.startsWith('http') 
+        ? imageUrl 
+        : 'http://38.244.208.106:8000$imageUrl';
+
+    return CachedNetworkImage(
+      imageUrl: fullImageUrl!,
+      width: width,
+      height: height,
+      fit: fit,
+      placeholder: (context, url) => Container(
+        width: width,
+        height: height,
+        color: Colors.grey[200],
+        child: const Center(child: CircularProgressIndicator()),
+      ),
+      errorWidget: (context, url, error) =>
+          Icon(Icons.broken_image, size: width, color: Colors.grey),
+    );
   }
 }

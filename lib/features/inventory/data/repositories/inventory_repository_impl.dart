@@ -85,12 +85,16 @@ class InventoryRepositoryImpl implements InventoryRepository {
   @override
   Future<Either<Failure, OperationResult>> createProduct(
       {required String name, required String sku, String? location, String? imageUrl}) async {
-
-    final permanentImageUrl = await _copyImageToPermanentStorage(imageUrl);
-
     if (await networkInfo.isConnected) {
       try {
-        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location, imageUrl: permanentImageUrl);
+        // First, create the product without the image URL
+        ProductModel newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location);
+
+        // If an image is provided, upload it now
+        if (imageUrl != null) {
+          newProduct = await remoteDataSource.uploadProductImage(newProduct.id, imageUrl);
+        }
+
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
@@ -99,13 +103,14 @@ class InventoryRepositoryImpl implements InventoryRepository {
     } else {
       // Offline creation
       try {
+        final permanentImageUrl = await _copyImageToPermanentStorage(imageUrl);
         final localId = const Uuid().v4(); // Generate a temporary local ID
         final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0, location: location, imageUrl: permanentImageUrl);
         await localDataSource.saveProduct(newProduct);
         await localDataSource.addProductCreationToQueue(name, sku, location, permanentImageUrl, localId);
-        return const Right(OperationResult(isQueued: true)); // Fixed: return OperationResult
+        return const Right(OperationResult(isQueued: true));
       } on Exception {
-        return Left(CacheFailure()); // Or a more specific failure
+        return Left(CacheFailure());
       }
     }
   }
@@ -135,23 +140,54 @@ class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
   Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
-    final permanentImageUrl = await _copyImageToPermanentStorage(product.imageUrl);
+    Product productToUpdate = product;
+
+    // Check if the imageUrl is a new local file path
+    if (product.imageUrl != null && !product.imageUrl!.startsWith('http')) {
+      if (await networkInfo.isConnected) {
+        try {
+          final uploadedProduct = await remoteDataSource.uploadProductImage(product.id, product.imageUrl!);
+          // Update the product instance with the new remote image URL
+          productToUpdate = Product(
+            id: product.id,
+            name: product.name,
+            sku: product.sku,
+            quantity: product.quantity,
+            location: product.location,
+            imageUrl: uploadedProduct.imageUrl,
+          );
+        } on ServerException {
+          return Left(ServerFailure());
+        }
+      } else {
+        // Cannot upload new image offline, but we can save the local path for later sync
+        final permanentImageUrl = await _copyImageToPermanentStorage(product.imageUrl);
+        productToUpdate = Product(
+          id: product.id,
+          name: product.name,
+          sku: product.sku,
+          quantity: product.quantity,
+          location: product.location,
+          imageUrl: permanentImageUrl,
+        );
+      }
+    }
 
     final productModel = ProductModel(
-      id: product.id,
-      name: product.name,
-      sku: product.sku,
-      quantity: product.quantity,
-      location: product.location,
-      imageUrl: permanentImageUrl, // Use the processed image URL
+      id: productToUpdate.id,
+      name: productToUpdate.name,
+      sku: productToUpdate.sku,
+      quantity: productToUpdate.quantity,
+      location: productToUpdate.location,
+      imageUrl: productToUpdate.imageUrl,
     );
+
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.updateProduct(productModel);
         await localDataSource.updateProduct(productModel);
         return const Right(OperationResult(isQueued: false));
-      }
-      on ServerException {
+      } on ServerException {
         return Left(ServerFailure());
       }
     } else {
@@ -160,8 +196,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await localDataSource.addProductUpdateToQueue(productModel);
         await localDataSource.updateProduct(productModel);
         return const Right(OperationResult(isQueued: true));
-      }
-      on Exception {
+      } on Exception {
         return Left(CacheFailure());
       }
     }

@@ -7,4 +7,5 @@ abstract class InventoryRemoteDataSource {
   Future<ProductModel> createProduct({required String name, required String sku, String? location, String? imageUrl});
   Future<void> updateProduct(ProductModel product);
   Future<void> deleteProduct(String id);
+  Future<ProductModel> uploadProductImage(String productId, String imagePath);
 }
