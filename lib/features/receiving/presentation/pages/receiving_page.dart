@@ -2,6 +2,7 @@ import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
+import 'package:easy_box/features/receiving/presentation/widgets/create_product_and_add_stock_form.dart';
 import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,59 +66,33 @@ class _ReceivingViewState extends State<_ReceivingView> {
     }
   }
 
-  void _showCreateProductDialog(String sku) {
-    final TextEditingController productNameController = TextEditingController();
-    final TextEditingController locationController = TextEditingController();
-    final TextEditingController imageUrlController = TextEditingController();
-    showDialog(
+  void _showCreateProductSheet(String sku) {
+    final quantity = int.tryParse(_quantityController.text) ?? 0;
+    if (quantity <= 0) {
+      ScaffoldMessenger.of(context)
+        ..hideCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+              content: Text(context.S.quantityMustBePositiveError),
+              backgroundColor: Colors.red),
+        );
+      return;
+    }
+
+    showModalBottomSheet(
       context: context,
-      barrierDismissible: false,
-      builder: (ctx) => AlertDialog(
-        title: Text(context.S.productNotFoundDialogTitle),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(context.S.skuLabelWithColon(sku)),
-            TextField(
-              controller: productNameController,
-              decoration: InputDecoration(labelText: context.S.productNameLabel),
-            ),
-            TextField(
-              controller: locationController,
-              decoration: InputDecoration(labelText: context.S.productLocationLabel),
-            ),
-            TextField(
-              controller: imageUrlController,
-              decoration: InputDecoration(labelText: context.S.productImageUrlLabel),
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(ctx).pop();
-            },
-            child: Text(context.S.cancelButtonText),
+      isScrollControlled: true,
+      builder: (_) {
+        // We can use context.read here because the BlocProvider is above this widget
+        // in the tree, specifically in the ReceivingPage build method.
+        return BlocProvider.value(
+          value: context.read<ReceivingBloc>(),
+          child: CreateProductAndAddStockForm(
+            sku: sku,
+            quantity: quantity,
           ),
-          ElevatedButton(
-            onPressed: () {
-              if (productNameController.text.isNotEmpty) {
-                Navigator.of(ctx).pop();
-                context.read<ReceivingBloc>().add(
-                      CreateProductAndAddStock(
-                        name: productNameController.text,
-                        sku: sku,
-                        quantity: int.tryParse(_quantityController.text) ?? 0,
-                        location: locationController.text,
-                        imageUrl: imageUrlController.text,
-                      ),
-                    );
-              }
-            },
-            child: Text(context.S.createAndAddStockButtonText),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 
@@ -169,7 +144,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
                     backgroundColor: Colors.red),
               );
           } else if (state is ReceivingProductNotFound) {
-            _showCreateProductDialog(state.sku);
+            _showCreateProductSheet(state.sku);
           }
         },
         child: Padding(
