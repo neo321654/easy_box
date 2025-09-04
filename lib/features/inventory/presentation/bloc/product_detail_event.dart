@@ -7,19 +7,19 @@ abstract class ProductDetailEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ProductUpdated extends ProductDetailEvent {
+class UpdateProductRequested extends ProductDetailEvent {
   final Product product;
 
-  const ProductUpdated(this.product);
+  const UpdateProductRequested(this.product);
 
   @override
   List<Object> get props => [product];
 }
 
-class ProductDeleted extends ProductDetailEvent {
+class DeleteProductRequested extends ProductDetailEvent {
   final String id;
 
-  const ProductDeleted(this.id);
+  const DeleteProductRequested(this.id);
 
   @override
   List<Object> get props => [id];
