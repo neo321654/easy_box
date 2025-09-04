@@ -111,10 +111,11 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pickingPageCompleteButton => 'Complete Picking';
 
   @override
-  String get retryButtonText => 'Retry';
+  String get pickingCompleteConfirmation =>
+      'Are you sure you want to complete this picking order?';
 
   @override
-  String get pickingCompleteConfirmation => 'Are you sure you want to complete this picking order?';
+  String get retryButtonText => 'Retry';
 
   @override
   String nPieces(num count) {

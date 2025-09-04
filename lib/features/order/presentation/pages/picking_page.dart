@@ -100,47 +100,50 @@ class _PickingViewState extends State<_PickingView> {
             final allItemsPicked = state.order?.lines
                     .every((line) => line.quantityPicked >= line.quantityToPick) ??
                 false;
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                FloatingActionButton.extended(
-                  heroTag: 'scanFab', // Unique tag for multiple FABs
-                  onPressed: () async {
-                    final pickingBloc = context.read<PickingBloc>(); // Get bloc before async gap
-                    final sku = await Navigator.of(context).push<String>(
-                      MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
-                    );
-                    if (!mounted) return; // Check mounted after async operation
-                    if (sku != null) {
-                      pickingBloc.add(BarcodeScanned(sku));
-                    }
-                  },
-                  label: Text(context.S.scanBarcodePageTitle),
-                  icon: const Icon(Icons.qr_code_scanner),
-                ),
-                const SizedBox(width: 16),
-                FloatingActionButton.extended(
-                  heroTag: 'completeFab', // Unique tag for multiple FABs
-                  onPressed: allItemsPicked
-                      ? () {
-                          showDialog(
-                            context: context,
-                            builder: (ctx) => ConfirmationDialog(
-                              title: context.S.pickingPageCompleteButton,
-                              content: Text(context.S.pickingCompleteConfirmation),
-                              confirmButtonText: context.S.pickingPageCompleteButton,
-                              onConfirm: () {
-                                context.read<PickingBloc>().add(PickingCompleted());
-                              },
-                            ),
-                          );
-                        }
-                      : null, // Disable button if not all items are picked
-                  label: Text(context.S.pickingPageCompleteButton),
-                  icon: const Icon(Icons.check),
-                  backgroundColor: allItemsPicked ? null : Colors.grey,
-                ),
-              ],
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  FloatingActionButton.extended(
+
+                    heroTag: 'scanFab', // Unique tag for multiple FABs
+                    onPressed: () async {
+                      final pickingBloc = context.read<PickingBloc>(); // Get bloc before async gap
+                      final sku = await Navigator.of(context).push<String>(
+                        MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
+                      );
+                      if (!mounted) return; // Check mounted after async operation
+                      if (sku != null) {
+                        pickingBloc.add(BarcodeScanned(sku));
+                      }
+                    },
+                    label: Text(context.S.scanBarcodePageTitle),
+                    icon: const Icon(Icons.qr_code_scanner),
+                  ),
+                  SizedBox(height: 25,),
+                  FloatingActionButton.extended(
+                    heroTag: 'completeFab', // Unique tag for multiple FABs
+                    onPressed: allItemsPicked
+                        ? () {
+                            showDialog(
+                              context: context,
+                              builder: (ctx) => ConfirmationDialog(
+                                title: context.S.pickingPageCompleteButton,
+                                content: Text(context.S.pickingCompleteConfirmation),
+                                confirmButtonText: context.S.pickingPageCompleteButton,
+                                onConfirm: () {
+                                  context.read<PickingBloc>().add(PickingCompleted());
+                                },
+                              ),
+                            );
+                          }
+                        : null, // Disable button if not all items are picked
+                    label: Text(context.S.pickingPageCompleteButton),
+                    icon: const Icon(Icons.check),
+                    backgroundColor: allItemsPicked ? null : Colors.grey,
+                  ),
+                ],
+              ),
             );
           },
         ),

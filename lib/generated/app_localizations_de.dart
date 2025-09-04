@@ -112,10 +112,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get pickingPageCompleteButton => 'Kommissionierung abschließen';
 
   @override
-  String get retryButtonText => 'Wiederholen';
+  String get pickingCompleteConfirmation =>
+      'Möchten Sie diese Kommissionierung wirklich abschließen?';
 
   @override
-  String get pickingCompleteConfirmation => 'Möchten Sie diese Kommissionierung wirklich abschließen?';
+  String get retryButtonText => 'Wiederholen';
 
   @override
   String nPieces(num count) {

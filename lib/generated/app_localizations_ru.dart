@@ -113,10 +113,11 @@ class AppLocalizationsRu extends AppLocalizations {
   String get pickingPageCompleteButton => 'Завершить сборку';
 
   @override
-  String get retryButtonText => 'Повторить';
+  String get pickingCompleteConfirmation =>
+      'Вы уверены, что хотите завершить сборку этого заказа?';
 
   @override
-  String get pickingCompleteConfirmation => 'Вы уверены, что хотите завершить сборку этого заказа?';
+  String get retryButtonText => 'Повторить';
 
   @override
   String nPieces(num count) {
