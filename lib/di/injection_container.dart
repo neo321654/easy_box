@@ -192,7 +192,7 @@ Future<void> init({Locale? systemLocale}) async {
     join(await getDatabasesPath(), 'easy_box_database.db'),
     onCreate: (db, version) {
       db.execute(
-        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT)',
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT)',
       );
       db.execute(
         'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
@@ -207,7 +207,7 @@ Future<void> init({Locale? systemLocale}) async {
         'CREATE TABLE product_deletions_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, product_id TEXT, timestamp INTEGER)',
       );
     },
-    version: 5,
+    version: 6,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(
@@ -232,6 +232,9 @@ Future<void> init({Locale? systemLocale}) async {
         db.execute('ALTER TABLE product_creations_queue ADD COLUMN location TEXT');
         db.execute('ALTER TABLE product_updates_queue ADD COLUMN location TEXT');
       }
+      if (oldVersion < 6) {
+        db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
+      }
     },
   );
   sl.registerLazySingleton<Database>(() => appDb); // Register app's DB
@@ -241,17 +244,20 @@ Future<void> init({Locale? systemLocale}) async {
     join(await getDatabasesPath(), 'easy_box_mock_backend_database.db'),
     onCreate: (db, version) async {
       await db.execute(
-        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT)',
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT)',
       );
       // Populate with initial mock data
       for (final product in initialMockProducts) {
         await db.insert('products', product.toJson());
       }
     },
-    version: 2, // Separate version for mock backend DB
+    version: 3, // Separate version for mock backend DB
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute('ALTER TABLE products ADD COLUMN location TEXT');
+      }
+      if (oldVersion < 3) {
+        db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
       }
     },
   );

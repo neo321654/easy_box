@@ -81,7 +81,8 @@ class AppLocalizationsRu extends AppLocalizations {
   String get addProductButtonText => 'Добавить товар';
 
   @override
-  String get pleaseEnterProductNameError => 'Пожалуйста, введите название товара';
+  String get pleaseEnterProductNameError =>
+      'Пожалуйста, введите название товара';
 
   @override
   String get productCreatedSuccessfully => 'Товар успешно создан';
