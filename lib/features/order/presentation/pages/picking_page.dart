@@ -4,6 +4,7 @@ import 'package:easy_box/features/order/domain/entities/entities.dart';
 import 'package:easy_box/features/order/presentation/bloc/picking_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
 
 class PickingPage extends StatelessWidget {
   final Order order;
@@ -98,16 +99,45 @@ class _PickingViewState extends State<_PickingView> {
             final allItemsPicked = state.order?.lines
                     .every((line) => line.quantityPicked >= line.quantityToPick) ??
                 false;
-            return FloatingActionButton.extended(
-              onPressed: allItemsPicked
-                  ? () {
-                      // TODO: Show confirmation dialog
-                      context.read<PickingBloc>().add(PickingCompleted());
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                FloatingActionButton.extended(
+                  heroTag: 'scanFab', // Unique tag for multiple FABs
+                  onPressed: () async {
+                    final sku = await Navigator.of(context).push<String>(
+                      MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
+                    );
+                    if (sku != null && mounted) {
+                      context.read<PickingBloc>().add(BarcodeScanned(sku));
                     }
-                  : null, // Disable button if not all items are picked
-              label: Text(context.S.pickingPageCompleteButton),
-              icon: const Icon(Icons.check),
-              backgroundColor: allItemsPicked ? null : Colors.grey,
+                  },
+                  label: Text(context.S.scanBarcodePageTitle),
+                  icon: const Icon(Icons.qr_code_scanner),
+                ),
+                const SizedBox(width: 16),
+                FloatingActionButton.extended(
+                  heroTag: 'completeFab', // Unique tag for multiple FABs
+                  onPressed: allItemsPicked
+                      ? () {
+                          showDialog(
+                            context: context,
+                            builder: (ctx) => ConfirmationDialog(
+                              title: context.S.pickingPageCompleteButton,
+                              content: Text(context.S.pickingCompleteConfirmation),
+                              confirmButtonText: context.S.pickingPageCompleteButton,
+                              onConfirm: () {
+                                context.read<PickingBloc>().add(PickingCompleted());
+                              },
+                            ),
+                          );
+                        }
+                      : null, // Disable button if not all items are picked
+                  label: Text(context.S.pickingPageCompleteButton),
+                  icon: const Icon(Icons.check),
+                  backgroundColor: allItemsPicked ? null : Colors.grey,
+                ),
+              ],
             );
           },
         ),

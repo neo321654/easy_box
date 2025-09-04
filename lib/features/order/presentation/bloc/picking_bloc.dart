@@ -15,6 +15,7 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
     on<InitializePicking>(_onInitializePicking);
     on<LineItemPicked>(_onLineItemPicked);
     on<PickingCompleted>(_onPickingCompleted);
+    on<BarcodeScanned>(_onBarcodeScanned);
   }
 
   void _onInitializePicking(
@@ -59,6 +60,36 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
       id: state.order!.id,
       customerName: state.order!.customerName,
       status: OrderStatus.inProgress, // Update status
+      lines: updatedLines,
+    );
+
+    emit(state.copyWith(order: updatedOrder));
+  }
+
+  void _onBarcodeScanned(
+    BarcodeScanned event,
+    Emitter<PickingState> emit,
+  ) {
+    if (state.order == null) return;
+
+    final updatedLines = state.order!.lines.map((line) {
+      if (line.sku == event.sku) {
+        return OrderLine(
+          productId: line.productId,
+          productName: line.productName,
+          sku: line.sku,
+          location: line.location,
+          quantityToPick: line.quantityToPick,
+          quantityPicked: line.quantityToPick, // Mark as fully picked on scan
+        );
+      }
+      return line;
+    }).toList();
+
+    final updatedOrder = Order(
+      id: state.order!.id,
+      customerName: state.order!.customerName,
+      status: OrderStatus.inProgress,
       lines: updatedLines,
     );
 

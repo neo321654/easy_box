@@ -45,6 +45,7 @@
   "pickingPageLocationLabel": "Location",
   "pickingPageSkuLabel": "SKU",
   "pickingPageCompleteButton": "Complete Picking",
+  "pickingCompleteConfirmation": "Are you sure you want to complete this picking order?",
     "retryButtonText": "Retry",
   "nPieces": "{count,plural, =1{1 piece} other{{count} pieces}}",
   "@nPieces": {

@@ -27,3 +27,12 @@ class LineItemPicked extends PickingEvent {
 }
 
 class PickingCompleted extends PickingEvent {}
+
+class BarcodeScanned extends PickingEvent {
+  final String sku;
+
+  const BarcodeScanned(this.sku);
+
+  @override
+  List<Object> get props => [sku];
+}

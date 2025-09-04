@@ -280,6 +280,12 @@ abstract class AppLocalizations {
   /// **'Завершить сборку'**
   String get pickingPageCompleteButton;
 
+  /// No description provided for @pickingCompleteConfirmation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите завершить сборку этого заказа?'**
+  String get pickingCompleteConfirmation;
+
   /// No description provided for @retryButtonText.
   ///
   /// In ru, this message translates to:

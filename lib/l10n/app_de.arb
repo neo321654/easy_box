@@ -45,6 +45,7 @@
   "pickingPageLocationLabel": "Standort",
   "pickingPageSkuLabel": "SKU",
   "pickingPageCompleteButton": "Kommissionierung abschließen",
+  "pickingCompleteConfirmation": "Möchten Sie diese Kommissionierung wirklich abschließen?",
     "retryButtonText": "Wiederholen",
   "nPieces": "{count,plural, one{1 Stück} other{{count} Stücke}}",
   "@nPieces": {

@@ -45,6 +45,7 @@
   "pickingPageLocationLabel": "Место",
   "pickingPageSkuLabel": "SKU",
   "pickingPageCompleteButton": "Завершить сборку",
+  "pickingCompleteConfirmation": "Вы уверены, что хотите завершить сборку этого заказа?",
     "retryButtonText": "Повторить",
   "nPieces": "{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}",
   "@nPieces": {
