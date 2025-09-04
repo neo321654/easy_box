@@ -39,6 +39,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get homeMenuSettings => 'Settings';
 
   @override
+  String get homeMenuAddProduct => 'Add Product';
+
+  @override
   String get settingsPageTitle => 'Settings';
 
   @override

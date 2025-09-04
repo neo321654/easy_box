@@ -39,6 +39,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get homeMenuSettings => 'Настройки';
 
   @override
+  String get homeMenuAddProduct => 'Добавить товар';
+
+  @override
   String get settingsPageTitle => 'Настройки';
 
   @override

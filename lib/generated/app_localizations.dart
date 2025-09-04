@@ -160,6 +160,12 @@ abstract class AppLocalizations {
   /// **'Настройки'**
   String get homeMenuSettings;
 
+  /// No description provided for @homeMenuAddProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить товар'**
+  String get homeMenuAddProduct;
+
   /// No description provided for @settingsPageTitle.
   ///
   /// In ru, this message translates to:
