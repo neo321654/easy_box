@@ -6,8 +6,9 @@ on:
 jobs:
   test-ssh:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Debug SSH key
+      - name: Debug SSH key (first lines)
         run: |
           echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -5
 
@@ -17,6 +18,8 @@ jobs:
           host: ${{ secrets.SSH_HOST }}
           username: ${{ secrets.SSH_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          debug: true
           script: |
             echo "✅ Успешное подключение к серверу!"
             hostname
