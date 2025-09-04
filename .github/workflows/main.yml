@@ -7,6 +7,10 @@ jobs:
   test-ssh:
     runs-on: ubuntu-latest
     steps:
+      - name: Debug SSH key
+        run: |
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" | head -5
+
       - name: Test SSH connection
         uses: appleboy/ssh-action@v1.0.0
         with:
