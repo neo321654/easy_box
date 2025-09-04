@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/utils/app_dimensions.dart';
 import 'package:easy_box/core/widgets/image_source_sheet.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_image.dart';
@@ -76,16 +77,16 @@ class _EditProductDialogState extends State<EditProductDialog> {
             GestureDetector(
               onTap: _pickImage,
               child: Container(
-                height: 150,
-                width: 150,
+                height: AppDimensions.productImageSmallSize,
+                width: AppDimensions.productImageSmallSize,
                 decoration: BoxDecoration(
                   color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(8),
+                  borderRadius: BorderRadius.circular(AppDimensions.small),
                   border: Border.all(color: Colors.grey),
                 ),
                 child: _imageFile != null
                     ? ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(AppDimensions.small),
                         child: Image.file(
                           _imageFile!,
                           fit: BoxFit.cover,
@@ -93,30 +94,30 @@ class _EditProductDialogState extends State<EditProductDialog> {
                       )
                     : ProductImage(
                         imageUrl: widget.product.imageUrl,
-                        width: 150,
-                        height: 150,
+                        width: AppDimensions.productImageSmallSize,
+                        height: AppDimensions.productImageSmallSize,
                       ),
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.medium),
             TextFormField(
               controller: _nameController,
               decoration:
                   InputDecoration(labelText: context.S.productNameLabel),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.medium),
             TextFormField(
               controller: _skuController,
               decoration:
                   InputDecoration(labelText: context.S.productSkuLabel),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.medium),
             TextFormField(
               controller: _quantityController,
               decoration: InputDecoration(labelText: context.S.quantityLabel),
               keyboardType: TextInputType.number,
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: AppDimensions.medium),
             TextFormField(
               controller: _locationController,
               decoration:

@@ -6,4 +6,8 @@ class AppDimensions {
 
   // Button Heights
   static const double buttonHeight = 50.0;
+
+  // Image Heights
+  static const double productImageHeight = 200.0;
+  static const double productImageSmallSize = 150.0;
 }
