@@ -269,4 +269,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String productCreatedAndStockAddedSuccessfully(Object sku) {
     return 'Product created and stock added successfully for SKU: $sku';
   }
+
+  @override
+  String get selectImageSource => 'Select Image Source';
+
+  @override
+  String get camera => 'Camera';
+
+  @override
+  String get gallery => 'Gallery';
+
+  @override
+  String get addProductImage => 'Add Product Image';
 }

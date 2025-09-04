@@ -543,6 +543,30 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Товар создан и успешно добавлен на склад для SKU: {sku}'**
   String productCreatedAndStockAddedSuccessfully(Object sku);
+
+  /// No description provided for @selectImageSource.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите источник изображения'**
+  String get selectImageSource;
+
+  /// No description provided for @camera.
+  ///
+  /// In ru, this message translates to:
+  /// **'Камера'**
+  String get camera;
+
+  /// No description provided for @gallery.
+  ///
+  /// In ru, this message translates to:
+  /// **'Галерея'**
+  String get gallery;
+
+  /// No description provided for @addProductImage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить изображение товара'**
+  String get addProductImage;
 }
 
 class _AppLocalizationsDelegate

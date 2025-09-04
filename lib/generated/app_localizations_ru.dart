@@ -273,4 +273,16 @@ class AppLocalizationsRu extends AppLocalizations {
   String productCreatedAndStockAddedSuccessfully(Object sku) {
     return 'Товар создан и успешно добавлен на склад для SKU: $sku';
   }
+
+  @override
+  String get selectImageSource => 'Выберите источник изображения';
+
+  @override
+  String get camera => 'Камера';
+
+  @override
+  String get gallery => 'Галерея';
+
+  @override
+  String get addProductImage => 'Добавить изображение товара';
 }

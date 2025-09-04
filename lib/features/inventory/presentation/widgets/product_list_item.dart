@@ -2,6 +2,7 @@ import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/pages/product_detail_page.dart';
+import 'package:easy_box/features/inventory/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -30,6 +31,11 @@ class ProductListItem extends StatelessWidget {
         }
       },
       child: ListTile(
+        leading: ProductImage(
+          imageUrl: product.imageUrl,
+          width: 50,
+          height: 50,
+        ),
         title: Text(product.name),
         subtitle: Text('${product.sku} - ${product.location ?? ''}'),
         trailing: Text(

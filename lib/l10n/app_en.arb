@@ -71,8 +71,6 @@
   "productNameLabel": "Product Name",
   "productLocationLabel": "Location",
   "productImageUrlLabel": "Image URL",
-  "productImageUrlLabel": "Image URL",
-  "productImageUrlLabel": "Image URL",
   "cancelButtonText": "Cancel",
   "createAndAddStockButtonText": "Create & Add Stock",
   "editProductDialogTitle": "Edit Product",
@@ -117,10 +115,6 @@
     }
   },
   "serverError": "Server Error",
-  "failedToUpdateProductMessage": "Failed to update product.",
-  "productUpdatedSuccessfullyMessage": "Product updated successfully.",
-  "failedToDeleteProductMessage": "Failed to delete product.",
-  "productDeletedSuccessfullyMessage": "Product deleted successfully.",
   "offlineIndicator": " (Offline)",
   "failedToAddStock": "Failed to add stock.",
   "stockAddedSuccessfully": "Stock added successfully for SKU: {sku}",
@@ -136,5 +130,9 @@
     "placeholders": {
       "sku": {}
     }
-  }
+  },
+  "selectImageSource": "Select Image Source",
+  "camera": "Camera",
+  "gallery": "Gallery",
+  "addProductImage": "Add Product Image"
 }

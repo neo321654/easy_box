@@ -71,8 +71,6 @@
   "productNameLabel": "Название товара",
   "productLocationLabel": "Местоположение",
   "productImageUrlLabel": "URL изображения",
-  "productImageUrlLabel": "URL изображения",
-  "productImageUrlLabel": "URL изображения",
   "cancelButtonText": "Отмена",
   "createAndAddStockButtonText": "Создать и добавить на склад",
   "editProductDialogTitle": "Редактировать товар",
@@ -117,10 +115,6 @@
     }
   },
   "serverError": "Ошибка сервера",
-  "failedToUpdateProductMessage": "Не удалось обновить товар.",
-  "productUpdatedSuccessfullyMessage": "Товар успешно обновлен.",
-  "failedToDeleteProductMessage": "Не удалось удалить товар.",
-  "productDeletedSuccessfullyMessage": "Товар успешно удален.",
   "offlineIndicator": " (Офлайн)",
   "failedToAddStock": "Не удалось добавить товар на склад.",
   "stockAddedSuccessfully": "Товар для SKU: {sku} успешно добавлен на склад",
@@ -136,5 +130,9 @@
     "placeholders": {
       "sku": {}
     }
-  }
+  },
+  "selectImageSource": "Выберите источник изображения",
+  "camera": "Камера",
+  "gallery": "Галерея",
+  "addProductImage": "Добавить изображение товара"
 }

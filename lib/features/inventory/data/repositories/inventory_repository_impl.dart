@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/core/error/failures.dart';
@@ -8,6 +10,9 @@ import 'package:easy_box/features/inventory/data/datasources/inventory_remote_da
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 class InventoryRepositoryImpl implements InventoryRepository {
   final InventoryRemoteDataSource remoteDataSource;
@@ -55,12 +60,37 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 
+  Future<String?> _copyImageToPermanentStorage(String? imagePath) async {
+    if (imagePath == null) return null;
+
+    try {
+      final file = File(imagePath);
+      if (!await file.exists()) return null;
+
+      final appDir = await getApplicationDocumentsDirectory();
+      final fileName = p.basename(imagePath);
+      final newPath = p.join(appDir.path, 'product_images', fileName);
+
+      final newFile = File(newPath);
+      await newFile.create(recursive: true);
+      await file.copy(newFile.path);
+
+      return newPath;
+    } catch (e) {
+      // Handle exceptions, e.g., file system errors
+      return null;
+    }
+  }
+
   @override
   Future<Either<Failure, OperationResult>> createProduct(
       {required String name, required String sku, String? location, String? imageUrl}) async {
+
+    final permanentImageUrl = await _copyImageToPermanentStorage(imageUrl);
+
     if (await networkInfo.isConnected) {
       try {
-        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location, imageUrl: imageUrl);
+        final newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location, imageUrl: permanentImageUrl);
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
@@ -69,10 +99,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
     } else {
       // Offline creation
       try {
-        final localId = DateTime.now().millisecondsSinceEpoch.toString(); // Generate a temporary local ID
-        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0, location: location, imageUrl: imageUrl);
+        final localId = const Uuid().v4(); // Generate a temporary local ID
+        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0, location: location, imageUrl: permanentImageUrl);
         await localDataSource.saveProduct(newProduct);
-        await localDataSource.addProductCreationToQueue(name, sku, location, imageUrl, localId);
+        await localDataSource.addProductCreationToQueue(name, sku, location, permanentImageUrl, localId);
         return const Right(OperationResult(isQueued: true)); // Fixed: return OperationResult
       } on Exception {
         return Left(CacheFailure()); // Or a more specific failure

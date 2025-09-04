@@ -4,6 +4,7 @@ import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/edit_product_dialog.dart';
+import 'package:easy_box/features/inventory/presentation/widgets/product_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -111,6 +112,12 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              ProductImage(
+                imageUrl: widget.product.imageUrl,
+                width: double.infinity,
+                height: 200,
+              ),
+              const SizedBox(height: 16),
               Text(
                 '${context.S.productSkuLabel}: ${widget.product.sku}',
                 style: Theme.of(context).textTheme.titleMedium,
@@ -125,15 +132,6 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
                 Text(
                   context.S.productLocationLabelWithColon(widget.product.location!),
                   style: Theme.of(context).textTheme.titleMedium,
-                ),
-              const SizedBox(height: 8),
-              if (widget.product.imageUrl != null && widget.product.imageUrl!.isNotEmpty)
-                Image.network(
-                  widget.product.imageUrl!,
-                  width: 100, // Adjust size as needed
-                  height: 100,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.broken_image), // Placeholder for error
                 ),
               // TODO: Add more product details if available
             ],

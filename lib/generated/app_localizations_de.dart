@@ -272,4 +272,16 @@ class AppLocalizationsDe extends AppLocalizations {
   String productCreatedAndStockAddedSuccessfully(Object sku) {
     return 'Produkt erstellt und Bestand für SKU: $sku erfolgreich hinzugefügt';
   }
+
+  @override
+  String get selectImageSource => 'Bildquelle auswählen';
+
+  @override
+  String get camera => 'Kamera';
+
+  @override
+  String get gallery => 'Galerie';
+
+  @override
+  String get addProductImage => 'Produktbild hinzufügen';
 }
