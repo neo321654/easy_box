@@ -1,4 +1,5 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/utils/app_dimensions.dart';
 import 'package:easy_box/core/widgets/app_snack_bar.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
@@ -101,26 +102,26 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
           }
         },
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(AppDimensions.medium),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               ProductImage(
                 imageUrl: widget.product.imageUrl,
-                width: MediaQuery.of(context).size.width - 32,
-                height: 200,
+                width: MediaQuery.of(context).size.width - (AppDimensions.medium * 2),
+                height: AppDimensions.productImageHeight,
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: AppDimensions.medium),
               Text(
                 '${context.S.productSkuLabel}: ${widget.product.sku}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.small),
               Text(
                 '${context.S.quantityLabel}: ${widget.product.quantity}',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              const SizedBox(height: 8),
+              const SizedBox(height: AppDimensions.small),
               if (widget.product.location != null && widget.product.location!.isNotEmpty)
                 Text(
                   context.S.productLocationLabelWithColon(widget.product.location!),

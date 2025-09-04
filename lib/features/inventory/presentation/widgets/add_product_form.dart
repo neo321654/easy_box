@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/utils/app_dimensions.dart';
 import 'package:easy_box/core/widgets/app_snack_bar.dart';
 import 'package:easy_box/core/widgets/image_source_sheet.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
@@ -94,9 +95,9 @@ class _AddProductFormState extends State<AddProductForm> {
         child: Padding(
           padding: EdgeInsets.only(
             bottom: MediaQuery.of(context).viewInsets.bottom,
-            left: 16,
-            right: 16,
-            top: 16,
+            left: AppDimensions.medium,
+            right: AppDimensions.medium,
+            top: AppDimensions.medium,
           ),
           child: Form(
             key: _formKey,
@@ -105,20 +106,20 @@ class _AddProductFormState extends State<AddProductForm> {
               children: [
                 Text(context.S.addProductPageTitle,
                     style: Theme.of(context).textTheme.headlineSmall),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppDimensions.large),
                 GestureDetector(
                   onTap: _pickImage,
                   child: Container(
-                    height: 150,
-                    width: 150,
+                    height: AppDimensions.productImageSmallSize,
+                    width: AppDimensions.productImageSmallSize,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(AppDimensions.small),
                       border: Border.all(color: Colors.grey),
                     ),
                     child: _imageFile != null
                         ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
+                            borderRadius: BorderRadius.circular(AppDimensions.small),
                             child: Image.file(
                               _imageFile!,
                               fit: BoxFit.cover,
@@ -129,14 +130,14 @@ class _AddProductFormState extends State<AddProductForm> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 const Icon(Icons.add_a_photo, size: 40),
-                                const SizedBox(height: 8),
+                                const SizedBox(height: AppDimensions.small),
                                 Text(context.S.addProductImage),
                               ],
                             ),
                           ),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppDimensions.large),
                 TextFormField(
                   controller: _nameController,
                   decoration: InputDecoration(
@@ -147,7 +148,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       ? context.S.pleaseEnterProductNameError
                       : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.medium),
                 TextFormField(
                   controller: _skuController,
                   readOnly: widget.initialSku != null, // Make read-only if initialSku is provided
@@ -165,7 +166,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       ? context.S.pleaseEnterSkuError
                       : null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.medium),
                 TextFormField(
                   controller: _locationController,
                   decoration: InputDecoration(
@@ -173,7 +174,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     border: const OutlineInputBorder(),
                   ),
                 ),
-                const SizedBox(height: 24),
+                const SizedBox(height: AppDimensions.large),
                 BlocBuilder<ProductCreationBloc, ProductCreationState>(
                   builder: (context, state) {
                     if (state is ProductCreationLoading) {
@@ -185,7 +186,7 @@ class _AddProductFormState extends State<AddProductForm> {
                     );
                   },
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppDimensions.medium),
               ],
             ),
           ),
