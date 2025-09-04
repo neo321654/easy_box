@@ -55,6 +55,7 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
       name: event.name,
       sku: event.sku,
       location: event.location,
+      imageUrl: event.imageUrl,
     );
 
     await failureOrCreateResult.fold(

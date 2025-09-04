@@ -21,6 +21,7 @@ class _EditProductDialogState extends State<EditProductDialog> {
   late final TextEditingController _skuController;
   late final TextEditingController _quantityController;
   late final TextEditingController _locationController;
+  late final TextEditingController _imageUrlController;
 
   @override
   void initState() {
@@ -30,6 +31,7 @@ class _EditProductDialogState extends State<EditProductDialog> {
     _quantityController =
         TextEditingController(text: widget.product.quantity.toString());
     _locationController = TextEditingController(text: widget.product.location);
+    _imageUrlController = TextEditingController(text: widget.product.imageUrl);
   }
 
   @override
@@ -38,6 +40,7 @@ class _EditProductDialogState extends State<EditProductDialog> {
     _skuController.dispose();
     _quantityController.dispose();
     _locationController.dispose();
+    _imageUrlController.dispose();
     super.dispose();
   }
 
@@ -66,6 +69,11 @@ class _EditProductDialogState extends State<EditProductDialog> {
             decoration:
                 InputDecoration(labelText: context.S.productLocationLabel),
           ),
+          TextField(
+            controller: _imageUrlController,
+            decoration:
+                InputDecoration(labelText: context.S.productImageUrlLabel),
+          ),
         ],
       ),
       actions: [
@@ -83,6 +91,7 @@ class _EditProductDialogState extends State<EditProductDialog> {
               sku: _skuController.text,
               quantity: int.tryParse(_quantityController.text) ?? 0,
               location: _locationController.text,
+              imageUrl: _imageUrlController.text,
             );
             widget.onUpdate(updatedProduct);
             Navigator.of(context).pop();

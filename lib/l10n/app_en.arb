@@ -65,6 +65,7 @@
   "productNotFoundDialogTitle": "Product Not Found",
   "productNameLabel": "Product Name",
   "productLocationLabel": "Location",
+  "productImageUrlLabel": "Image URL",
   "cancelButtonText": "Cancel",
   "createAndAddStockButtonText": "Create & Add Stock",
   "editProductDialogTitle": "Edit Product",
