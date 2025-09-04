@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
+import 'package:easy_box/core/widgets/app_snack_bar.dart';
 import 'package:easy_box/core/widgets/image_source_sheet.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
@@ -80,23 +81,13 @@ class _AddProductFormState extends State<AddProductForm> {
     return BlocListener<ProductCreationBloc, ProductCreationState>(
       listener: (context, state) {
         if (state is ProductCreationSuccess) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                  content: Text(context.S.productCreatedSuccessfully +
-                      (state.isQueued ? context.S.offlineIndicator : '')),
-                  backgroundColor: Colors.green),
-            );
+          showAppSnackBar(
+              context,
+              context.S.productCreatedSuccessfully +
+                  (state.isQueued ? context.S.offlineIndicator : ''));
           Navigator.of(context).pop(true); // Go back after successful creation
         } else if (state is ProductCreationFailure) {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                  content: Text(context.S.failedToCreateProduct),
-                  backgroundColor: Colors.red),
-            );
+          showAppSnackBar(context, context.S.failedToCreateProduct, isError: true);
         }
       },
       child: SingleChildScrollView(
