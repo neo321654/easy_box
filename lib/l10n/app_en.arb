@@ -66,6 +66,8 @@
   "productNameLabel": "Product Name",
   "productLocationLabel": "Location",
   "productImageUrlLabel": "Image URL",
+  "productImageUrlLabel": "Image URL",
+  "productImageUrlLabel": "Image URL",
   "cancelButtonText": "Cancel",
   "createAndAddStockButtonText": "Create & Add Stock",
   "editProductDialogTitle": "Edit Product",

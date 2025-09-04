@@ -66,6 +66,8 @@
   "productNameLabel": "Название товара",
   "productLocationLabel": "Местоположение",
   "productImageUrlLabel": "URL изображения",
+  "productImageUrlLabel": "URL изображения",
+  "productImageUrlLabel": "URL изображения",
   "cancelButtonText": "Отмена",
   "createAndAddStockButtonText": "Создать и добавить на склад",
   "editProductDialogTitle": "Редактировать товар",
