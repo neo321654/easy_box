@@ -3,6 +3,7 @@ import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_list_item.dart';
+import 'package:easy_box/features/inventory/presentation/pages/add_product_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,6 +17,19 @@ class InventoryPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: Text(context.S.inventoryPageTitle),
+        ),
+        floatingActionButton: FloatingActionButton.extended(
+          onPressed: () async {
+            await Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const AddProductPage()),
+            );
+            // Refresh the inventory list after returning from AddProductPage
+            if (context.mounted) {
+              context.read<InventoryBloc>().add(FetchProductsRequested());
+            }
+          },
+          label: Text(context.S.addProductButtonText),
+          icon: const Icon(Icons.add),
         ),
         body: BlocBuilder<InventoryBloc, InventoryState>(
           builder: (context, state) {

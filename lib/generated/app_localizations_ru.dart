@@ -75,6 +75,18 @@ class AppLocalizationsRu extends AppLocalizations {
   String get inventorySearchHint => 'Поиск по имени, SKU или местоположению...';
 
   @override
+  String get addProductPageTitle => 'Добавить новый товар';
+
+  @override
+  String get addProductButtonText => 'Добавить товар';
+
+  @override
+  String get pleaseEnterProductNameError => 'Пожалуйста, введите название товара';
+
+  @override
+  String get productCreatedSuccessfully => 'Товар успешно создан';
+
+  @override
   String get orderListPageTitle => 'Заказы';
 
   @override

@@ -232,6 +232,30 @@ abstract class AppLocalizations {
   /// **'Поиск по имени, SKU или местоположению...'**
   String get inventorySearchHint;
 
+  /// No description provided for @addProductPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить новый товар'**
+  String get addProductPageTitle;
+
+  /// No description provided for @addProductButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить товар'**
+  String get addProductButtonText;
+
+  /// No description provided for @pleaseEnterProductNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите название товара'**
+  String get pleaseEnterProductNameError;
+
+  /// No description provided for @productCreatedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно создан'**
+  String get productCreatedSuccessfully;
+
   /// No description provided for @orderListPageTitle.
   ///
   /// In ru, this message translates to:

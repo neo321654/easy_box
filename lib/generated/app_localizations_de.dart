@@ -75,6 +75,18 @@ class AppLocalizationsDe extends AppLocalizations {
   String get inventorySearchHint => 'Suche nach Name, SKU oder Standort...';
 
   @override
+  String get addProductPageTitle => 'Neues Produkt hinzufügen';
+
+  @override
+  String get addProductButtonText => 'Produkt hinzufügen';
+
+  @override
+  String get pleaseEnterProductNameError => 'Bitte Produktnamen eingeben';
+
+  @override
+  String get productCreatedSuccessfully => 'Produkt erfolgreich erstellt';
+
+  @override
   String get orderListPageTitle => 'Bestellungen';
 
   @override

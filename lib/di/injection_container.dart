@@ -17,6 +17,7 @@ import 'package:easy_box/features/inventory/domain/usecases/update_product_useca
 import 'package:easy_box/features/inventory/domain/usecases/delete_product_usecase.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';
+import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart'; // Added for initial mock data
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source.dart';
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source_impl.dart';
@@ -102,6 +103,7 @@ Future<void> init({Locale? systemLocale}) async {
   // Blocs
   sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl()));
   sl.registerFactory(() => ProductDetailBloc(updateProductUseCase: sl(), deleteProductUseCase: sl()));
+  sl.registerFactory(() => ProductCreationBloc(createProductUseCase: sl()));
 
   // Use Cases
   sl.registerLazySingleton(() => GetProductsUseCase(sl()));
