@@ -114,7 +114,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             children: [
               ProductImage(
                 imageUrl: widget.product.imageUrl,
-                width: double.infinity,
+                width: MediaQuery.of(context).size.width - 32,
                 height: 200,
               ),
               const SizedBox(height: 16),

@@ -135,13 +135,15 @@ class InventoryRepositoryImpl implements InventoryRepository {
 
   @override
   Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
+    final permanentImageUrl = await _copyImageToPermanentStorage(product.imageUrl);
+
     final productModel = ProductModel(
       id: product.id,
       name: product.name,
       sku: product.sku,
       quantity: product.quantity,
       location: product.location,
-      imageUrl: product.imageUrl,
+      imageUrl: permanentImageUrl, // Use the processed image URL
     );
     if (await networkInfo.isConnected) {
       try {
