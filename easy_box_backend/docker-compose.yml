@@ -9,6 +9,6 @@ services:
     volumes:
       # Этот том сохраняет базу данных SQLite на вашем сервере,
       # чтобы данные не терялись при перезапуске контейнера.
-      - ./easy_box.db:/easy_box_backend/easy_box.db
+      - ./db_data:/easy_box_backend/db_data
     env_file:
       - ./.env
