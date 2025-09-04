@@ -5,7 +5,7 @@ import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dar
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/add_product_form.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_list_item.dart';
-import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
+import 'package:easy_box/core/utils/scanner_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -61,9 +61,7 @@ class _InventoryViewState extends State<_InventoryView> {
   }
 
   Future<void> _scanBarcode() async {
-    final sku = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
-    );
+    final sku = await scanBarcode(context);
     if (sku != null && mounted) {
       _searchController.text = sku;
       context.read<InventoryBloc>().add(SearchTermChanged(sku));

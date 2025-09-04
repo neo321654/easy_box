@@ -4,7 +4,7 @@ import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/core/widgets/image_source_sheet.dart';
 import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
-import 'package:easy_box/features/scanning/presentation/pages/barcode_scanner_page.dart';
+import 'package:easy_box/core/utils/scanner_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,9 +54,7 @@ class _AddProductFormState extends State<AddProductForm> {
   }
 
   Future<void> _scanBarcode() async {
-    final sku = await Navigator.of(context).push<String>(
-      MaterialPageRoute(builder: (_) => const BarcodeScannerPage()),
-    );
+    final sku = await scanBarcode(context);
     if (sku != null && mounted) {
       _skuController.text = sku;
     }
