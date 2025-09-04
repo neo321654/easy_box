@@ -5,7 +5,6 @@ import 'package:easy_box/core/widgets/widgets.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -55,9 +54,6 @@ class _LoginPageState extends State<LoginPage> {
         listener: (context, state) {
           if (state is AuthFailure) {
             showAppSnackBar(context, state.message, isError: true);
-          }
-          if (state is AuthSuccess) {
-            context.go('/home');
           }
         },
         builder: (context, state) {
