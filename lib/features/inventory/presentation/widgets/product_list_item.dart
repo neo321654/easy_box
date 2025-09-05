@@ -31,10 +31,12 @@ class ProductListItem extends StatelessWidget {
         }
       },
       child: ListTile(
-        leading: ProductImage(
-          imageUrl: product.imageUrl,
+        leading: SizedBox(
           width: 50,
           height: 50,
+          child: ProductImage(
+            imageUrl: product.imageUrl,
+          ),
         ),
         title: Text(product.name),
         subtitle: Text('${product.sku} - ${product.location ?? ''}'),
