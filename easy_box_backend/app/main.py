@@ -39,6 +39,7 @@ app = FastAPI()
 
 @app.exception_handler(Exception)
 async def generic_exception_handler(request: Request, exc: Exception):
+    print("!!! GENERIC EXCEPTION HANDLER TRIGGERED !!!")
     error_message = f"""🚨 Unhandled Server Error 🚨
 
 **Endpoint**: `{request.method} {request.url.path}`
