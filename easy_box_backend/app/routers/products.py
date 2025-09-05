@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form, Request
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import shutil
 
 from .. import crud, models, schemas, deps
+from ..telegram_utils import send_client_error_notification
 from ..uploads_utils import save_upload_file, save_upload_file_and_update_product
 
 router = APIRouter(
@@ -15,6 +16,7 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Product)
 def create_product(
+    request: Request,
     db: Session = Depends(deps.get_db),
     name: str = Form(...),
     sku: str = Form(...),
@@ -24,7 +26,9 @@ def create_product(
 ):
     db_product = crud.get_product_by_sku(db, sku=sku)
     if db_product:
-        raise HTTPException(status_code=400, detail="SKU already registered")
+        detail = "SKU already registered"
+        send_client_error_notification(request=request, detail=detail)
+        raise HTTPException(status_code=400, detail=detail)
     
     image_url = None
     if file:

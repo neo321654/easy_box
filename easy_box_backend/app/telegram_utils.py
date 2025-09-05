@@ -3,6 +3,7 @@ import os
 from dotenv import load_dotenv
 import logging
 import traceback
+from fastapi import Request
 
 load_dotenv()
 
@@ -46,4 +47,14 @@ class TelegramLogHandler(logging.Handler):
             send_telegram_error_notification(msg)
         except Exception:
             self.handleError(record)
+
+def send_client_error_notification(request: Request, detail: str):
+    """Formats and sends a notification about a client-side error (e.g., 4xx)."""
+    message = (
+        f"🔵 **Client Error Notification** 🔵\n\n"
+        f"**Endpoint**: `{request.method} {request.url.path}`\n"
+        f"**Client**: `{request.client.host}:{request.client.port}`\n"
+        f"**Detail**: `{detail}`"
+    )
+    send_telegram_error_notification(message)
 
