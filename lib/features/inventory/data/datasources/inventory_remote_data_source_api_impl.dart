@@ -70,20 +70,27 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
     String? location,
     String? imageUrl,
   }) async {
-    final response = await client.post(
-      Uri.parse('$_baseUrl/products/'),
-      headers: await _getHeaders(),
-      body: json.encode({
-        'name': name,
-        'sku': sku,
-        'quantity': 0, // New products start with 0 quantity
-        'location': location,
-        'image_url': imageUrl,
-      }),
-    );
+    final uri = Uri.parse('$_baseUrl/products/');
+    final request = http.MultipartRequest('POST', uri);
+    final headers = await _getHeaders();
+    request.headers['Authorization'] = headers['Authorization']!;
+
+    request.fields['name'] = name;
+    request.fields['sku'] = sku;
+    request.fields['quantity'] = '0';
+    if (location != null) {
+      request.fields['location'] = location;
+    }
+
+    if (imageUrl != null) {
+      request.files.add(await http.MultipartFile.fromPath('file', imageUrl));
+    }
+
+    final response = await request.send();
 
     if (response.statusCode == 200) {
-      return ProductModel.fromJson(json.decode(response.body));
+      final responseBody = await response.stream.bytesToString();
+      return ProductModel.fromJson(json.decode(responseBody));
     } else {
       throw ServerException();
     }

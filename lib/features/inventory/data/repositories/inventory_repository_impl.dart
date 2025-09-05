@@ -87,14 +87,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
       {required String name, required String sku, String? location, String? imageUrl}) async {
     if (await networkInfo.isConnected) {
       try {
-        // First, create the product without the image URL
-        ProductModel newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location);
-
-        // If an image is provided, upload it now
-        if (imageUrl != null) {
-          newProduct = await remoteDataSource.uploadProductImage(newProduct.id, imageUrl);
-        }
-
+        final newProduct = await remoteDataSource.createProduct(
+          name: name,
+          sku: sku,
+          location: location,
+          imageUrl: imageUrl,
+        );
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
@@ -235,21 +233,13 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingCreations = await localDataSource.getQueuedProductCreations();
     if (pendingCreations.isNotEmpty) {
       for (final creation in pendingCreations) {
-        // 1. Create product on the backend without the image URL
-        ProductModel remoteProduct = await remoteDataSource.createProduct(
+        final localImagePath = creation['image_url'] as String?;
+        final remoteProduct = await remoteDataSource.createProduct(
           name: creation['name'],
           sku: creation['sku'],
           location: creation['location'],
-          // Do not pass the imageUrl here
+          imageUrl: localImagePath,
         );
-
-        // 2. If there was a local image, upload it now
-        final localImagePath = creation['image_url'] as String?;
-        if (localImagePath != null) {
-          remoteProduct = await remoteDataSource.uploadProductImage(remoteProduct.id, localImagePath);
-        }
-
-        // 3. Update local product with real server ID
         await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
       }
       await localDataSource.clearQueuedProductCreations();
@@ -291,5 +281,3 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 }
-
-
