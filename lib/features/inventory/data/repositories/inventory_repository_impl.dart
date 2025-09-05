@@ -142,8 +142,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
   Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
     Product productToUpdate = product;
 
-    // Check if the imageUrl is a new local file path
-    if (product.imageUrl != null && !product.imageUrl!.startsWith('http')) {
+    // Check if the imageUrl is a new local file path that needs uploading
+    // It should NOT be null, empty, start with 'http', or start with '/images/' (which is a server-relative path)
+    if (product.imageUrl != null &&
+        product.imageUrl!.isNotEmpty &&
+        !product.imageUrl!.startsWith('http') &&
+        !product.imageUrl!.startsWith('/images/')) {
       if (await networkInfo.isConnected) {
         try {
           final uploadedProduct = await remoteDataSource.uploadProductImage(product.id, product.imageUrl!);
