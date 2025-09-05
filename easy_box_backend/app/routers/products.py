@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form, Request
 from sqlalchemy.orm import Session
 from typing import List, Optional
 import shutil
 
 from .. import crud, models, schemas, deps
+from ..telegram_utils import send_client_error_notification
 from ..uploads_utils import save_upload_file, save_upload_file_and_update_product
 
 router = APIRouter(
@@ -15,6 +16,7 @@ router = APIRouter(
 
 @router.post("/", response_model=schemas.Product)
 def create_product(
+    request: Request,
     db: Session = Depends(deps.get_db),
     name: str = Form(...),
     sku: str = Form(...),
@@ -24,7 +26,9 @@ def create_product(
 ):
     db_product = crud.get_product_by_sku(db, sku=sku)
     if db_product:
-        raise HTTPException(status_code=400, detail="SKU already registered")
+        detail = "SKU already registered"
+        send_client_error_notification(request=request, detail=detail)
+        raise HTTPException(status_code=400, detail=detail)
     
     image_url = None
     if file:
@@ -46,43 +50,55 @@ def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(deps.ge
     return products
 
 @router.get("/{product_id}", response_model=schemas.Product)
-def read_product(product_id: int, db: Session = Depends(deps.get_db)):
+def read_product(request: Request, product_id: int, db: Session = Depends(deps.get_db)):
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:
+        detail = f"Product with id {product_id} not found"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.get("/sku/{sku}", response_model=schemas.Product)
-def read_product_by_sku(sku: str, db: Session = Depends(deps.get_db)):
+def read_product_by_sku(request: Request, sku: str, db: Session = Depends(deps.get_db)):
     db_product = crud.get_product_by_sku(db, sku=sku)
     if db_product is None:
+        detail = f"Product with sku {sku} not found"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.put("/{product_id}", response_model=schemas.Product)
-def update_product(product_id: int, product: schemas.ProductUpdate, db: Session = Depends(deps.get_db)):
+def update_product(request: Request, product_id: int, product: schemas.ProductUpdate, db: Session = Depends(deps.get_db)):
     db_product = crud.update_product(db, product_id=product_id, product=product)
     if db_product is None:
+        detail = f"Product with id {product_id} not found on update"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.delete("/{product_id}", response_model=schemas.Product)
-def delete_product(product_id: int, db: Session = Depends(deps.get_db)):
+def delete_product(request: Request, product_id: int, db: Session = Depends(deps.get_db)):
     db_product = crud.delete_product(db, product_id=product_id)
     if db_product is None:
+        detail = f"Product with id {product_id} not found on delete"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.post("/{sku}/add_stock", response_model=schemas.Product)
-def add_stock_to_product(sku: str, quantity: int, db: Session = Depends(deps.get_db)):
+def add_stock_to_product(request: Request, sku: str, quantity: int, db: Session = Depends(deps.get_db)):
     db_product = crud.add_stock(db, sku=sku, quantity=quantity)
     if db_product is None:
+        detail = f"Product with sku {sku} not found for adding stock"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.post("/{product_id}/upload-image", response_model=schemas.Product)
-def upload_product_image(product_id: int, db: Session = Depends(deps.get_db), file: UploadFile = File(...)):
+def upload_product_image(request: Request, product_id: int, db: Session = Depends(deps.get_db), file: UploadFile = File(...)):
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:
+        detail = f"Product with id {product_id} not found for image upload"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return save_upload_file_and_update_product(db=db, product_id=product_id, file=file)

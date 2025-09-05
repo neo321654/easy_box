@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:easy_box/core/talker/talker.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/pages/inventory_page.dart';
 import 'package:easy_box/features/receiving/presentation/pages/receiving_page.dart';
@@ -8,6 +9,7 @@ import 'package:easy_box/features/settings/presentation/pages/settings_page.dart
 import 'package:easy_box/features/order/presentation/pages/order_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/splash/presentation/pages/splash_page.dart';
@@ -19,6 +21,7 @@ void initializeRouter(AuthBloc authBloc) {
   appRouter = GoRouter(
     initialLocation: '/',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),
+    observers: [TalkerRouteObserver(talker)],
     routes: [
       GoRoute(
         path: '/',
@@ -51,6 +54,10 @@ void initializeRouter(AuthBloc authBloc) {
       GoRoute(
         path: '/orders',
         builder: (context, state) => const OrderListPage(),
+      ),
+      GoRoute(
+        path: '/talker',
+        builder: (context, state) => TalkerScreen(talker: talker),
       ),
     ],
     redirect: (context, state) {
