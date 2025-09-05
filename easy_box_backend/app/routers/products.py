@@ -1,10 +1,10 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
 from sqlalchemy.orm import Session
-from typing import List
+from typing import List, Optional
 import shutil
 
 from .. import crud, models, schemas, deps
-from ..uploads_utils import save_upload_file_and_update_product
+from ..uploads_utils import save_upload_file, save_upload_file_and_update_product
 
 router = APIRouter(
     prefix="/products",
@@ -14,11 +14,31 @@ router = APIRouter(
 )
 
 @router.post("/", response_model=schemas.Product)
-def create_product(product: schemas.ProductCreate, db: Session = Depends(deps.get_db)):
-    db_product = crud.get_product_by_sku(db, sku=product.sku)
+def create_product(
+    db: Session = Depends(deps.get_db),
+    name: str = Form(...),
+    sku: str = Form(...),
+    quantity: int = Form(...),
+    location: Optional[str] = Form(None),
+    file: Optional[UploadFile] = File(None)
+):
+    db_product = crud.get_product_by_sku(db, sku=sku)
     if db_product:
         raise HTTPException(status_code=400, detail="SKU already registered")
-    return crud.create_product(db=db, product=product)
+    
+    image_url = None
+    if file:
+        image_url = save_upload_file(file)
+        
+    product_data = schemas.ProductCreate(
+        name=name,
+        sku=sku,
+        quantity=quantity,
+        location=location,
+        image_url=image_url
+    )
+    
+    return crud.create_product(db=db, product=product_data)
 
 @router.get("/", response_model=List[schemas.Product])
 def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_db)):
