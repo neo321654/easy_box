@@ -245,7 +245,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
           location: creation['location'],
           imageUrl: localImagePath,
         );
-        await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
+        // Instead of just updating the ID, we delete the old temp product
+        // and save the new, complete product from the server.
+        await localDataSource.deleteProduct(creation['local_id']);
+        await localDataSource.saveProduct(remoteProduct);
       }
       await localDataSource.clearQueuedProductCreations();
     }
