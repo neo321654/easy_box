@@ -55,7 +55,10 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
         '$_baseUrl/products/$sku/add_stock?quantity=$quantityToAdd',
         options: await _getOptions(),
       );
-    } on DioException {
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw ProductNotFoundException(sku);
+      }
       throw ServerException();
     }
   }
