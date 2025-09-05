@@ -1,13 +1,6 @@
 name: Notify on Develop Merge
 
-on:
-  push:
-    branches:
-      - develop
-  workflow_dispatch:
-
-  @MyFlutterBot
-  5257920081:AAF7NghL_Et2x13_QlFRsY9V6qo4oBaMtL4
+on: push
 
 jobs:
   send-telegram-notification:
