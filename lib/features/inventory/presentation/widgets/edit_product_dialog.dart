@@ -37,12 +37,6 @@ class _EditProductDialogState extends State<EditProductDialog> {
     _quantityController =
         TextEditingController(text: widget.product.quantity.toString());
     _locationController = TextEditingController(text: widget.product.location);
-
-    // Initialize _imageFile if imageUrl is a local path
-    if (widget.product.imageUrl != null &&
-        !widget.product.imageUrl!.startsWith('http')) {
-      _imageFile = File(widget.product.imageUrl!);
-    }
   }
 
   @override
