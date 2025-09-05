@@ -34,12 +34,14 @@ class TelegramLogHandler(logging.Handler):
         try:
             msg = self.format(record)
             
-            # Если есть информация об исключении, добавляем traceback
+            # Если есть информация об исключении, добавляем тип и значение ошибки
             if record.exc_info:
-                msg += "\n\n"
-                msg += "```\n"
-                msg += "".join(traceback.format_exception(*record.exc_info))
-                msg += "\n```"
+                exc_type, exc_value, _ = record.exc_info
+                msg += f"\n**Exception**: `{exc_type.__name__}: {exc_value}`"
+
+            # Обрезаем сообщение, чтобы не превысить лимиты Telegram
+            if len(msg) > 4000:
+                msg = msg[:4000] + "\n... (truncated)"
 
             send_telegram_error_notification(msg)
         except Exception:
