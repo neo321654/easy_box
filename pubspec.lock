@@ -145,6 +145,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.7.11"
+  dio:
+    dependency: "direct main"
+    description:
+      name: dio
+      sha256: d90ee57923d1828ac14e492ca49440f65477f4bb1263575900be731a3dac66a9
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.9.0"
+  dio_web_adapter:
+    dependency: transitive
+    description:
+      name: dio_web_adapter
+      sha256: "7586e476d70caecaf1686d21eee7247ea43ef5c345eab9e0cc3583ff13378d78"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.1.1"
   equatable:
     dependency: "direct main"
     description:
@@ -294,7 +310,7 @@ packages:
     source: hosted
     version: "5.3.4"
   http:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: http
       sha256: bb2ce4590bc2667c96f318d68cac1b5a7987ec819351d32b1c987239a815e007
@@ -759,6 +775,14 @@ packages:
     description:
       name: talker_bloc_logger
       sha256: cf1e3b1d70f9a47e061288f0d230ba0e04a0f6394629d5df1c7b0933b236e397
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.9.3"
+  talker_dio_logger:
+    dependency: "direct main"
+    description:
+      name: talker_dio_logger
+      sha256: dcf784f1841e248c270ef741f8a07ca9cf562c6424ee43fc6e598c4eb7f18238
       url: "https://pub.dev"
     source: hosted
     version: "4.9.3"

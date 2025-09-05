@@ -1,3 +1,6 @@
+import 'package:dio/dio.dart';
+import 'package:easy_box/core/talker/talker.dart';
+import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source_api_impl.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source_api_impl.dart';
 import 'package:easy_box/features/auth/data/repositories/auth_repository_api_impl.dart';
@@ -46,7 +49,7 @@ import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source_impl.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 
 final sl = GetIt.instance;
 
@@ -196,7 +199,18 @@ Future<void> init({Locale? systemLocale}) async {
   //####################
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton(() => http.Client());
+  sl.registerLazySingleton(() {
+    final dio = Dio();
+    dio.interceptors.add(
+      TalkerDioLogger(
+        talker: talker,
+        settings: const TalkerDioLoggerSettings(
+          printResponseData: false,
+        ),
+      ),
+    );
+    return dio;
+  });
 
   // App's local cache database
   final appDb = await openDatabase(
