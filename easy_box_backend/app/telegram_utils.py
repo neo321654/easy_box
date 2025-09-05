@@ -1,6 +1,8 @@
 import requests
 import os
 from dotenv import load_dotenv
+import logging
+import traceback
 
 load_dotenv()
 
@@ -23,3 +25,23 @@ def send_telegram_error_notification(message: str):
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
         print(f"Failed to send Telegram notification: {e}")
+
+class TelegramLogHandler(logging.Handler):
+    def __init__(self):
+        super().__init__()
+
+    def emit(self, record: logging.LogRecord):
+        try:
+            msg = self.format(record)
+            
+            # Если есть информация об исключении, добавляем traceback
+            if record.exc_info:
+                msg += "\n\n"
+                msg += "```\n"
+                msg += "".join(traceback.format_exception(*record.exc_info))
+                msg += "\n```"
+
+            send_telegram_error_notification(msg)
+        except Exception:
+            self.handleError(record)
+

@@ -1,7 +1,8 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
-from .telegram_utils import send_telegram_error_notification
+from .telegram_utils import send_telegram_error_notification, TelegramLogHandler
 import traceback
+import logging
 from . import models
 from .database import engine
 from .routers import products, auth, orders
@@ -35,34 +36,36 @@ def create_default_user():
 
 create_default_user()
 
+# Configure logging
+log = logging.getLogger('gunicorn.error')
+telegram_handler = TelegramLogHandler()
+telegram_handler.setLevel(logging.ERROR)
+formatter = logging.Formatter('🚨 **EasyBox Server Error** 🚨\n\n' \
+                          '**Level**: `%(levelname)s`\n' \
+                          '**Path**: `%(pathname)s:%(lineno)d`\n' \
+                          '**Message**: `%(message)s`')
+telegram_handler.setFormatter(formatter)
+log.addHandler(telegram_handler)
+
 app = FastAPI()
 
-@app.exception_handler(Exception)
-async def generic_exception_handler(request: Request, exc: Exception):
-    print("!!! GENERIC EXCEPTION HANDLER TRIGGERED !!!")
-    error_message = f"""🚨 Unhandled Server Error 🚨
-
-**Endpoint**: `{request.method} {request.url.path}`
-**Error**: `{type(exc).__name__}: {exc}`
-
-```
-{traceback.format_exc()}
-```"""
-    
-    send_telegram_error_notification(error_message)
-    
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "Internal Server Error"},
-    )
-
+@app.middleware("http")
+async def log_exceptions_middleware(request: Request, call_next):
+    try:
+        return await call_next(request)
+    except Exception as e:
+        # Log the exception with traceback
+        log.error(f"Unhandled exception for {request.method} {request.url.path}", exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal Server Error"},
+        )
 
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
-app.add_exception_handler(Exception, generic_exception_handler)
-
 admin = Admin(app, engine, authentication_backend=authentication_backend)
+
 
 class UserAdmin(ModelView, model=models.User):
     column_list = [models.User.id, models.User.name, models.User.email, models.User.is_active]
