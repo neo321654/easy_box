@@ -43,16 +43,13 @@ class UserAdmin(ModelView, model=models.User):
     form_columns = [models.User.name, models.User.email, models.User.is_active]
 
 class ProductAdmin(ModelView, model=models.Product):
-    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url]
-    column_extra_list = ["actions_column"]
+    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url, 'upload_image_link']
     column_searchable_list = [models.Product.name, models.Product.sku]
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
     form_columns = [models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
     column_formatters = {
-        models.Product.image_url: lambda m, a: Markup(f'<img src="{m.image_url}" height="60">' if m.image_url else '')
-    }
-    column_extra_formatters = {
-        "actions_column": lambda m, a: Markup(f'<a href="/admin/product/{m.id}/upload">Upload Image</a>')
+        models.Product.image_url: lambda m, a: Markup(f'<img src="{m.image_url}" height="60">' if m.image_url else ''),
+        'upload_image_link': lambda m, a: Markup(f'<a href="/admin/product/{m.id}/upload">Upload Image</a>')
     }
 
 class OrderAdmin(ModelView, model=models.Order):
