@@ -1,17 +1,20 @@
 from fastapi import FastAPI
 from . import models
 from .database import engine
-from .routers import products, auth, orders, admin_actions
+from .routers import products, auth, orders
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
+from sqladmin.fields import FileField
+from starlette.requests import Request
 from markupsafe import Markup
 from .admin_auth import authentication_backend
 
 from .database import SessionLocal
 from . import crud, schemas
+from .uploads_utils import save_upload_file
 
 models.Base.metadata.create_all(bind=engine)
 
@@ -43,14 +46,31 @@ class UserAdmin(ModelView, model=models.User):
     form_columns = [models.User.name, models.User.email, models.User.is_active]
 
 class ProductAdmin(ModelView, model=models.Product):
-    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url, 'upload_image_link']
+    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url]
     column_searchable_list = [models.Product.name, models.Product.sku]
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
-    form_columns = [models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
-    column_formatters = {
-        models.Product.image_url: lambda m, a: Markup(f'<img src="{m.image_url}" height="60">' if m.image_url else ''),
-        'upload_image_link': lambda m, a: Markup(f'<a href="/admin/product/{m.id}/upload">Upload Image</a>')
+    
+    form_columns = [
+        models.Product.name,
+        models.Product.sku,
+        models.Product.quantity,
+        models.Product.location,
+    ]
+    
+    form_extra_fields = {
+        'image': FileField(name="Image", label="Image")
     }
+
+    column_formatters = {
+        models.Product.image_url: lambda m, a: Markup(f'<img src="{m.image_url}" height="60">') if m.image_url else '',
+    }
+
+    async def on_model_change(self, data: dict, model: any, is_created: bool, request: Request) -> None:
+        upload = data.get("image")
+
+        if upload and upload.filename:
+            image_url = save_upload_file(upload)
+            model.image_url = image_url
 
 class OrderAdmin(ModelView, model=models.Order):
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
@@ -90,7 +110,6 @@ app.mount("/images", StaticFiles(directory="uploads"), name="images")
 app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(orders.router)
-app.include_router(admin_actions.router)
 
 @app.get("/")
 def read_root():
