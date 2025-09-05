@@ -7,7 +7,6 @@ from starlette.middleware.sessions import SessionMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
-from sqladmin.actions import LinkRowAction
 from .admin_auth import authentication_backend
 
 from .database import SessionLocal
@@ -43,16 +42,14 @@ class UserAdmin(ModelView, model=models.User):
     form_columns = [models.User.name, models.User.email, models.User.is_active]
 
 class ProductAdmin(ModelView, model=models.Product):
-    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
+    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url, 'actions']
     column_searchable_list = [models.Product.name, models.Product.sku]
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
     form_columns = [models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
     column_formatters = {
-        models.Product.image_url: lambda m, a: f'<img src="{m.image_url}" height="60">' if m.image_url else ''
+        models.Product.image_url: lambda m, a: f'<img src="{m.image_url}" height="60">' if m.image_url else '',
+        'actions': lambda m, a: f'<a href="/admin/product/{m.id}/upload">Upload Image</a>'
     }
-    row_actions = [
-        LinkRowAction(icon="fa-solid fa-upload", text="Upload Image", url="/admin/product/{row.id}/upload"),
-    ]
 
 class OrderAdmin(ModelView, model=models.Order):
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
