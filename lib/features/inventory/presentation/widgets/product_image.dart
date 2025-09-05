@@ -24,7 +24,7 @@ class ProductImage extends StatelessWidget {
     }
 
     // Check if the imageUrl is a local file path
-    if (imageUrl!.startsWith('/')) {
+    if (imageUrl!.startsWith('/') && !imageUrl!.startsWith('/images/')) {
       return Image.file(
         File(imageUrl!),
         width: width,
