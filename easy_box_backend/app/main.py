@@ -133,6 +133,10 @@ app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(orders.router)
 
+@app.get("/test-error")
+async def test_error():
+    raise Exception("This is a test error for Telegram notifications.")
+
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Easy Box API"}
