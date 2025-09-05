@@ -7,6 +7,7 @@ from starlette.middleware.sessions import SessionMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
+from markupsafe import Markup
 from .admin_auth import authentication_backend
 
 from .database import SessionLocal
@@ -48,10 +49,10 @@ class ProductAdmin(ModelView, model=models.Product):
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
     form_columns = [models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
     column_formatters = {
-        models.Product.image_url: lambda m, a: f'<img src="{m.image_url}" height="60">' if m.image_url else ''
+        models.Product.image_url: lambda m, a: Markup(f'<img src="{m.image_url}" height="60">' if m.image_url else '')
     }
     column_extra_formatters = {
-        "actions_column": lambda m, a: f'<a href="/admin/product/{m.id}/upload">Upload Image</a>'
+        "actions_column": lambda m, a: Markup(f'<a href="/admin/product/{m.id}/upload">Upload Image</a>')
     }
 
 class OrderAdmin(ModelView, model=models.Order):
