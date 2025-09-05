@@ -1,3 +1,4 @@
+import 'package:easy_box/core/talker/talker.dart';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -96,6 +97,9 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
+        return Left(ServerFailure());
+      } catch (e, st) {
+        talker.handle(e, st, '[InventoryRepository] Failed to create product');
         return Left(ServerFailure());
       }
     } else {
