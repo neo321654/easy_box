@@ -231,13 +231,21 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingCreations = await localDataSource.getQueuedProductCreations();
     if (pendingCreations.isNotEmpty) {
       for (final creation in pendingCreations) {
-        final remoteProduct = await remoteDataSource.createProduct(
+        // 1. Create product on the backend without the image URL
+        ProductModel remoteProduct = await remoteDataSource.createProduct(
           name: creation['name'],
           sku: creation['sku'],
           location: creation['location'],
-          imageUrl: creation['image_url'],
+          // Do not pass the imageUrl here
         );
-        // Update local product with real server ID
+
+        // 2. If there was a local image, upload it now
+        final localImagePath = creation['image_url'] as String?;
+        if (localImagePath != null) {
+          remoteProduct = await remoteDataSource.uploadProductImage(remoteProduct.id, localImagePath);
+        }
+
+        // 3. Update local product with real server ID
         await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
       }
       await localDataSource.clearQueuedProductCreations();
