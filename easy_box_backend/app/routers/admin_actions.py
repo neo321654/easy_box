@@ -7,9 +7,9 @@ from .. import crud, deps
 from ..uploads_utils import save_upload_file_and_update_product
 
 router = APIRouter(
-    prefix="/admin",
+    prefix="/custom_admin",
     tags=["admin"],
-    dependencies=[Depends(deps.get_current_active_user)],
+    dependencies=[Depends(deps.get_current_admin)],
 )
 
 @router.get("/product/{product_id}/upload", response_class=HTMLResponse)
@@ -25,7 +25,7 @@ async def get_upload_form(request: Request, product_id: int, db: Session = Depen
         </head>
         <body>
             <h1>Upload Image for {product.name} (SKU: {product.sku})</h1>
-            <form action="/admin/product/{product_id}/upload" method="post" enctype="multipart/form-data">
+            <form action="/custom_admin/product/{product_id}/upload" method="post" enctype="multipart/form-data">
                 <input type="file" name="file" accept="image/*">
                 <input type="submit">
             </form>

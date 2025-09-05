@@ -54,7 +54,7 @@ class ProductAdmin(ModelView, model=models.Product):
     }
     column_formatters = {
         models.Product.image_url: lambda m, a: Markup(f'<img src="{m.image_url}" height="60">' if m.image_url else ''),
-        'upload_image_link': lambda m, a: Markup(f'<a href="/admin/product/{m.id}/upload">Upload Image</a>')
+        'upload_image_link': lambda m, a: Markup(f'<a href="/custom_admin/product/{m.id}/upload">Upload Image</a>')
     }
 
 class OrderAdmin(ModelView, model=models.Order):
