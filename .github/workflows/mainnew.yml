@@ -1,4 +1,4 @@
-name: Deploy Backend to Server
+name: Deploy Backend to Server new
 
 on:
   push:
@@ -34,10 +34,12 @@ jobs:
       - name: Deploy to Server
         uses: appleboy/ssh-action@master
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
           script: |
             cd ~/easy_box/easy_box_backend
             docker pull 321654neo/easy_box_backend:latest
+            docker-compose down
             docker-compose up -d

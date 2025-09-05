@@ -3,9 +3,11 @@ from . import models
 from .database import engine
 from .routers import products, auth, orders
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.middleware.sessions import SessionMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
+from .admin_auth import authentication_backend
 
 from .database import SessionLocal
 from . import crud, schemas
@@ -27,7 +29,11 @@ def create_default_user():
 create_default_user()
 
 app = FastAPI()
-admin = Admin(app, engine)
+
+# Add session middleware
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
+
+admin = Admin(app, engine, authentication_backend=authentication_backend)
 
 class UserAdmin(ModelView, model=models.User):
     column_list = [models.User.id, models.User.name, models.User.email, models.User.is_active]
