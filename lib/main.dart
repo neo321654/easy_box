@@ -63,9 +63,18 @@ class MyApp extends StatelessWidget {
             routerConfig: appRouter,
             title: 'Easy Box',
             builder: (context, child) {
-              return TalkerWrapper(
-                talker: talker,
-                child: child ?? const SizedBox.shrink(),
+              return Stack(
+                children: [
+                  child ?? const SizedBox.shrink(),
+                  Positioned(
+                    bottom: 20,
+                    right: 20,
+                    child: FloatingActionButton(
+                      onPressed: () => appRouter.push('/talker'),
+                      child: const Icon(Icons.bug_report),
+                    ),
+                  ),
+                ],
               );
             },
             theme: ThemeData(
