@@ -1,4 +1,7 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from .telegram_utils import send_telegram_error_notification
+import traceback
 from . import models
 from .database import engine
 from .routers import products, auth, orders
@@ -33,6 +36,25 @@ def create_default_user():
 create_default_user()
 
 app = FastAPI()
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    error_message = f"""🚨 Unhandled Server Error 🚨
+
+**Endpoint**: `{request.method} {request.url.path}`
+**Error**: `{type(exc).__name__}: {exc}`
+
+```
+{traceback.format_exc()}
+```"""
+    
+    send_telegram_error_notification(error_message)
+    
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "Internal Server Error"},
+    )
+
 
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
