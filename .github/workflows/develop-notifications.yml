@@ -1,0 +1,24 @@
+name: Notify on Develop Merge
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  send-telegram-notification:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram message
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            🚀 New merge into 'develop' branch!
+            
+            Commit by: ${{ github.actor }}
+            Message: 
+            ${{ github.event.head_commit.message }}
+            
+            See commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
