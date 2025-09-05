@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:easy_box/core/talker/talker.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/pages/inventory_page.dart';
 import 'package:easy_box/features/receiving/presentation/pages/receiving_page.dart';
@@ -18,6 +18,7 @@ late final GoRouter appRouter;
 
 // The router now depends on the AuthBloc to make decisions.
 void initializeRouter(AuthBloc authBloc) {
+  final talker = sl<Talker>();
   appRouter = GoRouter(
     initialLocation: '/',
     refreshListenable: GoRouterRefreshStream(authBloc.stream),

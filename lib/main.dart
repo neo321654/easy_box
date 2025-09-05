@@ -1,12 +1,11 @@
 import 'dart:async';
 import 'dart:ui';
-import 'package:easy_box/core/talker/talker.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
-
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'core/router/app_router.dart';
 import 'di/injection_container.dart';
@@ -16,14 +15,15 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+      final systemLocale = PlatformDispatcher.instance.locale;
+      await init(systemLocale: systemLocale);
+
+      final talker = sl<Talker>();
 
       // Explicitly handle Flutter framework errors
       FlutterError.onError = (details) {
         talker.handle(details.exception, details.stack, "FlutterError");
       };
-
-      final systemLocale = PlatformDispatcher.instance.locale; // Get system locale
-      await init(systemLocale: systemLocale); // Pass system locale
 
       // Initialize BLoC observer
       Bloc.observer = TalkerBlocObserver(
@@ -43,7 +43,7 @@ Future<void> main() async {
 
       runApp(MyApp(authBloc: authBloc));
     },
-    (error, stack) => talker.handle(error, stack, 'Uncaught app exception'),
+    (error, stack) => sl<Talker>().handle(error, stack, 'Uncaught app exception'),
   );
 }
 
@@ -69,18 +69,21 @@ class MyApp extends StatelessWidget {
             routerConfig: appRouter,
             title: 'Easy Box',
             builder: (context, child) {
-              return Stack(
-                children: [
-                  child ?? const SizedBox.shrink(),
-                  Positioned(
-                    bottom: 20,
-                    right: 20,
-                    child: FloatingActionButton(
-                      onPressed: () => appRouter.push('/talker'),
-                      child: const Icon(Icons.bug_report),
+              return TalkerWrapper(
+                talker: sl<Talker>(),
+                child: Stack(
+                  children: [
+                    child ?? const SizedBox.shrink(),
+                    Positioned(
+                      bottom: 20,
+                      right: 20,
+                      child: FloatingActionButton(
+                        onPressed: () => appRouter.push('/talker'),
+                        child: const Icon(Icons.bug_report),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               );
             },
             theme: ThemeData(

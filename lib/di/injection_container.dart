@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:easy_box/core/talker/talker.dart';
+import 'package:easy_box/core/talker/telegram_talker_observer.dart';
 import 'package:talker_dio_logger/talker_dio_logger.dart';
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source_api_impl.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source_api_impl.dart';
@@ -49,7 +49,7 @@ import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source_impl.dart';
 import 'package:flutter/material.dart';
-
+import 'package:talker_flutter/talker_flutter.dart';
 
 final sl = GetIt.instance;
 
@@ -66,6 +66,28 @@ Future<void> init({Locale? systemLocale}) async {
   //####################
   //region Features
   //####################
+
+  //--------------------
+  //region Auth
+  //--------------------
+  // Blocs
+  sl.registerLazySingleton(() => AuthBloc(
+        loginUseCase: sl(),
+        getMeUseCase: sl(),
+        logoutUseCase: sl(),
+        loginAnonymouslyUseCase: sl(),
+      ));
+
+  // Use Cases
+  sl.registerLazySingleton(() => LoginUseCase(sl()));
+  sl.registerLazySingleton(() => GetMeUseCase(sl()));
+  sl.registerLazySingleton(() => LogoutUseCase(sl()));
+  sl.registerLazySingleton(() => LoginAnonymouslyUseCase(sl()));
+
+  // Repositories
+  sl.registerLazySingleton<AuthRepository>(
+      () => AuthRepositoryApiImpl(dio: sl(), prefs: sl()));
+  //endregion
 
   //--------------------
   //region Order
@@ -170,28 +192,6 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(sl()));
   //endregion
 
-  //--------------------
-  //region Auth
-  //--------------------
-  // Blocs
-  sl.registerLazySingleton(() => AuthBloc(
-        loginUseCase: sl(),
-        getMeUseCase: sl(),
-        logoutUseCase: sl(),
-        loginAnonymouslyUseCase: sl(),
-      ));
-
-  // Use Cases
-  sl.registerLazySingleton(() => LoginUseCase(sl()));
-  sl.registerLazySingleton(() => GetMeUseCase(sl()));
-  sl.registerLazySingleton(() => LogoutUseCase(sl()));
-  sl.registerLazySingleton(() => LoginAnonymouslyUseCase(sl()));
-
-  // Repositories
-  sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryApiImpl(dio: sl(), prefs: sl()));
-  //endregion
-
   //endregion
 
   //####################
@@ -199,11 +199,12 @@ Future<void> init({Locale? systemLocale}) async {
   //####################
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
+  sl.registerLazySingleton<Talker>(() => TalkerFlutter.init(observer: TelegramTalkerObserver()));
   sl.registerLazySingleton(() {
     final dio = Dio();
     dio.interceptors.add(
       TalkerDioLogger(
-        talker: talker,
+        talker: sl<Talker>(),
         settings: const TalkerDioLoggerSettings(
           printResponseData: false,
         ),
@@ -313,5 +314,3 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
   //endregion
 }
-
-
