@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:intl/intl.dart' as intl;
 
+import 'app_localizations_de.dart';
 import 'app_localizations_en.dart';
 import 'app_localizations_ru.dart';
 
@@ -62,7 +63,8 @@ import 'app_localizations_ru.dart';
 /// be consistent with the languages listed in the AppLocalizations.supportedLocales
 /// property.
 abstract class AppLocalizations {
-  AppLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  AppLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
@@ -70,7 +72,8 @@ abstract class AppLocalizations {
     return Localizations.of<AppLocalizations>(context, AppLocalizations);
   }
 
-  static const LocalizationsDelegate<AppLocalizations> delegate = _AppLocalizationsDelegate();
+  static const LocalizationsDelegate<AppLocalizations> delegate =
+      _AppLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -82,17 +85,19 @@ abstract class AppLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
+    Locale('de'),
     Locale('en'),
-    Locale('ru')
+    Locale('ru'),
   ];
 
   /// No description provided for @appTitle.
@@ -143,11 +148,23 @@ abstract class AppLocalizations {
   /// **'Сканирование'**
   String get homeMenuScanning;
 
+  /// No description provided for @homeMenuPicking.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сборка'**
+  String get homeMenuPicking;
+
   /// No description provided for @homeMenuSettings.
   ///
   /// In ru, this message translates to:
   /// **'Настройки'**
   String get homeMenuSettings;
+
+  /// No description provided for @homeMenuAddProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить товар'**
+  String get homeMenuAddProduct;
 
   /// No description provided for @settingsPageTitle.
   ///
@@ -158,8 +175,26 @@ abstract class AppLocalizations {
   /// No description provided for @settingsThemeTitle.
   ///
   /// In ru, this message translates to:
-  /// **'Тёмная тема'**
+  /// **'Тема'**
   String get settingsThemeTitle;
+
+  /// No description provided for @settingsThemeSystem.
+  ///
+  /// In ru, this message translates to:
+  /// **'Системная'**
+  String get settingsThemeSystem;
+
+  /// No description provided for @settingsThemeLight.
+  ///
+  /// In ru, this message translates to:
+  /// **'Светлая'**
+  String get settingsThemeLight;
+
+  /// No description provided for @settingsThemeDark.
+  ///
+  /// In ru, this message translates to:
+  /// **'Темная'**
+  String get settingsThemeDark;
 
   /// No description provided for @settingsLanguageTitle.
   ///
@@ -179,6 +214,12 @@ abstract class AppLocalizations {
   /// **'Английский'**
   String get languageEnglish;
 
+  /// No description provided for @languageGerman.
+  ///
+  /// In ru, this message translates to:
+  /// **'Немецкий'**
+  String get languageGerman;
+
   /// No description provided for @loginAnonymousButtonText.
   ///
   /// In ru, this message translates to:
@@ -191,6 +232,90 @@ abstract class AppLocalizations {
   /// **'Инвентарь'**
   String get inventoryPageTitle;
 
+  /// No description provided for @inventorySearchHint.
+  ///
+  /// In ru, this message translates to:
+  /// **'Поиск по имени, SKU или местоположению...'**
+  String get inventorySearchHint;
+
+  /// No description provided for @addProductPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить новый товар'**
+  String get addProductPageTitle;
+
+  /// No description provided for @addProductButtonText.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить товар'**
+  String get addProductButtonText;
+
+  /// No description provided for @pleaseEnterProductNameError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Пожалуйста, введите название товара'**
+  String get pleaseEnterProductNameError;
+
+  /// No description provided for @productCreatedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар успешно создан'**
+  String get productCreatedSuccessfully;
+
+  /// No description provided for @orderListPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Заказы'**
+  String get orderListPageTitle;
+
+  /// No description provided for @orderListFailedToLoad.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось загрузить заказы'**
+  String get orderListFailedToLoad;
+
+  /// No description provided for @orderStatusLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Статус: {status}'**
+  String orderStatusLabel(Object status);
+
+  /// No description provided for @orderLinesLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'{count,plural, one{{count} позиция} few{{count} позиции} many{{count} позиций} other{{count} позиции}}'**
+  String orderLinesLabel(num count);
+
+  /// No description provided for @pickingPageTitle.
+  ///
+  /// In ru, this message translates to:
+  /// **'Сборка заказа: {orderId}'**
+  String pickingPageTitle(Object orderId);
+
+  /// No description provided for @pickingPageLocationLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Место'**
+  String get pickingPageLocationLabel;
+
+  /// No description provided for @pickingPageSkuLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU'**
+  String get pickingPageSkuLabel;
+
+  /// No description provided for @pickingPageCompleteButton.
+  ///
+  /// In ru, this message translates to:
+  /// **'Завершить сборку'**
+  String get pickingPageCompleteButton;
+
+  /// No description provided for @pickingCompleteConfirmation.
+  ///
+  /// In ru, this message translates to:
+  /// **'Вы уверены, что хотите завершить сборку этого заказа?'**
+  String get pickingCompleteConfirmation;
+
   /// No description provided for @retryButtonText.
   ///
   /// In ru, this message translates to:
@@ -200,7 +325,7 @@ abstract class AppLocalizations {
   /// No description provided for @nPieces.
   ///
   /// In ru, this message translates to:
-  /// **'{count,plural, one{1 штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
+  /// **'{count,plural, one{{count} штука} few{{count} штуки} many{{count} штук} other{{count} штуки}}'**
   String nPieces(num count);
 
   /// No description provided for @receiveStockPageTitle.
@@ -275,6 +400,18 @@ abstract class AppLocalizations {
   /// **'Название товара'**
   String get productNameLabel;
 
+  /// No description provided for @productLocationLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местоположение'**
+  String get productLocationLabel;
+
+  /// No description provided for @productImageUrlLabel.
+  ///
+  /// In ru, this message translates to:
+  /// **'URL изображения'**
+  String get productImageUrlLabel;
+
   /// No description provided for @cancelButtonText.
   ///
   /// In ru, this message translates to:
@@ -340,9 +477,106 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Товар успешно удален.'**
   String get productDeletedSuccessfullyMessage;
+
+  /// No description provided for @welcomeMessage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добро пожаловать, {userName}'**
+  String welcomeMessage(Object userName);
+
+  /// No description provided for @skuLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'SKU: {sku}'**
+  String skuLabelWithColon(Object sku);
+
+  /// No description provided for @productSkuLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'{productSkuLabel}: {sku}'**
+  String productSkuLabelWithColon(Object productSkuLabel, Object sku);
+
+  /// No description provided for @quantityLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'{quantityLabel}: {quantity}'**
+  String quantityLabelWithColon(Object quantityLabel, Object quantity);
+
+  /// No description provided for @productLocationLabelWithColon.
+  ///
+  /// In ru, this message translates to:
+  /// **'Местоположение: {location}'**
+  String productLocationLabelWithColon(Object location);
+
+  /// No description provided for @serverError.
+  ///
+  /// In ru, this message translates to:
+  /// **'Ошибка сервера'**
+  String get serverError;
+
+  /// No description provided for @offlineIndicator.
+  ///
+  /// In ru, this message translates to:
+  /// **' (Офлайн)'**
+  String get offlineIndicator;
+
+  /// No description provided for @failedToAddStock.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить товар на склад.'**
+  String get failedToAddStock;
+
+  /// No description provided for @stockAddedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар для SKU: {sku} успешно добавлен на склад'**
+  String stockAddedSuccessfully(Object sku);
+
+  /// No description provided for @failedToCreateProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось создать товар.'**
+  String get failedToCreateProduct;
+
+  /// No description provided for @failedToAddStockAfterCreatingProduct.
+  ///
+  /// In ru, this message translates to:
+  /// **'Не удалось добавить товар на склад после создания товара.'**
+  String get failedToAddStockAfterCreatingProduct;
+
+  /// No description provided for @productCreatedAndStockAddedSuccessfully.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар создан и успешно добавлен на склад для SKU: {sku}'**
+  String productCreatedAndStockAddedSuccessfully(Object sku);
+
+  /// No description provided for @selectImageSource.
+  ///
+  /// In ru, this message translates to:
+  /// **'Выберите источник изображения'**
+  String get selectImageSource;
+
+  /// No description provided for @camera.
+  ///
+  /// In ru, this message translates to:
+  /// **'Камера'**
+  String get camera;
+
+  /// No description provided for @gallery.
+  ///
+  /// In ru, this message translates to:
+  /// **'Галерея'**
+  String get gallery;
+
+  /// No description provided for @addProductImage.
+  ///
+  /// In ru, this message translates to:
+  /// **'Добавить изображение товара'**
+  String get addProductImage;
 }
 
-class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
+class _AppLocalizationsDelegate
+    extends LocalizationsDelegate<AppLocalizations> {
   const _AppLocalizationsDelegate();
 
   @override
@@ -351,25 +585,28 @@ class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> 
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['en', 'ru'].contains(locale.languageCode);
+  bool isSupported(Locale locale) =>
+      <String>['de', 'en', 'ru'].contains(locale.languageCode);
 
   @override
   bool shouldReload(_AppLocalizationsDelegate old) => false;
 }
 
 AppLocalizations lookupAppLocalizations(Locale locale) {
-
-
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'en': return AppLocalizationsEn();
-    case 'ru': return AppLocalizationsRu();
+    case 'de':
+      return AppLocalizationsDe();
+    case 'en':
+      return AppLocalizationsEn();
+    case 'ru':
+      return AppLocalizationsRu();
   }
 
   throw FlutterError(
     'AppLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }

@@ -3,6 +3,7 @@ from fastapi.responses import JSONResponse
 from .telegram_utils import send_telegram_error_notification, TelegramLogHandler
 import traceback
 import logging
+import sys
 from . import models
 from .database import engine
 from .routers import products, auth, orders
@@ -70,6 +71,11 @@ async def log_exceptions_middleware(request: Request, call_next):
     try:
         return await call_next(request)
     except Exception as e:
+        # --- TEMPORARY DEBUGGING ---
+        print("!!! EXCEPTION CAUGHT BY MIDDLEWARE !!!", file=sys.stderr)
+        traceback.print_exc(file=sys.stderr)
+        # --- END DEBUGGING ---
+
         # Log the exception with traceback
         log.error(f"Unhandled exception for {request.method} {request.url.path}", exc_info=True)
         return JSONResponse(
