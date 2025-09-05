@@ -58,7 +58,7 @@ class ProductAdmin(ModelView, model=models.Product):
     ]
     
     form_extra_fields = {
-        'image': FileField(name="Image", label="Image")
+        'image': FileField(name="Image", label="Image", base_path='uploads')
     }
 
     column_formatters = {
