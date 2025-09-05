@@ -16,6 +16,12 @@ Future<void> main() async {
   runZonedGuarded(
     () async {
       WidgetsFlutterBinding.ensureInitialized();
+
+      // Explicitly handle Flutter framework errors
+      FlutterError.onError = (details) {
+        talker.handle(details.exception, details.stack, "FlutterError");
+      };
+
       final systemLocale = PlatformDispatcher.instance.locale; // Get system locale
       await init(systemLocale: systemLocale); // Pass system locale
 
