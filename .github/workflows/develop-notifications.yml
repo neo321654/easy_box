@@ -6,6 +6,9 @@ on:
       - develop
   workflow_dispatch:
 
+  @MyFlutterBot
+  5257920081:AAF7NghL_Et2x13_QlFRsY9V6qo4oBaMtL4
+
 jobs:
   send-telegram-notification:
     runs-on: ubuntu-latest
