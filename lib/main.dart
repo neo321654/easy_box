@@ -1,26 +1,44 @@
+import 'dart:async';
 import 'dart:ui';
+import 'package:easy_box/core/talker/talker.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/settings/presentation/bloc/settings_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:talker_bloc_logger/talker_bloc_logger.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 import 'core/router/app_router.dart';
 import 'di/injection_container.dart';
 import 'generated/app_localizations.dart';
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final systemLocale = PlatformDispatcher.instance.locale; // Get system locale
-  await init(systemLocale: systemLocale); // Pass system locale
+  runZonedGuarded(
+    () async {
+      WidgetsFlutterBinding.ensureInitialized();
+      final systemLocale = PlatformDispatcher.instance.locale; // Get system locale
+      await init(systemLocale: systemLocale); // Pass system locale
 
-  // Get the AuthBloc instance from the service locator
-  final authBloc = sl<AuthBloc>();
-  // Initialize the router with the bloc instance
-  initializeRouter(authBloc);
-  // Dispatch the initial event
-  authBloc.add(AppStarted());
+      // Initialize BLoC observer
+      Bloc.observer = TalkerBlocObserver(
+        talker: talker,
+        settings: const TalkerBlocLoggerSettings(
+          printStateFullData: false,
+          printEventFullData: false,
+        ),
+      );
 
-  runApp(MyApp(authBloc: authBloc));
+      // Get the AuthBloc instance from the service locator
+      final authBloc = sl<AuthBloc>();
+      // Initialize the router with the bloc instance
+      initializeRouter(authBloc);
+      // Dispatch the initial event
+      authBloc.add(AppStarted());
+
+      runApp(MyApp(authBloc: authBloc));
+    },
+    (error, stack) => talker.handle(error, stack, 'Uncaught app exception'),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -44,6 +62,12 @@ class MyApp extends StatelessWidget {
           return MaterialApp.router(
             routerConfig: appRouter,
             title: 'Easy Box',
+            builder: (context, child) {
+              return TalkerWrapper(
+                talker: talker,
+                child: child ?? const SizedBox.shrink(),
+              );
+            },
             theme: ThemeData(
               brightness: Brightness.light,
               primarySwatch: Colors.blue,
