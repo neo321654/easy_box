@@ -1,4 +1,3 @@
-import 'package:easy_box/core/talker/talker.dart';
 import 'dart:io';
 
 import 'package:dartz/dartz.dart';
@@ -6,6 +5,7 @@ import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/core/usecases/operation_result.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
@@ -13,6 +13,7 @@ import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class InventoryRepositoryImpl implements InventoryRepository {
@@ -99,7 +100,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
       } on ServerException {
         return Left(ServerFailure());
       } catch (e, st) {
-        talker.handle(e, st, '[InventoryRepository] Failed to create product');
+        sl<Talker>().handle(e, st, '[InventoryRepository] Failed to create product');
         return Left(ServerFailure());
       }
     } else {
@@ -244,7 +245,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
           location: creation['location'],
           imageUrl: localImagePath,
         );
-        await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
+        // Instead of just updating the ID, we delete the old temp product
+        // and save the new, complete product from the server.
+        await localDataSource.deleteProduct(creation['local_id']);
+        await localDataSource.saveProduct(remoteProduct);
       }
       await localDataSource.clearQueuedProductCreations();
     }

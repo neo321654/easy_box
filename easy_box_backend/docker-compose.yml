@@ -7,8 +7,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Этот том сохраняет базу данных SQLite на вашем сервере,
-      # чтобы данные не терялись при перезапуске контейнера.
+      # This volume persists the SQLite database on your server
       - ./db_data:/easy_box_backend/db_data
+      # This volume persists the uploaded images on your server
+      - ./uploads:/easy_box_backend/uploads
     env_file:
       - ./.env
