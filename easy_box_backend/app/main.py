@@ -60,10 +60,7 @@ async def generic_exception_handler(request: Request, exc: Exception):
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
-admin = Admin(app, engine, authentication_backend=authentication_backend)
-
 app.add_exception_handler(Exception, generic_exception_handler)
-app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
 admin = Admin(app, engine, authentication_backend=authentication_backend)
 
