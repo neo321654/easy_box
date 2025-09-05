@@ -4,6 +4,7 @@ from typing import List
 import shutil
 
 from .. import crud, models, schemas, deps
+from ..uploads_utils import save_upload_file_and_update_product
 
 router = APIRouter(
     prefix="/products",
@@ -64,12 +65,4 @@ def upload_product_image(product_id: int, db: Session = Depends(deps.get_db), fi
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:
         raise HTTPException(status_code=404, detail="Product not found")
-
-    file_path = f"uploads/{file.filename}"
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-    
-    image_url = f"/images/{file.filename}"
-    updated_product_data = schemas.ProductUpdate(image_url=image_url)
-    
-    return crud.update_product(db=db, product_id=product_id, product=updated_product_data)
+    return save_upload_file_and_update_product(db=db, product_id=product_id, file=file)
