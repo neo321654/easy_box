@@ -1,12 +1,13 @@
 from fastapi import FastAPI
 from . import models
 from .database import engine
-from .routers import products, auth, orders
+from .routers import products, auth, orders, admin_actions
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
+from sqladmin.actions import LinkRowAction
 from .admin_auth import authentication_backend
 
 from .database import SessionLocal
@@ -42,10 +43,16 @@ class UserAdmin(ModelView, model=models.User):
     form_columns = [models.User.name, models.User.email, models.User.is_active]
 
 class ProductAdmin(ModelView, model=models.Product):
-    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location]
+    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
     column_searchable_list = [models.Product.name, models.Product.sku]
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
     form_columns = [models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
+    column_formatters = {
+        models.Product.image_url: lambda m, a: f'<img src="{m.image_url}" height="60">' if m.image_url else ''
+    }
+    row_actions = [
+        LinkRowAction(icon="fa-solid fa-upload", text="Upload Image", url="/admin/product/{row.id}/upload"),
+    ]
 
 class OrderAdmin(ModelView, model=models.Order):
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
@@ -85,6 +92,7 @@ app.mount("/images", StaticFiles(directory="uploads"), name="images")
 app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(orders.router)
+app.include_router(admin_actions.router)
 
 @app.get("/")
 def read_root():
