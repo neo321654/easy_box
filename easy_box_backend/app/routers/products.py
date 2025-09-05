@@ -50,43 +50,55 @@ def read_products(skip: int = 0, limit: int = 100, db: Session = Depends(deps.ge
     return products
 
 @router.get("/{product_id}", response_model=schemas.Product)
-def read_product(product_id: int, db: Session = Depends(deps.get_db)):
+def read_product(request: Request, product_id: int, db: Session = Depends(deps.get_db)):
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:
+        detail = f"Product with id {product_id} not found"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.get("/sku/{sku}", response_model=schemas.Product)
-def read_product_by_sku(sku: str, db: Session = Depends(deps.get_db)):
+def read_product_by_sku(request: Request, sku: str, db: Session = Depends(deps.get_db)):
     db_product = crud.get_product_by_sku(db, sku=sku)
     if db_product is None:
+        detail = f"Product with sku {sku} not found"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.put("/{product_id}", response_model=schemas.Product)
-def update_product(product_id: int, product: schemas.ProductUpdate, db: Session = Depends(deps.get_db)):
+def update_product(request: Request, product_id: int, product: schemas.ProductUpdate, db: Session = Depends(deps.get_db)):
     db_product = crud.update_product(db, product_id=product_id, product=product)
     if db_product is None:
+        detail = f"Product with id {product_id} not found on update"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.delete("/{product_id}", response_model=schemas.Product)
-def delete_product(product_id: int, db: Session = Depends(deps.get_db)):
+def delete_product(request: Request, product_id: int, db: Session = Depends(deps.get_db)):
     db_product = crud.delete_product(db, product_id=product_id)
     if db_product is None:
+        detail = f"Product with id {product_id} not found on delete"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.post("/{sku}/add_stock", response_model=schemas.Product)
-def add_stock_to_product(sku: str, quantity: int, db: Session = Depends(deps.get_db)):
+def add_stock_to_product(request: Request, sku: str, quantity: int, db: Session = Depends(deps.get_db)):
     db_product = crud.add_stock(db, sku=sku, quantity=quantity)
     if db_product is None:
+        detail = f"Product with sku {sku} not found for adding stock"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return db_product
 
 @router.post("/{product_id}/upload-image", response_model=schemas.Product)
-def upload_product_image(product_id: int, db: Session = Depends(deps.get_db), file: UploadFile = File(...)):
+def upload_product_image(request: Request, product_id: int, db: Session = Depends(deps.get_db), file: UploadFile = File(...)):
     db_product = crud.get_product(db, product_id=product_id)
     if db_product is None:
+        detail = f"Product with id {product_id} not found for image upload"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Product not found")
     return save_upload_file_and_update_product(db=db, product_id=product_id, file=file)

@@ -1,8 +1,9 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Request
 from sqlalchemy.orm import Session
 from typing import List
 
 from .. import crud, models, schemas, deps
+from ..telegram_utils import send_client_error_notification
 
 router = APIRouter(
     prefix="/orders",
@@ -21,15 +22,19 @@ def read_orders(skip: int = 0, limit: int = 100, db: Session = Depends(deps.get_
     return orders
 
 @router.get("/{order_id}", response_model=schemas.Order)
-def read_order(order_id: int, db: Session = Depends(deps.get_db)):
+def read_order(request: Request, order_id: int, db: Session = Depends(deps.get_db)):
     db_order = crud.get_order(db, order_id=order_id)
     if db_order is None:
+        detail = f"Order with id {order_id} not found"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Order not found")
     return db_order
 
 @router.put("/{order_id}", response_model=schemas.Order)
-def update_order(order_id: int, order: schemas.OrderUpdate, db: Session = Depends(deps.get_db)):
+def update_order(request: Request, order_id: int, order: schemas.OrderUpdate, db: Session = Depends(deps.get_db)):
     db_order = crud.update_order(db, order_id=order_id, order=order)
     if db_order is None:
+        detail = f"Order with id {order_id} not found on update"
+        send_client_error_notification(request=request, detail=detail)
         raise HTTPException(status_code=404, detail="Order not found")
     return db_order
