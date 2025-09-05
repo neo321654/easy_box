@@ -3,7 +3,7 @@ from . import models
 from .database import engine
 from .routers import products, auth, orders
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.middleware.sessions import SessionMiddleware
+from starlette.middleware.sessions import SessionMiddleware
 from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
