@@ -43,3 +43,26 @@ jobs:
             docker pull 321654neo/easy_box_backend:latest
             docker-compose down
             docker-compose up -d
+
+      - name: Send Telegram message on success
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ✅ Deployment Successful!
+            Project: easy_box_backend
+            Branch: ${{ github.ref_name }}
+            Commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+
+      - name: Send Telegram message on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ❌ Deployment Failed!
+            Project: easy_box_backend
+            Branch: ${{ github.ref_name }}
+            Workflow run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
