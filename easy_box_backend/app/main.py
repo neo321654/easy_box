@@ -37,27 +37,12 @@ create_default_user()
 
 app = FastAPI()
 
-@app.exception_handler(Exception)
-async def generic_exception_handler(request: Request, exc: Exception):
-    print("!!! GENERIC EXCEPTION HANDLER TRIGGERED !!!")
-    error_message = f"""🚨 Unhandled Server Error 🚨
-
-**Endpoint**: `{request.method} {request.url.path}`
-**Error**: `{type(exc).__name__}: {exc}`
-
-```
-{traceback.format_exc()}
-```"""
-    
-    send_telegram_error_notification(error_message)
-    
-    return JSONResponse(
-        status_code=500,
-        content={"detail": "Internal Server Error"},
-    )
-
-
 # Add session middleware
+app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
+
+admin = Admin(app, engine, authentication_backend=authentication_backend)
+
+app.add_exception_handler(Exception, generic_exception_handler)
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
 admin = Admin(app, engine, authentication_backend=authentication_backend)
