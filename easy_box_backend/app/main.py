@@ -37,17 +37,33 @@ def create_default_user():
 create_default_user()
 
 # Configure logging
-log = logging.getLogger('gunicorn.error')
+# Create a dedicated logger for the application
+log = logging.getLogger("easybox_app")
+log.setLevel(logging.INFO) # Set a base level
+
+# Create a handler for console output
+import sys
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logging.INFO)
+console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+console_handler.setFormatter(console_formatter)
+log.addHandler(console_handler)
+
+# Create and add the Telegram handler for critical errors
 telegram_handler = TelegramLogHandler()
 telegram_handler.setLevel(logging.ERROR)
-formatter = logging.Formatter('🚨 **EasyBox Server Error** 🚨\n\n' \
-                          '**Level**: `%(levelname)s`\n' \
-                          '**Path**: `%(pathname)s:%(lineno)d`\n' \
-                          '**Message**: `%(message)s`')
-telegram_handler.setFormatter(formatter)
+telegram_formatter = logging.Formatter('🚨 **EasyBox Server Error** 🚨\n\n' \
+                                     '**Level**: `%(levelname)s`\n' \
+                                     '**Path**: `%(pathname)s:%(lineno)d`\n' \
+                                     '**Message**: `%(message)s`')
+telegram_handler.setFormatter(telegram_formatter)
 log.addHandler(telegram_handler)
 
+# Prevent the logger from propagating to the root logger
+log.propagate = False
+
 app = FastAPI()
+
 
 @app.middleware("http")
 async def log_exceptions_middleware(request: Request, call_next):
