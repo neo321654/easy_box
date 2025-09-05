@@ -41,4 +41,5 @@ jobs:
           script: |
             cd ~/easy_box/easy_box_backend
             docker pull 321654neo/easy_box_backend:latest
+            docker-compose down
             docker-compose up -d
