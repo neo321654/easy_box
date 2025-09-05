@@ -15,6 +15,7 @@ from sqladmin import Admin, ModelView
 from sqladmin.fields import FileField
 from starlette.requests import Request
 from markupsafe import Markup
+from pydantic import BaseModel
 from .admin_auth import authentication_backend
 
 from .database import SessionLocal
@@ -155,6 +156,15 @@ app.mount("/images", StaticFiles(directory="uploads"), name="images")
 app.include_router(auth.router)
 app.include_router(products.router)
 app.include_router(orders.router)
+
+class ClientLog(BaseModel):
+    message: str
+
+@app.post("/log-client-error")
+async def log_client_error(log: ClientLog):
+    formatted_message = f"📱 **Client-Side Error** 📱\n\n{log.message}"
+    send_telegram_error_notification(formatted_message)
+    return {"status": "logged"}
 
 @app.get("/test-error")
 async def test_error():
