@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
@@ -21,10 +23,20 @@ class ProductImage extends StatelessWidget {
       return Icon(Icons.image, size: width, color: Colors.grey);
     }
 
+    // Check if the imageUrl is a local file path
+    if (imageUrl!.startsWith('/')) {
+      return Image.file(
+        File(imageUrl!),
+        width: width,
+        height: height,
+        fit: fit,
+      );
+    }
+
     // The image URL from the backend will be a relative path, e.g., /images/some_image.jpg
     // We need to prepend the base URL of the backend to make it a full URL.
-    final fullImageUrl = imageUrl!.startsWith('http') 
-        ? imageUrl 
+    final fullImageUrl = imageUrl!.startsWith('http')
+        ? imageUrl
         : 'http://38.244.208.106:8000$imageUrl';
 
     return CachedNetworkImage(
