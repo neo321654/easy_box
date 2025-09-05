@@ -88,7 +88,7 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Data Sources
   sl.registerLazySingleton<OrderRemoteDataSource>(
-      () => OrderRemoteDataSourceApiImpl(client: sl(), prefs: sl()));
+      () => OrderRemoteDataSourceApiImpl(dio: sl(), prefs: sl()));
   sl.registerLazySingleton<OrderLocalDataSource>(
     () => OrderLocalDataSourceImpl(database: sl()),
   );
@@ -135,7 +135,7 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Data Sources
   sl.registerLazySingleton<InventoryRemoteDataSource>(
-      () => InventoryRemoteDataSourceApiImpl(client: sl(), prefs: sl()));
+      () => InventoryRemoteDataSourceApiImpl(dio: sl(), prefs: sl()));
 
   // Local Data Sources
   sl.registerLazySingleton<InventoryLocalDataSource>(
@@ -189,7 +189,7 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryApiImpl(client: sl(), prefs: sl()));
+      () => AuthRepositoryApiImpl(dio: sl(), prefs: sl()));
   //endregion
 
   //endregion
