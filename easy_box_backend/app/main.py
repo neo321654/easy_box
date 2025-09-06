@@ -166,6 +166,12 @@ async def log_client_error(log: ClientLog):
     send_telegram_error_notification(formatted_message)
     return {"status": "logged"}
 
+@app.post("/log-client-error")
+async def log_client_error(log: ClientLog):
+    formatted_message = f"📱 **Client-Side Error** 📱\n\n{log.message}"
+    send_telegram_error_notification(formatted_message)
+    return {"status": "logged"}
+
 @app.get("/test-error")
 async def test_error():
     raise Exception("This is a test error for Telegram notifications.")
@@ -178,3 +184,4 @@ def read_root():
 # This is a test comment to trigger CI/CD (second test)
 # Triggering new deployment
 # Triggering new deployment to test the updated workflow
+# Final verification of the fix
