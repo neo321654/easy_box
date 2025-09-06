@@ -175,3 +175,4 @@ def read_root():
     return {"message": "Welcome to Easy Box API"}
 
 # This is a test comment to trigger CI/CD
+# This is a test comment to trigger CI/CD (second test)
