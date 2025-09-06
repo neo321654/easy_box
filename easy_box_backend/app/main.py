@@ -25,7 +25,7 @@ from .uploads_utils import save_upload_file
 models.Base.metadata.create_all(bind=engine)
 
 # Create uploads directory if it doesn't exist
-os.makedirs("uploads", exist_ok=True)
+os.makedirs("/easy_box_backend/uploads", exist_ok=True)
 
 # Create a default user
 def create_default_user():
@@ -104,7 +104,7 @@ class ProductAdmin(ModelView, model=models.Product):
     ]
     
     form_extra_fields = {
-        'image': FileField(name="Image", label="Image", base_path='uploads')
+        'image': FileField(name="Image", label="Image", base_path='/easy_box_backend/uploads')
     }
 
     column_formatters = {
@@ -176,3 +176,4 @@ def read_root():
 
 # This is a test comment to trigger CI/CD
 # This is a test comment to trigger CI/CD (second test)
+# Triggering new deployment
