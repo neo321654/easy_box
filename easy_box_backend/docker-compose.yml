@@ -7,14 +7,9 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      # Persist the SQLite database using a named volume
-      - db_data_vol:/easy_box_backend/db_data
-      # Persist the uploaded images using a named volume
-      - uploads_vol:/easy_box_backend/uploads
+      # Persist the SQLite database using a bind mount
+      - ./db_data:/easy_box_backend/db_data
+      # Persist the uploaded images using a bind mount
+      - ./uploads:/easy_box_backend/uploads
     env_file:
       - ./.env
-
-# Define the named volumes
-volumes:
-  db_data_vol:
-  uploads_vol:
