@@ -39,11 +39,20 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            echo "--- Начинаю деплой ---"
             cd ~/easy_box/easy_box_backend
-            mkdir -p ./uploads
+            echo "Текущая директория: $(pwd)"
+            echo "--- Создаю директорию uploads ---"
+            mkdir -p ~/easy_box/easy_box_backend/uploads
+            echo "--- Проверяю права на родительскую директорию ---"
+            ls -ld ~/easy_box/easy_box_backend
+            echo "--- Проверяю содержимое родительской директории ---"
+            ls -l ~/easy_box/easy_box_backend
+            echo "--- Перезапускаю docker-compose ---"
             docker pull 321654neo/easy_box_backend:latest
             docker-compose down
             docker-compose up -d
+            echo "--- Деплой завершен ---"
 
       - name: Clean up old Docker images
         uses: appleboy/ssh-action@master
