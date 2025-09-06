@@ -9,7 +9,7 @@ def save_upload_file(file: UploadFile) -> str:
     """Saves an uploaded file and returns its URL path."""
     ext = file.filename.split('.')[-1] if '.' in file.filename else ''
     unique_filename = f"{uuid.uuid4()}.{ext}"
-    file_path = f"uploads/{unique_filename}"
+    file_path = f"/easy_box_backend/uploads/{unique_filename}"
 
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)

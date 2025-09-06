@@ -151,7 +151,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/images", StaticFiles(directory="uploads"), name="images")
+app.mount("/images", StaticFiles(directory="/easy_box_backend/uploads"), name="images")
 
 app.include_router(auth.router)
 app.include_router(products.router)
