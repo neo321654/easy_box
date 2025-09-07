@@ -83,3 +83,5 @@ app.include_router(orders.router)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Easy Box API"}
+
+# Trivial change to trigger deployment
