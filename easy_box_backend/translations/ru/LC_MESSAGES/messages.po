@@ -1,0 +1,427 @@
+# Russian translations for PROJECT.
+# Copyright (C) 2025 ORGANIZATION
+# This file is distributed under the same license as the PROJECT project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PROJECT VERSION\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2025-09-07 23:30+0300\n"
+"PO-Revision-Date: 2025-09-07 23:21+0300\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: ru\n"
+"Language-Team: ru <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.17.0\n"
+
+#: easy_box_backend/app/templates/sqladmin/create.html:23
+#: easy_box_backend/app/templates/sqladmin/edit.html:23
+msgid "Cancel"
+msgstr "Отмена"
+
+#: easy_box_backend/app/templates/sqladmin/details.html:54
+msgid "Go Back"
+msgstr "Назад"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:17
+#: easy_box_backend/app/templates/sqladmin/list.html:31
+msgid "Export"
+msgstr "Экспорт"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:39
+msgid "New"
+msgstr "Новый"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:51
+#, fuzzy
+msgid "Actions"
+msgstr "Действия"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:58
+msgid "Delete selected items"
+msgstr "Удалить выбранные элементы"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:80
+#: easy_box_backend/app/templates/sqladmin/list.html:82
+msgid "Search"
+msgstr "Поиск"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:94
+msgid "Select all"
+msgstr "Выбрать все"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:122
+msgid "Select item"
+msgstr "Выбрать элемент"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:127
+msgid "View"
+msgstr "Просмотр"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:133
+msgid "Edit"
+msgstr "Редактировать"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:140
+msgid "Delete"
+msgstr "Удалить"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:171
+msgid "Showing"
+msgstr "Показано"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:171
+msgid "to"
+msgstr "до"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:172
+msgid "of"
+msgstr "из"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:173
+msgid "items"
+msgstr "элементов"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:183
+msgid "prev"
+msgstr "пред."
+
+#: easy_box_backend/app/templates/sqladmin/list.html:196
+msgid "next"
+msgstr "след."
+
+#: easy_box_backend/app/templates/sqladmin/list.html:202
+msgid "Show"
+msgstr "Показать"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:205
+#: easy_box_backend/app/templates/sqladmin/list.html:210
+msgid "Page"
+msgstr "Страница"
+
+#: easy_box_backend/app/templates/sqladmin/list.html:222
+#, fuzzy
+msgid "Filters"
+msgstr "Фильтры"
+
+#: easy_box_backend/venv/Lib/site-packages/click/_termui_impl.py:600
+#, python-brace-format
+msgid "{editor}: Editing failed"
+msgstr "{editor}: Ошибка редактирования"
+
+#: easy_box_backend/venv/Lib/site-packages/click/_termui_impl.py:604
+#, python-brace-format
+msgid "{editor}: Editing failed: {e}"
+msgstr "{editor}: Ошибка редактирования: {e}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1084
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1121
+#, python-brace-format
+msgid "{text} {deprecated_message}"
+msgstr "{text} {deprecated_message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1140
+msgid "Options"
+msgstr "Опции"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1202
+#, python-brace-format
+msgid "Got unexpected extra argument ({args})"
+msgid_plural "Got unexpected extra arguments ({args})"
+msgstr[0] "Получен неожиданный дополнительный аргумент ({args})"
+msgstr[1] "Получены неожиданные дополнительные аргументы ({args})"
+msgstr[2] "Получены неожиданные дополнительные аргументы ({args})"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1221
+#, python-brace-format
+msgid "DeprecationWarning: The command {name!r} is deprecated.{extra_message}"
+msgstr "DeprecationWarning: Команда {name!r} устарела.{extra_message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1405
+msgid "Aborted!"
+msgstr "Отменено!"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1779
+msgid "Commands"
+msgstr "Команды"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1810
+msgid "Missing command."
+msgstr "Отсутствует команда."
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:1888
+#, python-brace-format
+msgid "No such command {name!r}."
+msgstr "Нет такой команды {name!r}."
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2303
+msgid "Value must be an iterable."
+msgstr "Значение должно быть итерируемым."
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2324
+#, python-brace-format
+msgid "Takes {nargs} values but 1 was given."
+msgid_plural "Takes {nargs} values but {len} were given."
+msgstr[0] "Требуется {nargs} значений, но было дано 1."
+msgstr[1] "Требуется {nargs} значений, но было дано {len}."
+msgstr[2] "Требуется {nargs} значений, но было дано {len}."
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2404
+#, python-brace-format
+msgid ""
+"DeprecationWarning: The {param_type} {name!r} is "
+"deprecated.{extra_message}"
+msgstr "DeprecationWarning: {param_type} {name!r} устарел.{extra_message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2807
+#, python-brace-format
+msgid "env var: {var}"
+msgstr "переменная окружения: {var}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2810
+#, python-brace-format
+msgid "default: {default}"
+msgstr "по умолчанию: {default}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2814
+msgid "required"
+msgstr "обязательно"
+
+#: easy_box_backend/venv/Lib/site-packages/click/core.py:2870
+msgid "(dynamic)"
+msgstr "(динамический)"
+
+#: easy_box_backend/venv/Lib/site-packages/click/decorators.py:465
+#, python-format
+msgid "% (prog)s, version %(version)s"
+msgstr "% (prog)s, версия %(version)s"
+
+#: easy_box_backend/venv/Lib/site-packages/click/decorators.py:522
+msgid "Show the version and exit."
+msgstr "Показать версию и выйти."
+
+#: easy_box_backend/venv/Lib/site-packages/click/decorators.py:548
+msgid "Show this message and exit."
+msgstr "Показать это сообщение и выйти."
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:50
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:89
+#, python-brace-format
+msgid "Error: {message}"
+msgstr "Ошибка: {message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:81
+#, python-brace-format
+msgid "Try '{command} {option}' for help."
+msgstr "Попробуйте '{command} {option}' для помощи."
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:130
+#, python-brace-format
+msgid "Invalid value: {message}"
+msgstr "Недопустимое значение: {message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:132
+#, python-brace-format
+msgid "Invalid value for {param_hint}: {message}"
+msgstr "Недопустимое значение для {param_hint}: {message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:190
+msgid "Missing argument"
+msgstr "Отсутствует аргумент"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:192
+msgid "Missing option"
+msgstr "Отсутствует опция"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:194
+msgid "Missing parameter"
+msgstr "Отсутствует параметр"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:196
+#, python-brace-format
+msgid "Missing {param_type}"
+msgstr "Отсутствует {param_type}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:203
+#, python-brace-format
+msgid "Missing parameter: {param_name}"
+msgstr "Отсутствует параметр: {param_name}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:223
+#, python-brace-format
+msgid "No such option: {name}"
+msgstr "Нет такой опции: {name}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:235
+#, python-brace-format
+msgid "Did you mean {possibility}?"
+msgid_plural "(Possible options: {possibilities})"
+msgstr[0] "Вы имели в виду {possibility}?"
+msgstr[1] "(Возможные варианты: {possibilities})"
+msgstr[2] "(Возможные варианты: {possibilities})"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:282
+msgid "unknown error"
+msgstr "неизвестная ошибка"
+
+#: easy_box_backend/venv/Lib/site-packages/click/exceptions.py:289
+#, python-brace-format
+msgid "Could not open file {filename!r}: {message}"
+msgstr "Не удалось открыть файл {filename!r}: {message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/parser.py:200
+#, python-brace-format
+msgid "Argument {name!r} takes {nargs} values."
+msgstr "Аргумент {name!r} принимает {nargs} значений."
+
+#: easy_box_backend/venv/Lib/site-packages/click/parser.py:383
+#, python-brace-format
+msgid "Option {name!r} does not take a value."
+msgstr "Опция {name!r} не принимает значение."
+
+#: easy_box_backend/venv/Lib/site-packages/click/parser.py:444
+#, python-brace-format
+msgid "Option {name!r} requires an argument."
+msgid_plural "Option {name!r} requires {nargs} arguments."
+msgstr[0] "Опция {name!r} требует аргумент."
+msgstr[1] "Опция {name!r} требует {nargs} аргументов."
+msgstr[2] "Опция {name!r} требует {nargs} аргументов."
+
+#: easy_box_backend/venv/Lib/site-packages/click/shell_completion.py:326
+msgid "Shell completion is not supported for Bash versions older than 4.4."
+msgstr "Автодополнение оболочки не поддерживается для версий Bash старше 4.4."
+
+#: easy_box_backend/venv/Lib/site-packages/click/shell_completion.py:333
+msgid "Couldn't detect Bash version, shell completion is not supported."
+msgstr ""
+"Не удалось определить версию Bash, автодополнение оболочки не "
+"поддерживается."
+
+#: easy_box_backend/venv/Lib/site-packages/click/termui.py:162
+msgid "Repeat for confirmation"
+msgstr "Повторите для подтверждения"
+
+#: easy_box_backend/venv/Lib/site-packages/click/termui.py:178
+msgid "Error: The value you entered was invalid."
+msgstr "Ошибка: Введенное значение неверно."
+
+#: easy_box_backend/venv/Lib/site-packages/click/termui.py:180
+#, python-brace-format
+msgid "Error: {e.message}"
+msgstr "Ошибка: {e.message}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/termui.py:191
+msgid "Error: The two entered values do not match."
+msgstr "Ошибка: Два введенных значения не совпадают."
+
+#: easy_box_backend/venv/Lib/site-packages/click/termui.py:247
+msgid "Error: invalid input"
+msgstr "Ошибка: неверный ввод"
+
+#: easy_box_backend/venv/Lib/site-packages/click/termui.py:866
+msgid "Press any key to continue..."
+msgstr "Нажмите любую клавишу, чтобы продолжить..."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:332
+#, python-brace-format
+msgid ""
+"Choose from:\n"
+"\t{choices}"
+msgstr ""
+"Выберите из:\n"
+"\t{choices}"
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:369
+#, python-brace-format
+msgid "{value!r} is not {choice}."
+msgid_plural "{value!r} is not one of {choices}."
+msgstr[0] "{value!r} не является {choice}."
+msgstr[1] "{value!r} не является одним из {choices}."
+msgstr[2] "{value!r} не является одним из {choices}."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:460
+#, python-brace-format
+msgid "{value!r} does not match the format {format}."
+msgid_plural "{value!r} does not match the formats {formats}."
+msgstr[0] "{value!r} не соответствует формату {format}."
+msgstr[1] "{value!r} не соответствует форматам {formats}."
+msgstr[2] "{value!r} не соответствует форматам {formats}."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:482
+#, python-brace-format
+msgid "{value!r} is not a valid {number_type}."
+msgstr "{value!r} не является допустимым {number_type}."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:538
+#, python-brace-format
+msgid "{value} is not in the range {range}."
+msgstr "{value} не находится в диапазоне {range}."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:679
+#, python-brace-format
+msgid "{value!r} is not a valid boolean."
+msgstr "{value!r} не является допустимым логическим значением."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:703
+#, python-brace-format
+msgid "{value!r} is not a valid UUID."
+msgstr "{value!r} не является допустимым UUID."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:893
+msgid "file"
+msgstr "файл"
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:895
+msgid "directory"
+msgstr "каталог"
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:897
+msgid "path"
+msgstr "путь"
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:944
+#, python-brace-format
+msgid "{name} {filename!r} does not exist."
+msgstr "{name} {filename!r} не существует."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:953
+#, python-brace-format
+msgid "{name} {filename!r} is a file."
+msgstr "{name} {filename!r} является файлом."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:961
+#, python-brace-format
+msgid "{name} {filename!r} is a directory."
+msgstr "{name} {filename!r} является каталогом."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:970
+#, python-brace-format
+msgid "{name} {filename!r} is not readable."
+msgstr "{name} {filename!r} не читаем."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:979
+#, python-brace-format
+msgid "{name} {filename!r} is not writable."
+msgstr "{name} {filename!r} не доступен для записи."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:988
+#, python-brace-format
+msgid "{name} {filename!r} is not executable."
+msgstr "{name} {filename!r} не является исполняемым."
+
+#: easy_box_backend/venv/Lib/site-packages/click/types.py:1055
+#, python-brace-format
+msgid "{len_type} values are required, but {len_value} was given."
+msgid_plural "{len_type} values are required, but {len_value} were given."
+msgstr[0] "{len_type} значений требуются, но было дано {len_value}."
+msgstr[1] "{len_type} значений требуются, но было дано {len_value}."
+msgstr[2] "{len_type} значений требуются, но было дано {len_value}."
+
+#: easy_box_backend/venv/Lib/site-packages/passlib/ext/django/utils.py:1000
+msgid "algorithm"
+msgstr "алгоритм"

@@ -10,7 +10,6 @@ from .routers import products, auth, orders
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
 import os
-import os
 from sqladmin import Admin, ModelView
 from sqladmin.fields import FileField
 from starlette.requests import Request
@@ -19,6 +18,8 @@ from pydantic import BaseModel
 from .admin_auth import authentication_backend
 import cloudinary
 from dotenv import load_dotenv
+from babel.support import Translations
+from starlette.templating import Jinja2Templates
 
 from .database import SessionLocal
 from . import crud, schemas
@@ -62,8 +63,7 @@ console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - 
 console_handler.setFormatter(console_formatter)
 log.addHandler(console_handler)
 
-# Create and add the Telegram handler for critical errors
-telegram_handler = TelegramLogHandler()
+# Create and add the Telegram handler for critical errors	aughandler = TelegramLogHandler()
 telegram_handler.setLevel(logging.ERROR)
 telegram_formatter = logging.Formatter('🚨 **EasyBox Server Error** 🚨\n\n' \
                                      '**Level**: `%(levelname)s`\n' \
@@ -93,19 +93,41 @@ async def log_exceptions_middleware(request: Request, call_next):
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
-admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir=os.path.join(os.path.dirname(__file__), "templates"))
+# Localization
+translations = Translations.load("easy_box_backend/translations", locales=["ru_RU", "en_US"])
+
+templates = Jinja2Templates(directory="easy_box_backend/app/templates")
+templates.env.add_extension("jinja2.ext.i18n")
+templates.env.install_gettext_translations(translations)
+
+
+@app.middleware("http")
+async def get_language(request: Request, call_next):
+    language = request.headers.get("Accept-Language", "ru")
+    await translations.set_locale(language.split(",")[0])
+    response = await call_next(request)
+    return response
+
+admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir="easy_box_backend/app/templates")
 
 
 class UserAdmin(ModelView, model=models.User):
+    name = "Пользователь"
+    name_plural = "Пользователи"
     column_list = [models.User.id, models.User.name, models.User.email, models.User.is_active]
     column_searchable_list = [models.User.name, models.User.email]
     column_sortable_list = [models.User.id, models.User.name, models.User.email]
     form_columns = [models.User.name, models.User.email, models.User.is_active]
+    column_labels = {models.User.name: "Имя", models.User.email: "Email", models.User.is_active: "Активен"}
+
 
 class ProductAdmin(ModelView, model=models.Product):
-    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url]
+    name = "Товар"
+    name_plural = "Товары"
+    column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity, models.Product.location, models.Product.image_url]
     column_searchable_list = [models.Product.name, models.Product.sku]
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
+    column_labels = {models.Product.name: "Название", models.Product.sku: "SKU", models.Product.quantity: "Количество", models.Product.location: "Местоположение", models.Product.image_url: "Изображение"}
 
     form_columns = [
         models.Product.name,
@@ -123,7 +145,7 @@ class ProductAdmin(ModelView, model=models.Product):
     # Rename the label for clarity
     form_args = {
         'image_url': {
-            'label': 'Image'
+            'label': 'Изображение'
         }
     }
 
@@ -140,16 +162,24 @@ class ProductAdmin(ModelView, model=models.Product):
             image_url = save_upload_file(upload)
             model.image_url = image_url
 
+
 class OrderAdmin(ModelView, model=models.Order):
+    name = "Заказ"
+    name_plural = "Заказы"
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
     column_searchable_list = [models.Order.customer_name]
     column_sortable_list = [models.Order.id, models.Order.customer_name, models.Order.status]
     form_columns = [models.Order.customer_name, models.Order.status]
+    column_labels = {models.Order.customer_name: "Имя клиента", models.Order.status: "Статус"}
+
 
 class OrderLineAdmin(ModelView, model=models.OrderLine):
+    name = "Позиция заказа"
+    name_plural = "Позиции заказа"
     column_list = [models.OrderLine.id, models.OrderLine.order_id, models.OrderLine.product_id, models.OrderLine.quantity_to_pick, models.OrderLine.quantity_picked]
     column_sortable_list = [models.OrderLine.id, models.OrderLine.order_id, models.OrderLine.product_id]
     form_columns = [models.OrderLine.order, models.OrderLine.product, models.OrderLine.quantity_to_pick, models.OrderLine.quantity_picked]
+    column_labels = {models.OrderLine.order_id: "ID заказа", models.OrderLine.product_id: "ID товара", models.OrderLine.quantity_to_pick: "Количество для сборки", models.OrderLine.quantity_picked: "Собранное количество"}
 
 
 admin.add_view(UserAdmin)
@@ -188,12 +218,6 @@ async def log_client_error(log: ClientLog):
     send_telegram_error_notification(formatted_message)
     return {"status": "logged"}
 
-@app.post("/log-client-error")
-async def log_client_error(log: ClientLog):
-    formatted_message = f"📱 **Client-Side Error** 📱\n\n{log.message}"
-    send_telegram_error_notification(formatted_message)
-    return {"status": "logged"}
-
 @app.get("/test-error")
 async def test_error():
     raise Exception("This is a test error for Telegram notifications.")
@@ -201,7 +225,3 @@ async def test_error():
 @app.get("/")
 def read_root():
     return {"message": "Welcome to Easy Box API"}
-
-# Re-deploy test to verify image persistence
-
-# Triggering diagnostic deployment
