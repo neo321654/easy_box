@@ -88,7 +88,10 @@ templates.env.install_gettext_translations(translations)
 @app.middleware("http")
 async def localization_and_logging_middleware(request: Request, call_next):
     language = request.headers.get("Accept-Language", "ru")
-    await translations.set_locale(language.split(",")[0])
+    try:
+        await translations.set_locale(language.split(",")[0])
+    except Exception:
+        await translations.set_locale("en_US")
     try:
         return await call_next(request)
     except Exception as e:
