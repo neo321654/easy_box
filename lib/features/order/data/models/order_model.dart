@@ -29,4 +29,12 @@ class OrderModel extends Order {
       'lines': lines.map((line) => (line as OrderLineModel).toJson()).toList(),
     };
   }
+
+  Map<String, dynamic> toJsonForDb() {
+    return {
+      'id': id,
+      'customer_name': customerName,
+      'status': status.index, // Save status as integer index for DB
+    };
+  }
 }
