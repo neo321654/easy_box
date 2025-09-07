@@ -63,7 +63,8 @@ console_formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - 
 console_handler.setFormatter(console_formatter)
 log.addHandler(console_handler)
 
-# Create and add the Telegram handler for critical errors	aughandler = TelegramLogHandler()
+# Create and add the Telegram handler for critical errors
+telegram_handler = TelegramLogHandler()
 telegram_handler.setLevel(logging.ERROR)
 telegram_formatter = logging.Formatter('🚨 **EasyBox Server Error** 🚨\n\n' \
                                      '**Level**: `%(levelname)s`\n' \
@@ -77,9 +78,17 @@ log.propagate = False
 
 app = FastAPI()
 
+# Localization
+translations = Translations.load("easy_box_backend/translations", locales=["ru_RU", "en_US"])
+
+templates = Jinja2Templates(directory="easy_box_backend/app/templates")
+templates.env.add_extension("jinja2.ext.i18n")
+templates.env.install_gettext_translations(translations)
 
 @app.middleware("http")
-async def log_exceptions_middleware(request: Request, call_next):
+async def localization_and_logging_middleware(request: Request, call_next):
+    language = request.headers.get("Accept-Language", "ru")
+    await translations.set_locale(language.split(",")[0])
     try:
         return await call_next(request)
     except Exception as e:
@@ -92,21 +101,6 @@ async def log_exceptions_middleware(request: Request, call_next):
 
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
-
-# Localization
-translations = Translations.load("easy_box_backend/translations", locales=["ru_RU", "en_US"])
-
-templates = Jinja2Templates(directory="easy_box_backend/app/templates")
-templates.env.add_extension("jinja2.ext.i18n")
-templates.env.install_gettext_translations(translations)
-
-
-@app.middleware("http")
-async def get_language(request: Request, call_next):
-    language = request.headers.get("Accept-Language", "ru")
-    await translations.set_locale(language.split(",")[0])
-    response = await call_next(request)
-    return response
 
 admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir="easy_box_backend/app/templates")
 
