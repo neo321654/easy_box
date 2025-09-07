@@ -190,4 +190,6 @@ async def test_error():
 def read_root():
     return {"message": "Welcome to Easy Box API"}
 
+# Re-deploy test to verify image persistence
+
 # Triggering diagnostic deployment
