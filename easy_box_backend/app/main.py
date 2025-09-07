@@ -131,14 +131,13 @@ class ProductAdmin(ModelView, model=models.Product):
     }
 
     async def on_model_change(self, data: dict, model: any, is_created: bool, request: Request) -> None:
-        # The uploaded file will be in data['image_url']
-        upload = data.get("image_url")
+        # Pop the UploadFile object from the data to prevent SQLAdmin from trying to save it.
+        upload = data.pop("image_url", None)
 
-        if upload and getattr(upload, 'filename', None):
-            if upload.filename: # Check if a new file was actually uploaded
-                image_url = save_upload_file(upload)
-                model.image_url = image_url
-        # If no new file is uploaded, we keep the old value, so we don't need an else.
+        # If a new file was uploaded, save it to Cloudinary and set the URL on the model.
+        if hasattr(upload, 'filename') and upload.filename:
+            image_url = save_upload_file(upload)
+            model.image_url = image_url
 
 class OrderAdmin(ModelView, model=models.Order):
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
