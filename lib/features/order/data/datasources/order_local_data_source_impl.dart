@@ -88,20 +88,33 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
   Future<void> updateOrder(OrderModel order) async {
     await database.transaction((txn) async {
       final batch = txn.batch();
+      // Use toJsonForDb to correctly update the status as an integer
       batch.update(
         _tableOrders,
-        order.toJson(),
+        order.toJsonForDb(),
         where: 'id = ?',
         whereArgs: [order.id],
       );
       batch.delete(_tableOrderLines, where: 'order_id = ?', whereArgs: [order.id]);
       for (final line in order.lines) {
-        final lineModel = line as OrderLineModel;
+        // Robustly handle both OrderLine and OrderLineModel types
+        final lineJson = (line is OrderLineModel)
+            ? line.toJson()
+            : OrderLineModel(
+                productId: line.productId,
+                productName: line.productName,
+                sku: line.sku,
+                location: line.location,
+                quantityToPick: line.quantityToPick,
+                quantityPicked: line.quantityPicked,
+                imageUrl: line.imageUrl,
+              ).toJson();
+
         batch.insert(
             _tableOrderLines,
             {
               'order_id': order.id,
-              ...lineModel.toJson(),
+              ...lineJson,
             },
             conflictAlgorithm: ConflictAlgorithm.replace);
       }
