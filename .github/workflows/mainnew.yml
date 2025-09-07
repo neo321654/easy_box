@@ -39,8 +39,22 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
-            echo "--- Начинаю деплой ---"
+            echo "--- Creating .env file ---"
             cd ~/easy_box/easy_box_backend
+            cat <<EOF > .env
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            ALGORITHM=${{ secrets.ALGORITHM }}
+            ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+            CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+            CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+            EOF
+            echo "--- .env file created ---"
+            
+            echo "--- Начинаю деплой ---"
             echo "Текущая директория: $(pwd)"
             echo "--- Принудительно обновляю файлы до последней версии из Git ---"
             git fetch origin

@@ -13,3 +13,4 @@ gunicorn
 sqladmin
 itsdangerous
 requests
+cloudinary

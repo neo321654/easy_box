@@ -9,7 +9,6 @@ from .database import engine
 from .routers import products, auth, orders
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.sessions import SessionMiddleware
-from fastapi.staticfiles import StaticFiles
 import os
 from sqladmin import Admin, ModelView
 from sqladmin.fields import FileField
@@ -17,15 +16,26 @@ from starlette.requests import Request
 from markupsafe import Markup
 from pydantic import BaseModel
 from .admin_auth import authentication_backend
+import cloudinary
+from dotenv import load_dotenv
 
 from .database import SessionLocal
 from . import crud, schemas
 from .uploads_utils import save_upload_file
 
-models.Base.metadata.create_all(bind=engine)
+# Load environment variables from .env file
+load_dotenv()
 
-# Create uploads directory if it doesn't exist
-os.makedirs("/easy_box_backend/uploads", exist_ok=True)
+# Configure Cloudinary
+cloudinary.config(
+  cloud_name = os.getenv("CLOUDINARY_CLOUD_NAME"),
+  api_key = os.getenv("CLOUDINARY_API_KEY"),
+  api_secret = os.getenv("CLOUDINARY_API_SECRET"),
+  secure = True
+)
+
+
+models.Base.metadata.create_all(bind=engine)
 
 # Create a default user
 def create_default_user():
@@ -104,7 +114,7 @@ class ProductAdmin(ModelView, model=models.Product):
     ]
     
     form_extra_fields = {
-        'image': FileField(name="Image", label="Image", base_path='/easy_box_backend/uploads')
+        'image': FileField(name="Image", label="Image")
     }
 
     column_formatters = {
@@ -151,7 +161,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.mount("/images", StaticFiles(directory="/easy_box_backend/uploads"), name="images")
+
 
 app.include_router(auth.router)
 app.include_router(products.router)
