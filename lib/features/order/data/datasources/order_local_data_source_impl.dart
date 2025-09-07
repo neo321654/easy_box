@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_box/features/order/data/datasources/order_local_data_source.dart';
 import 'package:easy_box/features/order/data/models/order_line_model.dart';
 import 'package:easy_box/features/order/data/models/order_model.dart';
+import 'package:easy_box/features/order/domain/entities/order.dart';
 import 'package:sqflite/sqflite.dart';
 
 const String _tableOrders = 'orders';
@@ -21,7 +22,8 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
       batch.delete(_tableOrders);
       batch.delete(_tableOrderLines);
       for (final order in orders) {
-        batch.insert(_tableOrders, order.toJson(),
+        // Use toJsonForDb which excludes lines and uses int for status
+        batch.insert(_tableOrders, order.toJsonForDb(),
             conflictAlgorithm: ConflictAlgorithm.replace);
         for (final line in order.lines) {
           final lineModel = line as OrderLineModel;
@@ -48,9 +50,14 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         where: 'order_id = ?',
         whereArgs: [orderMap['id']],
       );
+      
+      final fullOrderMap = Map<String, dynamic>.from(orderMap);
+      // Convert integer status from DB back to String for the fromJson factory
+      final statusIndex = fullOrderMap['status'] as int;
+      fullOrderMap['status'] = OrderStatus.values[statusIndex].name;
+
       // The fromJson method on OrderModel expects the lines to be in the map.
       // The local database stores them separately, so we add them to the map here.
-      final fullOrderMap = Map<String, dynamic>.from(orderMap);
       fullOrderMap['lines'] = lineMaps;
       orders.add(OrderModel.fromJson(fullOrderMap));
     }
@@ -81,20 +88,33 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
   Future<void> updateOrder(OrderModel order) async {
     await database.transaction((txn) async {
       final batch = txn.batch();
+      // Use toJsonForDb to correctly update the status as an integer
       batch.update(
         _tableOrders,
-        order.toJson(),
+        order.toJsonForDb(),
         where: 'id = ?',
         whereArgs: [order.id],
       );
       batch.delete(_tableOrderLines, where: 'order_id = ?', whereArgs: [order.id]);
       for (final line in order.lines) {
-        final lineModel = line as OrderLineModel;
+        // Robustly handle both OrderLine and OrderLineModel types
+        final lineJson = (line is OrderLineModel)
+            ? line.toJson()
+            : OrderLineModel(
+                productId: line.productId,
+                productName: line.productName,
+                sku: line.sku,
+                location: line.location,
+                quantityToPick: line.quantityToPick,
+                quantityPicked: line.quantityPicked,
+                imageUrl: line.imageUrl,
+              ).toJson();
+
         batch.insert(
             _tableOrderLines,
             {
               'order_id': order.id,
-              ...lineModel.toJson(),
+              ...lineJson,
             },
             conflictAlgorithm: ConflictAlgorithm.replace);
       }

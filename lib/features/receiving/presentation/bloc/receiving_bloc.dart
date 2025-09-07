@@ -35,8 +35,9 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
 
     failureOrResult.fold(
       (failure) {
+        // Explicitly check for the exact type
         if (failure is ProductNotFoundFailure) {
-          emit(ReceivingProductNotFound(failure.sku));
+          emit(ReceivingProductNotFound((failure).sku));
         } else {
           emit(const AddStockFailure());
         }

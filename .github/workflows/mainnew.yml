@@ -39,7 +39,61 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            echo "--- Creating .env file ---"
             cd ~/easy_box/easy_box_backend
+            cat <<EOF > .env
+            SECRET_KEY=${{ secrets.SECRET_KEY }}
+            ALGORITHM=${{ secrets.ALGORITHM }}
+            ACCESS_TOKEN_EXPIRE_MINUTES=${{ secrets.ACCESS_TOKEN_EXPIRE_MINUTES }}
+            DATABASE_URL=${{ secrets.DATABASE_URL }}
+            CLOUDINARY_CLOUD_NAME=${{ secrets.CLOUDINARY_CLOUD_NAME }}
+            CLOUDINARY_API_KEY=${{ secrets.CLOUDINARY_API_KEY }}
+            CLOUDINARY_API_SECRET=${{ secrets.CLOUDINARY_API_SECRET }}
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+            EOF
+            echo "--- .env file created ---"
+            
+            echo "--- Начинаю деплой ---"
+            echo "Текущая директория: $(pwd)"
+            echo "--- Принудительно обновляю файлы до последней версии из Git ---"
+            git fetch origin
+            git reset --hard origin/main
+            echo "--- Перезапускаю docker-compose с гарантированно новым docker-compose.yml ---"
             docker pull 321654neo/easy_box_backend:latest
             docker-compose down
             docker-compose up -d
+            echo "--- Деплой завершен ---"
+
+      - name: Clean up old Docker images
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SERVER_PORT }}
+          script: |
+            docker image prune -f
+
+      - name: Send Telegram message on success
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ✅ Deployment Successful!
+            Project: easy_box_backend
+            Branch: ${{ github.ref_name }}
+            Commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+
+      - name: Send Telegram message on failure
+        if: failure()
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ❌ Deployment Failed!
+            Project: easy_box_backend
+            Branch: ${{ github.ref_name }}
+            Workflow run: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}

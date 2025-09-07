@@ -5,6 +5,7 @@ import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/core/network/network_info.dart';
 import 'package:easy_box/core/usecases/operation_result.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_local_data_source.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
@@ -12,6 +13,7 @@ import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/domain/repositories/inventory_repository.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
+import 'package:talker_flutter/talker_flutter.dart';
 import 'package:uuid/uuid.dart';
 
 class InventoryRepositoryImpl implements InventoryRepository {
@@ -87,17 +89,18 @@ class InventoryRepositoryImpl implements InventoryRepository {
       {required String name, required String sku, String? location, String? imageUrl}) async {
     if (await networkInfo.isConnected) {
       try {
-        // First, create the product without the image URL
-        ProductModel newProduct = await remoteDataSource.createProduct(name: name, sku: sku, location: location);
-
-        // If an image is provided, upload it now
-        if (imageUrl != null) {
-          newProduct = await remoteDataSource.uploadProductImage(newProduct.id, imageUrl);
-        }
-
+        final newProduct = await remoteDataSource.createProduct(
+          name: name,
+          sku: sku,
+          location: location,
+          imageUrl: imageUrl,
+        );
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
       } on ServerException {
+        return Left(ServerFailure());
+      } catch (e, st) {
+        sl<Talker>().handle(e, st, '[InventoryRepository] Failed to create product');
         return Left(ServerFailure());
       }
     } else {
@@ -142,8 +145,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
   Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
     Product productToUpdate = product;
 
-    // Check if the imageUrl is a new local file path
-    if (product.imageUrl != null && !product.imageUrl!.startsWith('http')) {
+    // Check if the imageUrl is a new local file path that needs uploading
+    // It should NOT be null, empty, start with 'http', or start with '/images/' (which is a server-relative path)
+    if (product.imageUrl != null &&
+        product.imageUrl!.isNotEmpty &&
+        !product.imageUrl!.startsWith('http') &&
+        !product.imageUrl!.startsWith('/images/')) {
       if (await networkInfo.isConnected) {
         try {
           final uploadedProduct = await remoteDataSource.uploadProductImage(product.id, product.imageUrl!);
@@ -231,14 +238,17 @@ class InventoryRepositoryImpl implements InventoryRepository {
     final pendingCreations = await localDataSource.getQueuedProductCreations();
     if (pendingCreations.isNotEmpty) {
       for (final creation in pendingCreations) {
+        final localImagePath = creation['image_url'] as String?;
         final remoteProduct = await remoteDataSource.createProduct(
           name: creation['name'],
           sku: creation['sku'],
           location: creation['location'],
-          imageUrl: creation['image_url'],
+          imageUrl: localImagePath,
         );
-        // Update local product with real server ID
-        await localDataSource.updateProductId(creation['local_id'], remoteProduct.id);
+        // Instead of just updating the ID, we delete the old temp product
+        // and save the new, complete product from the server.
+        await localDataSource.deleteProduct(creation['local_id']);
+        await localDataSource.saveProduct(remoteProduct);
       }
       await localDataSource.clearQueuedProductCreations();
     }
@@ -279,5 +289,3 @@ class InventoryRepositoryImpl implements InventoryRepository {
     }
   }
 }
-
-

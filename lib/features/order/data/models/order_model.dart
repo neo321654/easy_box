@@ -26,7 +26,31 @@ class OrderModel extends Order {
       'id': id,
       'customer_name': customerName,
       'status': status.name,
-      'lines': lines.map((line) => (line as OrderLineModel).toJson()).toList(),
+      'lines': lines.map((line) {
+        // Handle both OrderLine and OrderLineModel, making the method robust.
+        if (line is OrderLineModel) {
+          return line.toJson();
+        } else {
+          // Convert a domain OrderLine entity to a model before serializing.
+          return OrderLineModel(
+            productId: line.productId,
+            productName: line.productName,
+            sku: line.sku,
+            location: line.location,
+            quantityToPick: line.quantityToPick,
+            quantityPicked: line.quantityPicked,
+            imageUrl: line.imageUrl,
+          ).toJson();
+        }
+      }).toList(),
+    };
+  }
+
+  Map<String, dynamic> toJsonForDb() {
+    return {
+      'id': id,
+      'customer_name': customerName,
+      'status': status.index, // Save status as integer index for DB
     };
   }
 }

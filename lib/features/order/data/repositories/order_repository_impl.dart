@@ -73,13 +73,21 @@ class OrderRepositoryImpl implements OrderRepository {
   Future<void> _syncPendingUpdates() async {
     final pendingUpdates = await localDataSource.getQueuedOrderUpdates();
     if (pendingUpdates.isNotEmpty) {
+      // Fetch all local orders to find the customer name.
+      final localOrders = await localDataSource.getLastOrders();
+      final ordersMap = {for (var o in localOrders) o.id: o};
+
       for (final update in pendingUpdates) {
         final lines = (jsonDecode(update['lines']) as List)
             .map((line) => OrderLineModel.fromJson(line))
             .toList();
+        
+        final orderId = update['order_id'] as String;
+        final existingOrder = ordersMap[orderId];
+
         final order = OrderModel(
-          id: update['order_id'],
-          customerName: 'N/A', // This should be fetched from the order table
+          id: orderId,
+          customerName: existingOrder?.customerName ?? 'N/A', // Use fetched name
           status: OrderStatus.values[update['status']],
           lines: lines,
         );

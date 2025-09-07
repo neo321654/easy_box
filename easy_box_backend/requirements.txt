@@ -11,3 +11,8 @@ python-dotenv
 python-multipart
 gunicorn
 sqladmin
+itsdangerous
+requests
+cloudinary
+Babel
+speaklater

@@ -1,64 +1,64 @@
-import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
 import 'package:easy_box/features/inventory/data/models/product_model.dart';
-import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
-  final http.Client client;
+  final Dio dio;
   final SharedPreferences prefs;
   final String _baseUrl = 'http://38.244.208.106:8000';
 
-  InventoryRemoteDataSourceApiImpl({required this.client, required this.prefs});
+  InventoryRemoteDataSourceApiImpl({required this.dio, required this.prefs});
 
-  Future<Map<String, String>> _getHeaders() async {
+  Future<Options> _getOptions() async {
     final token = prefs.getString('user_token');
-    return {
-      'Content-Type': 'application/json; charset=UTF-8',
+    return Options(headers: {
       'Authorization': 'Bearer $token',
-    };
+    });
   }
 
   @override
   Future<List<ProductModel>> getProducts() async {
-    final response = await client.get(
-      Uri.parse('$_baseUrl/products/'),
-      headers: await _getHeaders(),
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> data = json.decode(response.body);
+    try {
+      final response = await dio.get(
+        '$_baseUrl/products/',
+        options: await _getOptions(),
+      );
+      final List<dynamic> data = response.data;
       return data.map((json) => ProductModel.fromJson(json)).toList();
-    } else {
+    } on DioException {
       throw ServerException();
     }
   }
 
   @override
   Future<ProductModel?> findProductBySku(String sku) async {
-    final response = await client.get(
-      Uri.parse('$_baseUrl/products/sku/$sku'),
-      headers: await _getHeaders(),
-    );
-
-    if (response.statusCode == 200) {
-      return ProductModel.fromJson(json.decode(response.body));
-    } else if (response.statusCode == 404) {
-      return null;
-    } else {
+    try {
+      final response = await dio.get(
+        '$_baseUrl/products/sku/$sku',
+        options: await _getOptions(),
+      );
+      return ProductModel.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        return null;
+      }
       throw ServerException();
     }
   }
 
   @override
   Future<void> addStock(String sku, int quantityToAdd) async {
-    final response = await client.post(
-      Uri.parse('$_baseUrl/products/$sku/add_stock?quantity=$quantityToAdd'),
-      headers: await _getHeaders(),
-    );
-
-    if (response.statusCode != 200) {
+    try {
+      await dio.post(
+        '$_baseUrl/products/$sku/add_stock?quantity=$quantityToAdd',
+        options: await _getOptions(),
+      );
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        throw ProductNotFoundException(sku);
+      }
       throw ServerException();
     }
   }
@@ -70,63 +70,65 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
     String? location,
     String? imageUrl,
   }) async {
-    final response = await client.post(
-      Uri.parse('$_baseUrl/products/'),
-      headers: await _getHeaders(),
-      body: json.encode({
+    try {
+      final formData = FormData.fromMap({
         'name': name,
         'sku': sku,
-        'quantity': 0, // New products start with 0 quantity
-        'location': location,
-        'image_url': imageUrl,
-      }),
-    );
+        'quantity': 0,
+        if (location != null) 'location': location,
+        if (imageUrl != null) 'file': await MultipartFile.fromFile(imageUrl),
+      });
 
-    if (response.statusCode == 200) {
-      return ProductModel.fromJson(json.decode(response.body));
-    } else {
+      final response = await dio.post(
+        '$_baseUrl/products/',
+        data: formData,
+        options: await _getOptions(),
+      );
+      return ProductModel.fromJson(response.data);
+    } on DioException {
       throw ServerException();
     }
   }
 
   @override
   Future<void> updateProduct(ProductModel product) async {
-    final response = await client.put(
-      Uri.parse('$_baseUrl/products/${product.id}'),
-      headers: await _getHeaders(),
-      body: json.encode(product.toJson()),
-    );
-
-    if (response.statusCode != 200) {
+    try {
+      await dio.put(
+        '$_baseUrl/products/${product.id}',
+        data: product.toJson(),
+        options: await _getOptions(),
+      );
+    } on DioException {
       throw ServerException();
     }
   }
 
   @override
   Future<void> deleteProduct(String id) async {
-    final response = await client.delete(
-      Uri.parse('$_baseUrl/products/$id'),
-      headers: await _getHeaders(),
-    );
-
-    if (response.statusCode != 200) {
+    try {
+      await dio.delete(
+        '$_baseUrl/products/$id',
+        options: await _getOptions(),
+      );
+    } on DioException {
       throw ServerException();
     }
   }
 
   @override
   Future<ProductModel> uploadProductImage(String productId, String imagePath) async {
-    final uri = Uri.parse('$_baseUrl/products/$productId/upload-image');
-    final request = http.MultipartRequest('POST', uri);
-    request.headers.addAll(await _getHeaders());
-    request.files.add(await http.MultipartFile.fromPath('file', imagePath));
+    try {
+      final formData = FormData.fromMap({
+        'file': await MultipartFile.fromFile(imagePath),
+      });
 
-    final response = await request.send();
-
-    if (response.statusCode == 200) {
-      final responseBody = await response.stream.bytesToString();
-      return ProductModel.fromJson(json.decode(responseBody));
-    } else {
+      final response = await dio.post(
+        '$_baseUrl/products/$productId/upload-image',
+        data: formData,
+        options: await _getOptions(),
+      );
+      return ProductModel.fromJson(response.data);
+    } on DioException {
       throw ServerException();
     }
   }
