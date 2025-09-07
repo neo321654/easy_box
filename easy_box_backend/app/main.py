@@ -92,7 +92,7 @@ async def log_exceptions_middleware(request: Request, call_next):
 # Add session middleware
 app.add_middleware(SessionMiddleware, secret_key=os.getenv("SECRET_KEY"))
 
-admin = Admin(app, engine, authentication_backend=authentication_backend)
+admin = Admin(app, engine, authentication_backend=authentication_backend, templates_dir="app/templates")
 
 
 class UserAdmin(ModelView, model=models.User):
