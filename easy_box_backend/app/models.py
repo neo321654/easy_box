@@ -30,6 +30,9 @@ class Product(Base):
 
     order_lines = relationship("OrderLine", back_populates="product")
 
+    def __str__(self) -> str:
+        return f"SKU: {self.sku} | {self.name}"
+
 
 class Order(Base):
     __tablename__ = "orders"
@@ -39,6 +42,9 @@ class Order(Base):
     status = Column(Enum(OrderStatus), nullable=False)
     
     lines = relationship("OrderLine", back_populates="order")
+
+    def __str__(self) -> str:
+        return f"Order #{self.id} - {self.customer_name}"
 
 
 class OrderLine(Base):
