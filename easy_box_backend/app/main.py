@@ -122,11 +122,16 @@ class ProductAdmin(ModelView, model=models.Product):
     }
 
     async def on_model_change(self, data: dict, model: any, is_created: bool, request: Request) -> None:
-        upload = data.get("image")
+        try:
+            form = await request.form()
+            upload = form.get("image")
 
-        if upload and upload.filename:
-            image_url = save_upload_file(upload)
-            model.image_url = image_url
+            if upload and upload.filename:
+                image_url = save_upload_file(upload)
+                model.image_url = image_url
+        except Exception as e:
+            # Log the error if something goes wrong
+            log.error(f"Failed to upload image to Cloudinary from admin: {e}")
 
 class OrderAdmin(ModelView, model=models.Order):
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
