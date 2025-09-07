@@ -7,6 +7,7 @@ from . import crud, schemas
 def save_upload_file(file: UploadFile) -> str:
     """Saves an uploaded file to Cloudinary and returns its secure URL path."""
     # The upload function automatically uses the configuration set in main.py
+    # The file object from UploadFile is accessed via .file
     upload_result = cloudinary.uploader.upload(file.file, folder="easy_box_products")
     return upload_result.get("secure_url")
 

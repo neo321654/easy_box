@@ -105,16 +105,25 @@ class ProductAdmin(ModelView, model=models.Product):
     column_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.image_url]
     column_searchable_list = [models.Product.name, models.Product.sku]
     column_sortable_list = [models.Product.id, models.Product.name, models.Product.sku, models.Product.quantity]
-    
+
     form_columns = [
         models.Product.name,
         models.Product.sku,
         models.Product.quantity,
         models.Product.location,
+        models.Product.image_url, # Display image field in form
     ]
-    
-    form_extra_fields = {
-        'image': FileField(name="Image", label="Image")
+
+    # Use FileField for the image_url model field
+    form_overrides = {
+        'image_url': FileField
+    }
+
+    # Rename the label for clarity
+    form_args = {
+        'image_url': {
+            'label': 'Image'
+        }
     }
 
     column_formatters = {
@@ -122,16 +131,14 @@ class ProductAdmin(ModelView, model=models.Product):
     }
 
     async def on_model_change(self, data: dict, model: any, is_created: bool, request: Request) -> None:
-        try:
-            form = await request.form()
-            upload = form.get("image")
+        # The uploaded file will be in data['image_url']
+        upload = data.get("image_url")
 
-            if upload and upload.filename:
+        if upload and getattr(upload, 'filename', None):
+            if upload.filename: # Check if a new file was actually uploaded
                 image_url = save_upload_file(upload)
                 model.image_url = image_url
-        except Exception as e:
-            # Log the error if something goes wrong
-            log.error(f"Failed to upload image to Cloudinary from admin: {e}")
+        # If no new file is uploaded, we keep the old value, so we don't need an else.
 
 class OrderAdmin(ModelView, model=models.Order):
     column_list = [models.Order.id, models.Order.customer_name, models.Order.status]
