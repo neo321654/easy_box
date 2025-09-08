@@ -53,9 +53,13 @@ class ProductSerializer(serializers.ModelSerializer):
             # Set the main image URL
             product.image_url = upload_result['secure_url']
             
-            # Build the thumbnail URL from the public_id of the uploaded image
-            # DIAGNOSTIC: Use the same URL as the main image to test.
-            product.thumbnail_url = upload_result['secure_url']
+            # Build the thumbnail URL from the public_id and format of the uploaded image
+            public_id = upload_result['public_id']
+            file_format = upload_result['format']
+            thumbnail_url = cloudinary.CloudinaryImage(public_id, format=file_format).build_url(
+                transformation=[{'width': 100, 'height': 100, 'crop': 'thumb'}]
+            )
+            product.thumbnail_url = thumbnail_url
             
             product.save()
         return product
