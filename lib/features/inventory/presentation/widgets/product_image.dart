@@ -23,24 +23,23 @@ class ProductImage extends StatelessWidget {
       return Icon(Icons.image, size: width, color: Colors.grey);
     }
 
-    // Check if the imageUrl is a local file path
-    if (imageUrl!.startsWith('/') && !imageUrl!.startsWith('/images/')) {
+    // Check if the imageUrl is a local file path or a full URL
+    if (imageUrl!.startsWith('/')) {
+      // This handles local file paths for images that have just been picked
+      // and not yet uploaded.
       return Image.file(
         File(imageUrl!),
         width: width,
         height: height,
         fit: fit,
+        errorBuilder: (context, error, stackTrace) =>
+            Icon(Icons.broken_image, size: width, color: Colors.grey, key: const ValueKey('broken_local_image_icon')),
       );
     }
 
-    // The image URL from the backend will be a relative path, e.g., /images/some_image.jpg
-    // We need to prepend the base URL of the backend to make it a full URL.
-    final fullImageUrl = imageUrl!.startsWith('http')
-        ? imageUrl
-        : 'http://38.244.208.106:8000$imageUrl';
-
+    // At this point, the imageUrl should be a full URL from the backend (Cloudinary).
     return CachedNetworkImage(
-      imageUrl: fullImageUrl!,
+      imageUrl: imageUrl!,
       width: width,
       height: height,
       fit: fit,
@@ -51,7 +50,7 @@ class ProductImage extends StatelessWidget {
         child: const Center(child: CircularProgressIndicator()),
       ),
       errorWidget: (context, url, error) =>
-          Tooltip(message: error.toString(), child: Icon(Icons.broken_image, size: width, color: Colors.grey, key: const ValueKey('broken_image_icon'))),
+          Tooltip(message: error.toString(), child: Icon(Icons.broken_image, size: width, color: Colors.grey, key: const ValueKey('broken_network_image_icon'))),
     );
   }
 }
