@@ -56,11 +56,11 @@ final sl = GetIt.instance;
 Future<void> init({Locale? systemLocale}) async {
   // Initial mock data for the persistent mock backend
   final List<ProductModel> initialMockProducts = [
-    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150, location: 'A1-01-01'),
-    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85, location: 'A1-01-02'),
-    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110, location: 'A2-03-05'),
-    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200, location: 'C4-02-01'),
-    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350, location: 'C4-02-02'),
+    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150, location: 'A1-01-01', thumbnailUrl: null),
+    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85, location: 'A1-01-02', thumbnailUrl: null),
+    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110, location: 'A2-03-05', thumbnailUrl: null),
+    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200, location: 'C4-02-01', thumbnailUrl: null),
+    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350, location: 'C4-02-02', thumbnailUrl: null),
   ];
 
   //####################
@@ -293,20 +293,23 @@ Future<void> init({Locale? systemLocale}) async {
     join(await getDatabasesPath(), 'easy_box_mock_backend_database.db'),
     onCreate: (db, version) async {
       await db.execute(
-        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT)',
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT, thumbnail_url TEXT)',
       );
       // Populate with initial mock data
       for (final product in initialMockProducts) {
         await db.insert('products', product.toJson());
       }
     },
-    version: 3, // Separate version for mock backend DB
+    version: 4, // Separate version for mock backend DB
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute('ALTER TABLE products ADD COLUMN location TEXT');
       }
       if (oldVersion < 3) {
         db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
+      }
+      if (oldVersion < 4) {
+        db.execute('ALTER TABLE products ADD COLUMN thumbnail_url TEXT');
       }
     },
   );
