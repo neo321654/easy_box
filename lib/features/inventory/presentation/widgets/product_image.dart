@@ -61,6 +61,5 @@ class ProductImage extends StatelessWidget {
                 key: const ValueKey('broken_local_image_icon'))),
       );
     }
-    );
   }
 }
