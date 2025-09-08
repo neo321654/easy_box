@@ -136,7 +136,6 @@ void main() {
 
         final productListItem = find.byValueKey('product_list_item_SKU-TS-RED-L');
 
-        // Check that the broken image icon is not present within the list item.
         await driver.waitForAbsent(find.descendant(
           of: productListItem,
           matching: find.byValueKey('broken_image_icon'),
