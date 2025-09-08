@@ -1,7 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from rest_framework.authtoken import views
-from .views import UserViewSet, ProductViewSet, OrderViewSet, OrderLineViewSet
+from .views import UserViewSet, ProductViewSet, OrderViewSet, OrderLineViewSet, CustomObtainAuthToken
 
 router = DefaultRouter()
 router.register(r'users', UserViewSet)
@@ -11,5 +10,5 @@ router.register(r'orderlines', OrderLineViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/token/', views.obtain_auth_token)
+    path('auth/token/', CustomObtainAuthToken.as_view())
 ]
