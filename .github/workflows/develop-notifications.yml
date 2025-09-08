@@ -30,7 +30,29 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
 
-      - name: Send APK to Telegram
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: build-${{ github.sha }}
+          release_name: Build ${{ github.sha }}
+          draft: false
+          prerelease: true
+
+      - name: Upload Release Asset
+        id: upload-release-asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./build/app/outputs/flutter-apk/app-release.apk
+          asset_name: app-release.apk
+          asset_content_type: application/vnd.android.package-archive
+
+      - name: Send Telegram message with link
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -43,4 +65,5 @@ jobs:
             ${{ github.event.head_commit.message }}
             
             See commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
-          document: "build/app/outputs/flutter-apk/app-release.apk"
+
+            Download APK: ${{ steps.upload-release-asset.outputs.browser_download_url }}
