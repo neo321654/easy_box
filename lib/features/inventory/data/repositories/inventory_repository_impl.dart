@@ -33,6 +33,8 @@ class InventoryRepositoryImpl implements InventoryRepository {
       try {
         await _syncPendingUpdates(); // 1. PUSH local changes to remote
         final remoteProducts = await remoteDataSource.getProducts(); // 2. PULL latest from remote
+        // ignore: avoid_print
+        print('[DEBUG] Fetched remote products: ${remoteProducts.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}');
         await localDataSource.cacheProducts(remoteProducts); // 3. Cache latest remote data
         return Right(remoteProducts); // 4. Return fresh data
       } on ServerException {

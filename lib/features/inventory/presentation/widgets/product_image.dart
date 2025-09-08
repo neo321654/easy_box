@@ -19,6 +19,9 @@ class ProductImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: avoid_print
+    print('[DEBUG] ProductImage received URL: $imageUrl');
+
     if (imageUrl == null || imageUrl!.isEmpty) {
       return Icon(Icons.image, size: width, color: Colors.grey);
     }

@@ -16,6 +16,11 @@ class ProductListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final urlForImage = product.thumbnailUrl ?? product.imageUrl;
+    // ignore: avoid_print
+    print(
+        '[DEBUG] ProductListItem for SKU ${product.sku}: Using URL: $urlForImage (Thumbnail: ${product.thumbnailUrl}, Image: ${product.imageUrl})');
+
     return InkWell(
       key: ValueKey('product_list_item_${product.sku}'),
       onTap: () async {

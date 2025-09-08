@@ -30,7 +30,11 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     final failureOrProducts = await _getProductsUseCase();
     failureOrProducts.fold(
       (failure) => emit(const InventoryFailure()),
-      (products) => emit(InventorySuccess(allProducts: products)),
+      (products) {
+        // ignore: avoid_print
+        print('[DEBUG] InventoryBloc received products: ${products.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}');
+        emit(InventorySuccess(allProducts: products));
+      },
     );
   }
 
