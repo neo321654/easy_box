@@ -23,34 +23,44 @@ class ProductImage extends StatelessWidget {
       return Icon(Icons.image, size: width, color: Colors.grey);
     }
 
-    // Check if the imageUrl is a local file path or a full URL
-    if (imageUrl!.startsWith('/')) {
-      // This handles local file paths for images that have just been picked
-      // and not yet uploaded.
+    final uri = Uri.tryParse(imageUrl!);
+
+    // A network URL will be an absolute URI with an http/https scheme.
+    // A local file path will not.
+    if (uri != null && uri.isAbsolute) {
+      return CachedNetworkImage(
+        imageUrl: imageUrl!,
+        width: width,
+        height: height,
+        fit: fit,
+        placeholder: (context, url) => Container(
+          width: width,
+          height: height,
+          color: Colors.grey[200],
+          child: const Center(child: CircularProgressIndicator()),
+        ),
+        errorWidget: (context, url, error) => Tooltip(
+            message: error.toString(),
+            child: Icon(Icons.broken_image,
+                size: width,
+                color: Colors.grey,
+                key: const ValueKey('broken_network_image_icon'))),
+      );
+    } else {
+      // It's a local file path
       return Image.file(
         File(imageUrl!),
         width: width,
         height: height,
         fit: fit,
-        errorBuilder: (context, error, stackTrace) =>
-            Icon(Icons.broken_image, size: width, color: Colors.grey, key: const ValueKey('broken_local_image_icon')),
+        errorBuilder: (context, error, stackTrace) => Tooltip(
+            message: error.toString(),
+            child: Icon(Icons.broken_image,
+                size: width,
+                color: Colors.grey,
+                key: const ValueKey('broken_local_image_icon'))),
       );
     }
-
-    // At this point, the imageUrl should be a full URL from the backend (Cloudinary).
-    return CachedNetworkImage(
-      imageUrl: imageUrl!,
-      width: width,
-      height: height,
-      fit: fit,
-      placeholder: (context, url) => Container(
-        width: width,
-        height: height,
-        color: Colors.grey[200],
-        child: const Center(child: CircularProgressIndicator()),
-      ),
-      errorWidget: (context, url, error) =>
-          Tooltip(message: error.toString(), child: Icon(Icons.broken_image, size: width, color: Colors.grey, key: const ValueKey('broken_network_image_icon'))),
     );
   }
 }
