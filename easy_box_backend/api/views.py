@@ -39,12 +39,15 @@ class ProductViewSet(viewsets.ModelViewSet):
         if not image:
             return Response({'error': 'No image provided'}, status=400)
 
-        upload_result = cloudinary.uploader.upload(image)
-        product.image_url = upload_result['secure_url']
-        product.save()
+        try:
+            upload_result = cloudinary.uploader.upload(image)
+            product.image_url = upload_result['secure_url']
+            product.save()
 
-        serializer = self.get_serializer(product)
-        return Response(serializer.data)
+            serializer = self.get_serializer(product)
+            return Response(serializer.data)
+        except Exception as e:
+            return Response({'error': str(e)}, status=500)
 
 class OrderViewSet(viewsets.ModelViewSet):
     queryset = Order.objects.all()
