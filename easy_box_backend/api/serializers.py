@@ -32,9 +32,20 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class ProductSerializer(serializers.ModelSerializer):
+    image = serializers.ImageField(write_only=True, required=False)
+
     class Meta:
         model = Product
         fields = '__all__'
+
+    def create(self, validated_data):
+        image = validated_data.pop('image', None)
+        product = super().create(validated_data)
+        if image:
+            upload_result = cloudinary.uploader.upload(image)
+            product.image_url = upload_result['secure_url']
+            product.save()
+        return product
 
 class OrderLineSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
