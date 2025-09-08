@@ -18,6 +18,7 @@ class Product(models.Model):
     quantity = models.IntegerField()
     location = models.CharField(max_length=100, blank=True, null=True)
     image_url = models.CharField(max_length=2048, blank=True, null=True)
+    thumbnail_url = models.CharField(max_length=2048, blank=True, null=True)
 
     def __str__(self):
         return f"SKU: {self.sku} | {self.name}"

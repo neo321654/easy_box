@@ -51,8 +51,12 @@ class ProductViewSet(viewsets.ModelViewSet):
             return Response({'error': 'No image provided'}, status=400)
 
         try:
-            upload_result = cloudinary.uploader.upload(image)
+            upload_result = cloudinary.uploader.upload(
+                image,
+                transformation={"width": 150, "height": 150, "crop": "thumb"}
+            )
             product.image_url = upload_result['secure_url']
+            product.thumbnail_url = cloudinary.CloudinaryImage(upload_result['public_id']).build_url(transformation={"width": 150, "height": 150, "crop": "thumb"})
             product.save()
 
             serializer = self.get_serializer(product)

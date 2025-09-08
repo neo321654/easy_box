@@ -16,8 +16,12 @@ class ProductAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         if 'image' in form.cleaned_data and form.cleaned_data['image']:
             image = form.cleaned_data['image']
-            upload_result = cloudinary.uploader.upload(image)
+            upload_result = cloudinary.uploader.upload(
+                image,
+                transformation={"width": 150, "height": 150, "crop": "thumb"}
+            )
             obj.image_url = upload_result['secure_url']
+            obj.thumbnail_url = cloudinary.CloudinaryImage(upload_result['public_id']).build_url(transformation={"width": 150, "height": 150, "crop": "thumb"})
         super().save_model(request, obj, form, change)
 
 admin.site.register(User)

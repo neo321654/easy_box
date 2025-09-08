@@ -51,7 +51,7 @@ class ProductImage extends StatelessWidget {
         child: const Center(child: CircularProgressIndicator()),
       ),
       errorWidget: (context, url, error) =>
-          Icon(Icons.broken_image, size: width, color: Colors.grey),
+          Tooltip(message: error.toString(), child: Icon(Icons.broken_image, size: width, color: Colors.grey)),
     );
   }
 }

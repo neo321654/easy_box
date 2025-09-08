@@ -35,7 +35,7 @@ class ProductListItem extends StatelessWidget {
           width: 50,
           height: 50,
           child: ProductImage(
-            imageUrl: product.imageUrl,
+            imageUrl: product.thumbnailUrl ?? product.imageUrl,
           ),
         ),
         title: Text(product.name),
