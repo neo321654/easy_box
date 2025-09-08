@@ -10,8 +10,8 @@ class ScanningBloc extends Bloc<ScanningEvent, ScanningState> {
   final FindProductBySkuUseCase _findProductBySkuUseCase;
 
   ScanningBloc({required FindProductBySkuUseCase findProductBySkuUseCase})
-      : _findProductBySkuUseCase = findProductBySkuUseCase,
-        super(ScanningInitial()) {
+    : _findProductBySkuUseCase = findProductBySkuUseCase,
+      super(ScanningInitial()) {
     on<BarcodeDetected>(_onBarcodeDetected);
   }
 
@@ -22,15 +22,14 @@ class ScanningBloc extends Bloc<ScanningEvent, ScanningState> {
     emit(ScanningLoading());
     final failureOrProduct = await _findProductBySkuUseCase(event.sku);
 
-    failureOrProduct.fold(
-      (failure) => emit(const ScanningFailure()),
-      (product) {
-        if (product != null) {
-          emit(ScanningProductFound(product));
-        } else {
-          emit(ScanningProductNotFound());
-        }
-      },
-    );
+    failureOrProduct.fold((failure) => emit(const ScanningFailure()), (
+      product,
+    ) {
+      if (product != null) {
+        emit(ScanningProductFound(product));
+      } else {
+        emit(ScanningProductNotFound());
+      }
+    });
   }
 }

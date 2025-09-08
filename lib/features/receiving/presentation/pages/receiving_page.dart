@@ -50,11 +50,11 @@ class _ReceivingViewState extends State<_ReceivingView> {
   void _addStock() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<ReceivingBloc>().add(
-            StockAdded(
-              sku: _skuController.text,
-              quantity: int.tryParse(_quantityController.text) ?? 0,
-            ),
-          );
+        StockAdded(
+          sku: _skuController.text,
+          quantity: int.tryParse(_quantityController.text) ?? 0,
+        ),
+      );
     }
   }
 
@@ -68,8 +68,11 @@ class _ReceivingViewState extends State<_ReceivingView> {
   void _showCreateProductSheet(String sku) {
     final quantity = int.tryParse(_quantityController.text) ?? 0;
     if (quantity <= 0) {
-      showAppSnackBar(context, context.S.quantityMustBePositiveError,
-          isError: true);
+      showAppSnackBar(
+        context,
+        context.S.quantityMustBePositiveError,
+        isError: true,
+      );
       return;
     }
 
@@ -81,10 +84,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
         // in the tree, specifically in the ReceivingPage build method.
         return BlocProvider.value(
           value: context.read<ReceivingBloc>(),
-          child: CreateProductAndAddStockForm(
-            sku: sku,
-            quantity: quantity,
-          ),
+          child: CreateProductAndAddStockForm(sku: sku, quantity: quantity),
         );
       },
     );
@@ -93,9 +93,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.S.receiveStockPageTitle),
-      ),
+      appBar: AppBar(title: Text(context.S.receiveStockPageTitle)),
       body: BlocListener<ReceivingBloc, ReceivingState>(
         listener: (context, state) {
           if (state is ReceivingSuccess) {
@@ -103,20 +101,26 @@ class _ReceivingViewState extends State<_ReceivingView> {
                 ? context.S.productCreatedAndStockAddedSuccessfully(state.sku)
                 : context.S.stockAddedSuccessfully(state.sku);
             showAppSnackBar(
-                context,
-                message +
-                    (state.isQueued ? context.S.offlineIndicator : ''));
+              context,
+              message + (state.isQueued ? context.S.offlineIndicator : ''),
+            );
             _skuController.clear();
             _quantityController.clear();
             FocusScope.of(context).unfocus();
           } else if (state is AddStockFailure) {
             showAppSnackBar(context, context.S.failedToAddStock, isError: true);
           } else if (state is CreateProductFailure) {
-            showAppSnackBar(context, context.S.failedToCreateProduct, isError: true);
+            showAppSnackBar(
+              context,
+              context.S.failedToCreateProduct,
+              isError: true,
+            );
           } else if (state is AddStockAfterCreateFailure) {
             showAppSnackBar(
-                context, context.S.failedToAddStockAfterCreatingProduct,
-                isError: true);
+              context,
+              context.S.failedToAddStockAfterCreatingProduct,
+              isError: true,
+            );
           } else if (state is ReceivingProductNotFound) {
             _showCreateProductSheet(state.sku);
           }

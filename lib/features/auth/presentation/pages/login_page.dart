@@ -33,11 +33,11 @@ class _LoginPageState extends State<LoginPage> {
 
   void _login() {
     context.read<AuthBloc>().add(
-          LoginButtonPressed(
-            email: _emailController.text,
-            password: _passwordController.text,
-          ),
-        );
+      LoginButtonPressed(
+        email: _emailController.text,
+        password: _passwordController.text,
+      ),
+    );
   }
 
   void _loginAnonymously() {
@@ -47,9 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.S.loginPageTitle),
-      ),
+      appBar: AppBar(title: Text(context.S.loginPageTitle)),
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthFailure) {
@@ -93,14 +91,15 @@ class _LoginPageState extends State<LoginPage> {
                     const SizedBox(height: AppDimensions.small),
                     TextButton(
                       key: const ValueKey('login_anonymous_button'),
-                      onPressed: state is AuthLoading ? null : _loginAnonymously,
+                      onPressed: state is AuthLoading
+                          ? null
+                          : _loginAnonymously,
                       child: Text(context.S.loginAnonymousButtonText),
                     ),
                   ],
                 ),
               ),
-              if (state is AuthLoading)
-                const LoadingIndicator(),
+              if (state is AuthLoading) const LoadingIndicator(),
             ],
           );
         },

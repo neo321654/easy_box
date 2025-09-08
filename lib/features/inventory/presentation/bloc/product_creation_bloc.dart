@@ -6,12 +6,13 @@ import 'package:easy_box/core/error/failures.dart';
 part 'product_creation_event.dart';
 part 'product_creation_state.dart';
 
-class ProductCreationBloc extends Bloc<ProductCreationEvent, ProductCreationState> {
+class ProductCreationBloc
+    extends Bloc<ProductCreationEvent, ProductCreationState> {
   final CreateProductUseCase _createProductUseCase;
 
   ProductCreationBloc({required CreateProductUseCase createProductUseCase})
-      : _createProductUseCase = createProductUseCase,
-        super(ProductCreationInitial()) {
+    : _createProductUseCase = createProductUseCase,
+      super(ProductCreationInitial()) {
     on<ProductCreateRequested>(_onCreateProductRequested);
   }
 
@@ -27,15 +28,16 @@ class ProductCreationBloc extends Bloc<ProductCreationEvent, ProductCreationStat
       imageUrl: event.imageUrl,
     );
 
-    failureOrResult.fold(
-      (failure) {
-        if (failure is SkuAlreadyExistsFailure) {
-          emit(ProductCreationFailure(message: 'Product with SKU ${failure.sku} already exists.'));
-        } else {
-          emit(const ProductCreationFailure());
-        }
-      },
-      (result) => emit(ProductCreationSuccess(isQueued: result.isQueued)),
-    );
+    failureOrResult.fold((failure) {
+      if (failure is SkuAlreadyExistsFailure) {
+        emit(
+          ProductCreationFailure(
+            message: 'Product with SKU ${failure.sku} already exists.',
+          ),
+        );
+      } else {
+        emit(const ProductCreationFailure());
+      }
+    }, (result) => emit(ProductCreationSuccess(isQueued: result.isQueued)));
   }
 }

@@ -20,10 +20,7 @@ class ErrorDisplay extends StatelessWidget {
         children: [
           Text(message),
           const SizedBox(height: 16),
-          ElevatedButton(
-            onPressed: onRetry,
-            child: Text(retryButtonText),
-          ),
+          ElevatedButton(onPressed: onRetry, child: Text(retryButtonText)),
         ],
       ),
     );

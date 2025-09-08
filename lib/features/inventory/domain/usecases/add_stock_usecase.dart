@@ -8,7 +8,10 @@ class AddStockUseCase {
 
   AddStockUseCase(this.repository);
 
-  Future<Either<Failure, OperationResult>> call({required String sku, required int quantity}) {
+  Future<Either<Failure, OperationResult>> call({
+    required String sku,
+    required int quantity,
+  }) {
     return repository.addStock(sku, quantity);
   }
 }

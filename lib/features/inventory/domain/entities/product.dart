@@ -20,5 +20,13 @@ class Product extends Equatable {
   });
 
   @override
-  List<Object?> get props => [id, name, sku, quantity, location, imageUrl, thumbnailUrl];
+  List<Object?> get props => [
+    id,
+    name,
+    sku,
+    quantity,
+    location,
+    imageUrl,
+    thumbnailUrl,
+  ];
 }

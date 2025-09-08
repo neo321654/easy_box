@@ -17,9 +17,11 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     required SaveThemeModeUseCase saveThemeModeUseCase,
     required SaveLocaleUseCase saveLocaleUseCase,
     Locale? systemLocale,
-  })  : _saveThemeModeUseCase = saveThemeModeUseCase,
-        _saveLocaleUseCase = saveLocaleUseCase,
-        super(initialState.copyWith(locale: initialState.locale ?? systemLocale)) {
+  }) : _saveThemeModeUseCase = saveThemeModeUseCase,
+       _saveLocaleUseCase = saveLocaleUseCase,
+       super(
+         initialState.copyWith(locale: initialState.locale ?? systemLocale),
+       ) {
     on<ThemeModeChanged>(_onThemeModeChanged);
     on<LocaleChanged>(_onLocaleChanged);
   }

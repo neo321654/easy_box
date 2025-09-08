@@ -13,9 +13,7 @@ class OrderRemoteDataSourceApiImpl implements OrderRemoteDataSource {
 
   Future<Options> _getOptions() async {
     final token = prefs.getString('user_token');
-    return Options(headers: {
-      'Authorization': 'Token $token',
-    });
+    return Options(headers: {'Authorization': 'Token $token'});
   }
 
   @override

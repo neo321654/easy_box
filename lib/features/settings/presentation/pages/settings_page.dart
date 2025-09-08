@@ -11,9 +11,7 @@ class SettingsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.S.settingsPageTitle),
-      ),
+      appBar: AppBar(title: Text(context.S.settingsPageTitle)),
       body: BlocBuilder<SettingsBloc, SettingsState>(
         builder: (context, settingsState) {
           return ListView(
@@ -52,7 +50,9 @@ class SettingsPage extends StatelessWidget {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.medium),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.medium,
+                  ),
                   child: ToggleButtons(
                     borderRadius: BorderRadius.circular(8.0),
                     isSelected: [
@@ -61,8 +61,14 @@ class SettingsPage extends StatelessWidget {
                       settingsState.themeMode == ThemeMode.system,
                     ],
                     onPressed: (index) {
-                      final themeMode = [ThemeMode.light, ThemeMode.dark, ThemeMode.system][index];
-                      context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
+                      final themeMode = [
+                        ThemeMode.light,
+                        ThemeMode.dark,
+                        ThemeMode.system,
+                      ][index];
+                      context.read<SettingsBloc>().add(
+                        ThemeModeChanged(themeMode),
+                      );
                     },
                     children: [
                       Padding(
@@ -91,7 +97,9 @@ class SettingsPage extends StatelessWidget {
               ),
               Center(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.medium),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: AppDimensions.medium,
+                  ),
                   child: ToggleButtons(
                     borderRadius: BorderRadius.circular(8.0),
                     isSelected: [
@@ -100,7 +108,11 @@ class SettingsPage extends StatelessWidget {
                       settingsState.locale == const Locale('de'),
                     ],
                     onPressed: (index) {
-                      final locale = [const Locale('ru'), const Locale('en'), const Locale('de')][index];
+                      final locale = [
+                        const Locale('ru'),
+                        const Locale('en'),
+                        const Locale('de'),
+                      ][index];
                       context.read<SettingsBloc>().add(LocaleChanged(locale));
                     },
                     children: [

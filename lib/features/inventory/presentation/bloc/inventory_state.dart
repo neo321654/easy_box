@@ -22,18 +22,22 @@ class InventorySuccess extends InventoryState {
       return allProducts;
     } else {
       return allProducts
-          .where((product) =>
-              product.name.toLowerCase().contains(searchTerm!.toLowerCase()) ||
-              product.sku.toLowerCase().contains(searchTerm!.toLowerCase()) ||
-              (product.location?.toLowerCase().contains(searchTerm!.toLowerCase()) ?? false))
+          .where(
+            (product) =>
+                product.name.toLowerCase().contains(
+                  searchTerm!.toLowerCase(),
+                ) ||
+                product.sku.toLowerCase().contains(searchTerm!.toLowerCase()) ||
+                (product.location?.toLowerCase().contains(
+                      searchTerm!.toLowerCase(),
+                    ) ??
+                    false),
+          )
           .toList();
     }
   }
 
-  InventorySuccess copyWith({
-    List<Product>? allProducts,
-    String? searchTerm,
-  }) {
+  InventorySuccess copyWith({List<Product>? allProducts, String? searchTerm}) {
     return InventorySuccess(
       allProducts: allProducts ?? this.allProducts,
       searchTerm: searchTerm ?? this.searchTerm,

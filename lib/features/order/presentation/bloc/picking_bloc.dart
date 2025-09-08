@@ -10,8 +10,8 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
   final UpdateOrderUseCase _updateOrderUseCase;
 
   PickingBloc({required UpdateOrderUseCase updateOrderUseCase})
-      : _updateOrderUseCase = updateOrderUseCase,
-        super(const PickingState()) {
+    : _updateOrderUseCase = updateOrderUseCase,
+      super(const PickingState()) {
     on<InitializePicking>(_onInitializePicking);
     on<LineItemPicked>(_onLineItemPicked);
     on<PickingCompleted>(_onPickingCompleted);
@@ -36,10 +36,7 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
     emit(state.copyWith(order: sortedOrder));
   }
 
-  void _onLineItemPicked(
-    LineItemPicked event,
-    Emitter<PickingState> emit,
-  ) {
+  void _onLineItemPicked(LineItemPicked event, Emitter<PickingState> emit) {
     if (state.order == null) return;
 
     final updatedLines = state.order!.lines.map((line) {
@@ -66,10 +63,7 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
     emit(state.copyWith(order: updatedOrder));
   }
 
-  void _onBarcodeScanned(
-    BarcodeScanned event,
-    Emitter<PickingState> emit,
-  ) {
+  void _onBarcodeScanned(BarcodeScanned event, Emitter<PickingState> emit) {
     if (state.order == null) return;
 
     final updatedLines = state.order!.lines.map((line) {
@@ -114,7 +108,8 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
     final result = await _updateOrderUseCase(completedOrder);
 
     result.fold(
-      (failure) => emit(state.copyWith(isLoading: false)), // TODO: Handle failure
+      (failure) =>
+          emit(state.copyWith(isLoading: false)), // TODO: Handle failure
       (_) => emit(state.copyWith(isLoading: false, isCompleted: true)),
     );
   }

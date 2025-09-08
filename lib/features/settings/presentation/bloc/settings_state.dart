@@ -9,10 +9,7 @@ class SettingsState extends Equatable {
   final ThemeMode themeMode;
   final Locale? locale; // Make it nullable
 
-  SettingsState copyWith({
-    ThemeMode? themeMode,
-    Locale? locale,
-  }) {
+  SettingsState copyWith({ThemeMode? themeMode, Locale? locale}) {
     return SettingsState(
       themeMode: themeMode ?? this.themeMode,
       locale: locale ?? this.locale,

@@ -3,6 +3,7 @@ import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/order/domain/entities/entities.dart';
 import 'package:easy_box/features/order/presentation/bloc/picking_bloc.dart';
 import 'package:easy_box/core/widgets/confirmation_dialog.dart';
+import 'package:easy_box/core/widgets/quantity_input_dialog.dart'; // Import the new dialog
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/core/utils/scanner_utils.dart';
@@ -35,20 +36,41 @@ class _PickingViewState extends State<_PickingView> {
     context.read<PickingBloc>().add(InitializePicking(widget.order));
   }
 
+  void _showQuantityDialog(OrderLine line) {
+    showDialog<int>(
+      context: context,
+      builder: (_) => QuantityInputDialog(
+        initialQuantity: line.quantityPicked,
+        maxQuantity: line.quantityToPick,
+      ),
+    ).then((quantity) {
+      if (!mounted) { return; } // Add mounted check here
+      if (quantity != null) {
+        context.read<PickingBloc>().add(
+          LineItemPicked(
+            productId: line.productId,
+            quantity: quantity,
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<PickingBloc, PickingState>(
       listener: (context, state) {
         if (state.isCompleted) {
-          Navigator.of(context).pop(true); // Pop with a result to indicate success
+          Navigator.of(
+            context,
+          ).pop(true); // Pop with a result to indicate success
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: BlocBuilder<PickingBloc, PickingState>(
             builder: (context, state) {
-              return Text(
-                  context.S.pickingPageTitle(state.order?.id ?? ''));
+              return Text(context.S.pickingPageTitle(state.order?.id ?? ''));
             },
           ),
         ),
@@ -76,18 +98,31 @@ class _PickingViewState extends State<_PickingView> {
                       : const Icon(Icons.image_not_supported),
                   title: Text(line.productName),
                   subtitle: Text(
-                      '${context.S.pickingPageSkuLabel}: ${line.sku}\n${context.S.pickingPageLocationLabel}: ${line.location ?? 'N/A'}'),
-                  trailing: Text(
-                    '${line.quantityPicked}/${line.quantityToPick}',
-                    style: Theme.of(context).textTheme.titleLarge,
+                    '${context.S.pickingPageSkuLabel}: ${line.sku}\n${context.S.pickingPageLocationLabel}: ${line.location ?? 'N/A'}',
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '${line.quantityPicked}/${line.quantityToPick}',
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.edit),
+                        onPressed: isPicked
+                            ? null
+                            : () => _showQuantityDialog(line),
+                      ),
+                    ],
                   ),
                   onTap: () {
                     if (!isPicked) {
-                      // In a real app, you might show a dialog to enter quantity
-                      context.read<PickingBloc>().add(LineItemPicked(
-                            productId: line.productId,
-                            quantity: line.quantityToPick,
-                          ));
+                      context.read<PickingBloc>().add(
+                        LineItemPicked(
+                          productId: line.productId,
+                          quantity: line.quantityToPick,
+                        ),
+                      );
                     }
                   },
                 );
@@ -97,21 +132,25 @@ class _PickingViewState extends State<_PickingView> {
         ),
         floatingActionButton: BlocBuilder<PickingBloc, PickingState>(
           builder: (context, state) {
-            final allItemsPicked = state.order?.lines
-                    .every((line) => line.quantityPicked >= line.quantityToPick) ??
+            final allItemsPicked =
+                state.order?.lines.every(
+                  (line) => line.quantityPicked >= line.quantityToPick,
+                ) ??
                 false;
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   FloatingActionButton.extended(
-
                     key: const ValueKey('picking_scan_barcode_button'),
                     heroTag: 'scanFab', // Unique tag for multiple FABs
                     onPressed: () async {
-                      final pickingBloc = context.read<PickingBloc>(); // Get bloc before async gap
+                      final pickingBloc = context
+                          .read<PickingBloc>(); // Get bloc before async gap
                       final sku = await scanBarcode(context);
-                      if (!mounted) return; // Check mounted after async operation
+                      if (!mounted) {
+                        return; // Check mounted after async operation
+                      }
                       if (sku != null) {
                         pickingBloc.add(BarcodeScanned(sku));
                       }
@@ -119,7 +158,7 @@ class _PickingViewState extends State<_PickingView> {
                     label: Text(context.S.scanBarcodePageTitle),
                     icon: const Icon(Icons.qr_code_scanner),
                   ),
-                  SizedBox(height: 25,),
+                  SizedBox(height: 25),
                   FloatingActionButton.extended(
                     key: const ValueKey('picking_complete_button'),
                     heroTag: 'completeFab', // Unique tag for multiple FABs
@@ -129,10 +168,15 @@ class _PickingViewState extends State<_PickingView> {
                               context: context,
                               builder: (ctx) => ConfirmationDialog(
                                 title: context.S.pickingPageCompleteButton,
-                                content: Text(context.S.pickingCompleteConfirmation),
-                                confirmButtonText: context.S.pickingPageCompleteButton,
+                                content: Text(
+                                  context.S.pickingCompleteConfirmation,
+                                ),
+                                confirmButtonText:
+                                    context.S.pickingPageCompleteButton,
                                 onConfirm: () {
-                                  context.read<PickingBloc>().add(PickingCompleted());
+                                  context.read<PickingBloc>().add(
+                                    PickingCompleted(),
+                                  );
                                 },
                               ),
                             );
@@ -151,4 +195,3 @@ class _PickingViewState extends State<_PickingView> {
     );
   }
 }
-

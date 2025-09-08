@@ -81,13 +81,14 @@ class OrderRepositoryImpl implements OrderRepository {
         final lines = (jsonDecode(update['lines']) as List)
             .map((line) => OrderLineModel.fromJson(line))
             .toList();
-        
+
         final orderId = update['order_id'] as String;
         final existingOrder = ordersMap[orderId];
 
         final order = OrderModel(
           id: orderId,
-          customerName: existingOrder?.customerName ?? 'N/A', // Use fetched name
+          customerName:
+              existingOrder?.customerName ?? 'N/A', // Use fetched name
           status: OrderStatus.values[update['status']],
           lines: lines,
         );

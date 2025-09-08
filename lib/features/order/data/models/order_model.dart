@@ -11,12 +11,17 @@ class OrderModel extends Order {
 
   factory OrderModel.fromJson(Map<String, dynamic> json) {
     var linesList = json['lines'] as List? ?? [];
-    List<OrderLineModel> lines = linesList.map((i) => OrderLineModel.fromJson(i)).toList();
+    List<OrderLineModel> lines = linesList
+        .map((i) => OrderLineModel.fromJson(i))
+        .toList();
 
     return OrderModel(
       id: json['id'].toString(),
       customerName: json['customer_name'],
-      status: OrderStatus.values.firstWhere((e) => e.name == json['status'], orElse: () => OrderStatus.open),
+      status: OrderStatus.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => OrderStatus.open,
+      ),
       lines: lines,
     );
   }

@@ -65,15 +65,15 @@ class _AddProductFormState extends State<AddProductForm> {
   void _createProduct() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<ProductCreationBloc>().add(
-            ProductCreateRequested(
-              name: _nameController.text,
-              sku: _skuController.text,
-              location: _locationController.text.isEmpty
-                  ? null
-                  : _locationController.text,
-              imageUrl: _imageFile?.path,
-            ),
-          );
+        ProductCreateRequested(
+          name: _nameController.text,
+          sku: _skuController.text,
+          location: _locationController.text.isEmpty
+              ? null
+              : _locationController.text,
+          imageUrl: _imageFile?.path,
+        ),
+      );
     }
   }
 
@@ -83,12 +83,17 @@ class _AddProductFormState extends State<AddProductForm> {
       listener: (context, state) {
         if (state is ProductCreationSuccess) {
           showAppSnackBar(
-              context,
-              context.S.productCreatedSuccessfully +
-                  (state.isQueued ? context.S.offlineIndicator : ''));
+            context,
+            context.S.productCreatedSuccessfully +
+                (state.isQueued ? context.S.offlineIndicator : ''),
+          );
           Navigator.of(context).pop(true); // Go back after successful creation
         } else if (state is ProductCreationFailure) {
-          showAppSnackBar(context, context.S.failedToCreateProduct, isError: true);
+          showAppSnackBar(
+            context,
+            context.S.failedToCreateProduct,
+            isError: true,
+          );
         }
       },
       child: SingleChildScrollView(
@@ -104,8 +109,10 @@ class _AddProductFormState extends State<AddProductForm> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(context.S.addProductPageTitle,
-                    style: Theme.of(context).textTheme.headlineSmall),
+                Text(
+                  context.S.addProductPageTitle,
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
                 const SizedBox(height: AppDimensions.large),
                 GestureDetector(
                   onTap: _pickImage,
@@ -119,11 +126,10 @@ class _AddProductFormState extends State<AddProductForm> {
                     ),
                     child: _imageFile != null
                         ? ClipRRect(
-                            borderRadius: BorderRadius.circular(AppDimensions.small),
-                            child: Image.file(
-                              _imageFile!,
-                              fit: BoxFit.cover,
+                            borderRadius: BorderRadius.circular(
+                              AppDimensions.small,
                             ),
+                            child: Image.file(_imageFile!, fit: BoxFit.cover),
                           )
                         : Center(
                             child: Column(
@@ -153,7 +159,9 @@ class _AddProductFormState extends State<AddProductForm> {
                 TextFormField(
                   key: const ValueKey('add_product_sku_field'),
                   controller: _skuController,
-                  readOnly: widget.initialSku != null, // Make read-only if initialSku is provided
+                  readOnly:
+                      widget.initialSku !=
+                      null, // Make read-only if initialSku is provided
                   decoration: InputDecoration(
                     labelText: context.S.productSkuLabel,
                     border: const OutlineInputBorder(),

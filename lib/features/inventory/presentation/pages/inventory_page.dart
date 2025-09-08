@@ -71,9 +71,7 @@ class _InventoryViewState extends State<_InventoryView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.S.inventoryPageTitle),
-      ),
+      appBar: AppBar(title: Text(context.S.inventoryPageTitle)),
       floatingActionButton: FloatingActionButton.extended(
         key: const ValueKey('add_product_fab'),
         onPressed: () => _showAddProductSheet(),
@@ -112,14 +110,18 @@ class _InventoryViewState extends State<_InventoryView> {
                       ),
                     ),
                     onChanged: (value) {
-                      context.read<InventoryBloc>().add(SearchTermChanged(value));
+                      context.read<InventoryBloc>().add(
+                        SearchTermChanged(value),
+                      );
                     },
                   ),
                 ),
                 Expanded(
                   child: RefreshIndicator(
                     onRefresh: () async {
-                      context.read<InventoryBloc>().add(FetchProductsRequested());
+                      context.read<InventoryBloc>().add(
+                        FetchProductsRequested(),
+                      );
                     },
                     child: ListView.builder(
                       key: const ValueKey('inventory_product_list'),
@@ -141,7 +143,8 @@ class _InventoryViewState extends State<_InventoryView> {
                   Text(context.S.productNotFound),
                   const SizedBox(height: 16),
                   PrimaryButton(
-                    onPressed: () => _showAddProductSheet(initialSku: state.sku),
+                    onPressed: () =>
+                        _showAddProductSheet(initialSku: state.sku),
                     text: context.S.addProductButtonText,
                   ),
                 ],

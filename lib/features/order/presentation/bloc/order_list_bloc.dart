@@ -10,8 +10,8 @@ class OrderListBloc extends Bloc<OrderListEvent, OrderListState> {
   final GetOrdersUseCase _getOrdersUseCase;
 
   OrderListBloc({required GetOrdersUseCase getOrdersUseCase})
-      : _getOrdersUseCase = getOrdersUseCase,
-        super(OrderListInitial()) {
+    : _getOrdersUseCase = getOrdersUseCase,
+      super(OrderListInitial()) {
     on<FetchOrdersRequested>(_onFetchOrdersRequested);
   }
 

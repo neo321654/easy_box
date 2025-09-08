@@ -51,8 +51,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
     _currentProduct = widget.product;
     _nameController = TextEditingController(text: _currentProduct.name);
     _skuController = TextEditingController(text: _currentProduct.sku);
-    _locationController =
-        TextEditingController(text: _currentProduct.location);
+    _locationController = TextEditingController(text: _currentProduct.location);
   }
 
   @override
@@ -97,9 +96,9 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
       location: _locationController.text,
       imageUrl: _imageFile?.path ?? _currentProduct.imageUrl,
     );
-    context
-        .read<ProductDetailBloc>()
-        .add(UpdateProductRequested(updatedProduct));
+    context.read<ProductDetailBloc>().add(
+      UpdateProductRequested(updatedProduct),
+    );
   }
 
   void _updateQuantity(int change) {
@@ -115,9 +114,9 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
         imageUrl: _currentProduct.imageUrl,
       );
       // We dispatch an event to the BLoC to handle the update
-      context
-          .read<ProductDetailBloc>()
-          .add(UpdateProductRequested(updatedProduct));
+      context.read<ProductDetailBloc>().add(
+        UpdateProductRequested(updatedProduct),
+      );
     }
   }
 
@@ -126,12 +125,14 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
       context: context,
       builder: (ctx) => ConfirmationDialog(
         title: context.S.deleteProductDialogTitle,
-        content: Text(context.S.deleteConfirmationMessage(_currentProduct.name)),
+        content: Text(
+          context.S.deleteConfirmationMessage(_currentProduct.name),
+        ),
         confirmButtonText: context.S.deleteButtonText,
         onConfirm: () {
-          context
-              .read<ProductDetailBloc>()
-              .add(DeleteProductRequested(_currentProduct.id));
+          context.read<ProductDetailBloc>().add(
+            DeleteProductRequested(_currentProduct.id),
+          );
         },
       ),
     );
@@ -154,9 +155,11 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
               Navigator.of(context).pop(_currentProduct);
             },
           ),
-          title: Text(_isEditing
-              ? context.S.editProductDialogTitle
-              : _currentProduct.name),
+          title: Text(
+            _isEditing
+                ? context.S.editProductDialogTitle
+                : _currentProduct.name,
+          ),
           actions: [
             if (_isEditing)
               IconButton(
@@ -180,8 +183,10 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
               final message = state.type == ProductDetailSuccessType.updated
                   ? context.S.productUpdatedSuccessfullyMessage
                   : context.S.productDeletedSuccessfullyMessage;
-              showAppSnackBar(context,
-                  message + (state.isQueued ? context.S.offlineIndicator : ''));
+              showAppSnackBar(
+                context,
+                message + (state.isQueued ? context.S.offlineIndicator : ''),
+              );
               if (state.type == ProductDetailSuccessType.updated) {
                 setState(() {
                   _currentProduct = state.updatedProduct!;
@@ -200,12 +205,16 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
               }
             } else if (state is ProductUpdateFailure) {
               showAppSnackBar(
-                  context, context.S.failedToUpdateProductMessage,
-                  isError: true);
+                context,
+                context.S.failedToUpdateProductMessage,
+                isError: true,
+              );
             } else if (state is ProductDeleteFailure) {
               showAppSnackBar(
-                  context, context.S.failedToDeleteProductMessage,
-                  isError: true);
+                context,
+                context.S.failedToDeleteProductMessage,
+                isError: true,
+              );
             }
           },
           child: SingleChildScrollView(
@@ -217,7 +226,8 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
                   if (!_isEditing)
                     ProductImage(
                       imageUrl: _currentProduct.imageUrl,
-                      width: MediaQuery.of(context).size.width -
+                      width:
+                          MediaQuery.of(context).size.width -
                           (AppDimensions.medium * 2),
                       height: AppDimensions.productImageHeight,
                     ),
@@ -295,12 +305,8 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
             ),
             child: _imageFile != null
                 ? ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(AppDimensions.small),
-                    child: Image.file(
-                      _imageFile!,
-                      fit: BoxFit.cover,
-                    ),
+                    borderRadius: BorderRadius.circular(AppDimensions.small),
+                    child: Image.file(_imageFile!, fit: BoxFit.cover),
                   )
                 : ProductImage(
                     imageUrl: _currentProduct.imageUrl,
@@ -312,8 +318,7 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
         const SizedBox(height: AppDimensions.medium),
         TextFormField(
           controller: _nameController,
-          decoration:
-              InputDecoration(labelText: context.S.productNameLabel),
+          decoration: InputDecoration(labelText: context.S.productNameLabel),
         ),
         const SizedBox(height: AppDimensions.medium),
         TextFormField(
@@ -323,8 +328,9 @@ class _ProductDetailViewState extends State<_ProductDetailView> {
         const SizedBox(height: AppDimensions.medium),
         TextFormField(
           controller: _locationController,
-          decoration:
-              InputDecoration(labelText: context.S.productLocationLabel),
+          decoration: InputDecoration(
+            labelText: context.S.productLocationLabel,
+          ),
         ),
       ],
     );

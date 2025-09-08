@@ -14,10 +14,9 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
   ProductDetailBloc({
     required UpdateProductUseCase updateProductUseCase,
     required DeleteProductUseCase deleteProductUseCase,
-  })
-      : _updateProductUseCase = updateProductUseCase,
-        _deleteProductUseCase = deleteProductUseCase,
-        super(ProductDetailInitial()) {
+  }) : _updateProductUseCase = updateProductUseCase,
+       _deleteProductUseCase = deleteProductUseCase,
+       super(ProductDetailInitial()) {
     on<UpdateProductRequested>(_onUpdateProductRequested);
     on<DeleteProductRequested>(_onDeleteProductRequested);
   }
@@ -30,7 +29,13 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrResult = await _updateProductUseCase(event.product);
     failureOrResult.fold(
       (failure) => emit(const ProductUpdateFailure()),
-      (result) => emit(ProductDetailSuccess(type: ProductDetailSuccessType.updated, updatedProduct: event.product, isQueued: result.isQueued)),
+      (result) => emit(
+        ProductDetailSuccess(
+          type: ProductDetailSuccessType.updated,
+          updatedProduct: event.product,
+          isQueued: result.isQueued,
+        ),
+      ),
     );
   }
 
@@ -42,7 +47,12 @@ class ProductDetailBloc extends Bloc<ProductDetailEvent, ProductDetailState> {
     final failureOrResult = await _deleteProductUseCase(event.id);
     failureOrResult.fold(
       (failure) => emit(const ProductDeleteFailure()),
-      (result) => emit(ProductDetailSuccess(type: ProductDetailSuccessType.deleted, isQueued: result.isQueued)),
+      (result) => emit(
+        ProductDetailSuccess(
+          type: ProductDetailSuccessType.deleted,
+          isQueued: result.isQueued,
+        ),
+      ),
     );
   }
 }

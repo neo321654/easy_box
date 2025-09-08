@@ -23,17 +23,17 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
       batch.delete(_tableOrderLines);
       for (final order in orders) {
         // Use toJsonForDb which excludes lines and uses int for status
-        batch.insert(_tableOrders, order.toJsonForDb(),
-            conflictAlgorithm: ConflictAlgorithm.replace);
+        batch.insert(
+          _tableOrders,
+          order.toJsonForDb(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
         for (final line in order.lines) {
           final lineModel = line as OrderLineModel;
-          batch.insert(
-              _tableOrderLines,
-              {
-                'order_id': order.id,
-                ...lineModel.toJson(),
-              },
-              conflictAlgorithm: ConflictAlgorithm.replace);
+          batch.insert(_tableOrderLines, {
+            'order_id': order.id,
+            ...lineModel.toJson(),
+          }, conflictAlgorithm: ConflictAlgorithm.replace);
         }
       }
       await batch.commit(noResult: true);
@@ -42,7 +42,9 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
 
   @override
   Future<List<OrderModel>> getLastOrders() async {
-    final List<Map<String, dynamic>> orderMaps = await database.query(_tableOrders);
+    final List<Map<String, dynamic>> orderMaps = await database.query(
+      _tableOrders,
+    );
     final List<OrderModel> orders = [];
     for (final orderMap in orderMaps) {
       final List<Map<String, dynamic>> lineMaps = await database.query(
@@ -50,7 +52,7 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         where: 'order_id = ?',
         whereArgs: [orderMap['id']],
       );
-      
+
       final fullOrderMap = Map<String, dynamic>.from(orderMap);
       // Convert integer status from DB back to String for the fromJson factory
       final statusIndex = fullOrderMap['status'] as int;
@@ -69,14 +71,19 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
     await database.insert(_tableOrderUpdatesQueue, {
       'order_id': order.id,
       'status': order.status.index,
-      'lines': jsonEncode(order.lines.map((line) => (line as OrderLineModel).toJson()).toList()),
+      'lines': jsonEncode(
+        order.lines.map((line) => (line as OrderLineModel).toJson()).toList(),
+      ),
       'timestamp': DateTime.now().millisecondsSinceEpoch,
     });
   }
 
   @override
   Future<List<Map<String, dynamic>>> getQueuedOrderUpdates() async {
-    return await database.query(_tableOrderUpdatesQueue, orderBy: 'timestamp ASC');
+    return await database.query(
+      _tableOrderUpdatesQueue,
+      orderBy: 'timestamp ASC',
+    );
   }
 
   @override
@@ -95,7 +102,11 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         where: 'id = ?',
         whereArgs: [order.id],
       );
-      batch.delete(_tableOrderLines, where: 'order_id = ?', whereArgs: [order.id]);
+      batch.delete(
+        _tableOrderLines,
+        where: 'order_id = ?',
+        whereArgs: [order.id],
+      );
       for (final line in order.lines) {
         // Robustly handle both OrderLine and OrderLineModel types
         final lineJson = (line is OrderLineModel)
@@ -110,13 +121,10 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
                 imageUrl: line.imageUrl,
               ).toJson();
 
-        batch.insert(
-            _tableOrderLines,
-            {
-              'order_id': order.id,
-              ...lineJson,
-            },
-            conflictAlgorithm: ConflictAlgorithm.replace);
+        batch.insert(_tableOrderLines, {
+          'order_id': order.id,
+          ...lineJson,
+        }, conflictAlgorithm: ConflictAlgorithm.replace);
       }
       await batch.commit(noResult: true);
     });

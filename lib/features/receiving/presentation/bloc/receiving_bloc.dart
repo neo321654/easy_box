@@ -14,10 +14,9 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
   ReceivingBloc({
     required AddStockUseCase addStockUseCase,
     required CreateProductUseCase createProductUseCase,
-  })
-      : _addStockUseCase = addStockUseCase,
-        _createProductUseCase = createProductUseCase,
-        super(ReceivingInitial()) {
+  }) : _addStockUseCase = addStockUseCase,
+       _createProductUseCase = createProductUseCase,
+       super(ReceivingInitial()) {
     on<StockAdded>(_onStockAdded);
     on<CreateProductAndAddStock>(_onCreateProductAndAddStock);
   }
@@ -42,7 +41,8 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
           emit(const AddStockFailure());
         }
       },
-      (result) => emit(ReceivingSuccess(sku: event.sku, isQueued: result.isQueued)),
+      (result) =>
+          emit(ReceivingSuccess(sku: event.sku, isQueued: result.isQueued)),
     );
   }
 
@@ -71,11 +71,13 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
 
         failureOrAddStockResult.fold(
           (failure) => emit(const AddStockAfterCreateFailure()),
-          (addStockResult) => emit(ReceivingSuccess(
-            sku: event.sku,
-            isQueued: createResult.isQueued || addStockResult.isQueued,
-            productCreated: true,
-          )),
+          (addStockResult) => emit(
+            ReceivingSuccess(
+              sku: event.sku,
+              isQueued: createResult.isQueued || addStockResult.isQueued,
+              productCreated: true,
+            ),
+          ),
         );
       },
     );

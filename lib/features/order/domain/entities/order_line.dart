@@ -21,12 +21,12 @@ class OrderLine extends Equatable {
 
   @override
   List<Object?> get props => [
-        productId,
-        productName,
-        sku,
-        location,
-        quantityToPick,
-        quantityPicked,
-        imageUrl,
-      ];
+    productId,
+    productName,
+    sku,
+    location,
+    quantityToPick,
+    quantityPicked,
+    imageUrl,
+  ];
 }

@@ -16,7 +16,11 @@ class ReceivingSuccess extends ReceivingState {
   final bool isQueued;
   final bool productCreated;
 
-  const ReceivingSuccess({required this.sku, this.isQueued = false, this.productCreated = false});
+  const ReceivingSuccess({
+    required this.sku,
+    this.isQueued = false,
+    this.productCreated = false,
+  });
 
   @override
   List<Object> get props => [sku, isQueued, productCreated];

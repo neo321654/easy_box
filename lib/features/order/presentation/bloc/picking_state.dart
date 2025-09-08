@@ -11,11 +11,7 @@ class PickingState extends Equatable {
     this.isCompleted = false,
   });
 
-  PickingState copyWith({
-    Order? order,
-    bool? isLoading,
-    bool? isCompleted,
-  }) {
+  PickingState copyWith({Order? order, bool? isLoading, bool? isCompleted}) {
     return PickingState(
       order: order ?? this.order,
       isLoading: isLoading ?? this.isLoading,

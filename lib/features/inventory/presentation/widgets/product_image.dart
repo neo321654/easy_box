@@ -43,11 +43,14 @@ class ProductImage extends StatelessWidget {
           child: const Center(child: CircularProgressIndicator()),
         ),
         errorWidget: (context, url, error) => Tooltip(
-            message: error.toString(),
-            child: Icon(Icons.broken_image,
-                size: width,
-                color: Colors.grey,
-                key: const ValueKey('broken_network_image_icon'))),
+          message: error.toString(),
+          child: Icon(
+            Icons.broken_image,
+            size: width,
+            color: Colors.grey,
+            key: const ValueKey('broken_network_image_icon'),
+          ),
+        ),
       );
     } else {
       // It's a local file path
@@ -57,11 +60,14 @@ class ProductImage extends StatelessWidget {
         height: height,
         fit: fit,
         errorBuilder: (context, error, stackTrace) => Tooltip(
-            message: error.toString(),
-            child: Icon(Icons.broken_image,
-                size: width,
-                color: Colors.grey,
-                key: const ValueKey('broken_local_image_icon'))),
+          message: error.toString(),
+          child: Icon(
+            Icons.broken_image,
+            size: width,
+            color: Colors.grey,
+            key: const ValueKey('broken_local_image_icon'),
+          ),
+        ),
       );
     }
   }

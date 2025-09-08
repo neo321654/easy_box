@@ -58,7 +58,12 @@ class InventoryRemoteDataSourceImpl implements InventoryRemoteDataSource {
   }
 
   @override
-  Future<ProductModel> createProduct({required String name, required String sku, String? location, String? imageUrl}) async {
+  Future<ProductModel> createProduct({
+    required String name,
+    required String sku,
+    String? location,
+    String? imageUrl,
+  }) async {
     // Simulate network delay
     await Future.delayed(const Duration(milliseconds: 400));
     final newProduct = ProductModel(

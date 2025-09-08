@@ -43,17 +43,15 @@ Future<void> main() async {
 
       runApp(MyApp(authBloc: authBloc));
     },
-    (error, stack) => sl<Talker>().handle(error, stack, 'Uncaught app exception'),
+    (error, stack) =>
+        sl<Talker>().handle(error, stack, 'Uncaught app exception'),
   );
 }
 
 class MyApp extends StatelessWidget {
   final AuthBloc authBloc;
 
-  const MyApp({
-    super.key,
-    required this.authBloc,
-  });
+  const MyApp({super.key, required this.authBloc});
 
   @override
   Widget build(BuildContext context) {

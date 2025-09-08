@@ -24,11 +24,9 @@ class AuthRepositoryImpl implements AuthRepository {
       // Here, we'll just use the user's ID as a mock token.
       const mockToken = 'user-id-1';
       await _prefs.setString(_userTokenKey, mockToken);
-      return const Right(User(
-        id: '1',
-        name: 'Admin User',
-        email: 'admin@example.com',
-      ));
+      return const Right(
+        User(id: '1', name: 'Admin User', email: 'admin@example.com'),
+      );
     } else {
       return const Left(LogInFailure('Invalid credentials'));
     }
@@ -67,11 +65,7 @@ class AuthRepositoryImpl implements AuthRepository {
 
     // In a real app, we would use the token to fetch user data.
     // For now, any other token is considered a real user.
-    return const User(
-      id: '1',
-      name: 'Admin User',
-      email: 'admin@example.com',
-    );
+    return const User(id: '1', name: 'Admin User', email: 'admin@example.com');
   }
 
   @override

@@ -21,10 +21,7 @@ class TelegramTalkerObserver extends TalkerObserver {
 
     Future(() async {
       try {
-        await _dio.post(
-          _url,
-          data: {'message': fullMessage},
-        );
+        await _dio.post(_url, data: {'message': fullMessage});
       } catch (e) {
         // ignore: avoid_print
         print('Failed to send log to Telegram: $e');

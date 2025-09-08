@@ -15,9 +15,7 @@ class OrderListPage extends StatelessWidget {
     return BlocProvider(
       create: (context) => sl<OrderListBloc>()..add(FetchOrdersRequested()),
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(context.S.orderListPageTitle),
-        ),
+        appBar: AppBar(title: Text(context.S.orderListPageTitle)),
         body: BlocBuilder<OrderListBloc, OrderListState>(
           builder: (context, state) {
             if (state is OrderListLoading || state is OrderListInitial) {
@@ -40,8 +38,12 @@ class OrderListPage extends StatelessWidget {
                   final order = state.orders[index];
                   return ListTile(
                     title: Text('${order.id} - ${order.customerName}'),
-                    subtitle: Text(context.S.orderStatusLabel(order.status.name)),
-                    trailing: Text(context.S.orderLinesLabel(order.lines.length)),
+                    subtitle: Text(
+                      context.S.orderStatusLabel(order.status.name),
+                    ),
+                    trailing: Text(
+                      context.S.orderLinesLabel(order.lines.length),
+                    ),
                     onTap: () async {
                       final result = await Navigator.of(context).push(
                         MaterialPageRoute(
@@ -50,7 +52,9 @@ class OrderListPage extends StatelessWidget {
                       );
                       if (result == true && context.mounted) {
                         // If picking was completed, refresh the list
-                        context.read<OrderListBloc>().add(FetchOrdersRequested());
+                        context.read<OrderListBloc>().add(
+                          FetchOrdersRequested(),
+                        );
                       }
                     },
                   );

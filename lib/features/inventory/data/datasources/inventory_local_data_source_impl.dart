@@ -19,7 +19,11 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
       final batch = txn.batch();
       batch.delete(_tableProducts); // Clear old cache
       for (final product in products) {
-        batch.insert(_tableProducts, product.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);
+        batch.insert(
+          _tableProducts,
+          product.toJson(),
+          conflictAlgorithm: ConflictAlgorithm.replace,
+        );
       }
       await batch.commit(noResult: true);
     });
@@ -27,7 +31,9 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<List<ProductModel>> getLastProducts() async {
-    final List<Map<String, dynamic>> maps = await database.query(_tableProducts);
+    final List<Map<String, dynamic>> maps = await database.query(
+      _tableProducts,
+    );
     return List.generate(maps.length, (i) {
       return ProductModel.fromJson(maps[i]);
     });
@@ -44,7 +50,10 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<List<Map<String, dynamic>>> getQueuedStockUpdates() async {
-    return await database.query(_tableStockUpdatesQueue, orderBy: 'timestamp ASC');
+    return await database.query(
+      _tableStockUpdatesQueue,
+      orderBy: 'timestamp ASC',
+    );
   }
 
   @override
@@ -70,7 +79,13 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
   }
 
   @override
-  Future<void> addProductCreationToQueue(String name, String sku, String? location, String? imageUrl, String localId) async {
+  Future<void> addProductCreationToQueue(
+    String name,
+    String sku,
+    String? location,
+    String? imageUrl,
+    String localId,
+  ) async {
     await database.insert(_tableProductCreationsQueue, {
       'name': name,
       'sku': sku,
@@ -83,7 +98,10 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<List<Map<String, dynamic>>> getQueuedProductCreations() async {
-    return await database.query(_tableProductCreationsQueue, orderBy: 'timestamp ASC');
+    return await database.query(
+      _tableProductCreationsQueue,
+      orderBy: 'timestamp ASC',
+    );
   }
 
   @override
@@ -93,10 +111,10 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<void> updateProductId(String oldId, String newId) async {
-    await database.rawUpdate(
-      'UPDATE $_tableProducts SET id = ? WHERE id = ?',
-      [newId, oldId],
-    );
+    await database.rawUpdate('UPDATE $_tableProducts SET id = ? WHERE id = ?', [
+      newId,
+      oldId,
+    ]);
   }
 
   @override
@@ -112,11 +130,7 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<void> deleteProduct(String id) async {
-    await database.delete(
-      _tableProducts,
-      where: 'id = ?',
-      whereArgs: [id],
-    );
+    await database.delete(_tableProducts, where: 'id = ?', whereArgs: [id]);
   }
 
   @override
@@ -134,7 +148,10 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<List<Map<String, dynamic>>> getQueuedProductUpdates() async {
-    return await database.query(_tableProductUpdatesQueue, orderBy: 'timestamp ASC');
+    return await database.query(
+      _tableProductUpdatesQueue,
+      orderBy: 'timestamp ASC',
+    );
   }
 
   @override
@@ -152,7 +169,10 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
 
   @override
   Future<List<Map<String, dynamic>>> getQueuedProductDeletions() async {
-    return await database.query(_tableProductDeletionsQueue, orderBy: 'timestamp ASC');
+    return await database.query(
+      _tableProductDeletionsQueue,
+      orderBy: 'timestamp ASC',
+    );
   }
 
   @override

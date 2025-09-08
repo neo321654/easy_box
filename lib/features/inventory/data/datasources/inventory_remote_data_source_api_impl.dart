@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
@@ -14,9 +13,7 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
 
   Future<Options> _getOptions() async {
     final token = prefs.getString('user_token');
-    return Options(headers: {
-      'Authorization': 'Token $token',
-    });
+    return Options(headers: {'Authorization': 'Token $token'});
   }
 
   @override
@@ -125,17 +122,17 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   @override
   Future<void> deleteProduct(String id) async {
     try {
-      await dio.delete(
-        '$_baseUrl/products/$id/',
-        options: await _getOptions(),
-      );
+      await dio.delete('$_baseUrl/products/$id/', options: await _getOptions());
     } on DioException {
       throw ServerException();
     }
   }
 
   @override
-  Future<ProductModel> uploadProductImage(String productId, String imagePath) async {
+  Future<ProductModel> uploadProductImage(
+    String productId,
+    String imagePath,
+  ) async {
     try {
       final formData = FormData.fromMap({
         'image': await MultipartFile.fromFile(imagePath),

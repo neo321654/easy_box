@@ -32,10 +32,15 @@ class InventoryRepositoryImpl implements InventoryRepository {
     if (await networkInfo.isConnected) {
       try {
         await _syncPendingUpdates(); // 1. PUSH local changes to remote
-        final remoteProducts = await remoteDataSource.getProducts(); // 2. PULL latest from remote
+        final remoteProducts = await remoteDataSource
+            .getProducts(); // 2. PULL latest from remote
         // ignore: avoid_print
-        print('[DEBUG] Fetched remote products: ${remoteProducts.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}');
-        await localDataSource.cacheProducts(remoteProducts); // 3. Cache latest remote data
+        print(
+          '[DEBUG] Fetched remote products: ${remoteProducts.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}',
+        );
+        await localDataSource.cacheProducts(
+          remoteProducts,
+        ); // 3. Cache latest remote data
         return Right(remoteProducts); // 4. Return fresh data
       } on ServerException {
         // If server fails (either sync or pull), fall through to load from cache below
@@ -60,7 +65,9 @@ class InventoryRepositoryImpl implements InventoryRepository {
         return Left(ServerFailure());
       }
     } else {
-      return Left(ServerFailure()); // Sku lookup offline not supported in this scenario
+      return Left(
+        ServerFailure(),
+      ); // Sku lookup offline not supported in this scenario
     }
   }
 
@@ -87,8 +94,12 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, OperationResult>> createProduct(
-      {required String name, required String sku, String? location, String? imageUrl}) async {
+  Future<Either<Failure, OperationResult>> createProduct({
+    required String name,
+    required String sku,
+    String? location,
+    String? imageUrl,
+  }) async {
     if (await networkInfo.isConnected) {
       try {
         final newProduct = await remoteDataSource.createProduct(
@@ -104,7 +115,11 @@ class InventoryRepositoryImpl implements InventoryRepository {
       } on ServerException {
         return Left(ServerFailure());
       } catch (e, st) {
-        sl<Talker>().handle(e, st, '[InventoryRepository] Failed to create product');
+        sl<Talker>().handle(
+          e,
+          st,
+          '[InventoryRepository] Failed to create product',
+        );
         return Left(ServerFailure());
       }
     } else {
@@ -112,9 +127,22 @@ class InventoryRepositoryImpl implements InventoryRepository {
       try {
         final permanentImageUrl = await _copyImageToPermanentStorage(imageUrl);
         final localId = const Uuid().v4(); // Generate a temporary local ID
-        final newProduct = ProductModel(id: localId, name: name, sku: sku, quantity: 0, location: location, imageUrl: permanentImageUrl);
+        final newProduct = ProductModel(
+          id: localId,
+          name: name,
+          sku: sku,
+          quantity: 0,
+          location: location,
+          imageUrl: permanentImageUrl,
+        );
         await localDataSource.saveProduct(newProduct);
-        await localDataSource.addProductCreationToQueue(name, sku, location, permanentImageUrl, localId);
+        await localDataSource.addProductCreationToQueue(
+          name,
+          sku,
+          location,
+          permanentImageUrl,
+          localId,
+        );
         return const Right(OperationResult(isQueued: true));
       } on Exception {
         return Left(CacheFailure());
@@ -123,7 +151,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, OperationResult>> addStock(String sku, int quantityToAdd) async {
+  Future<Either<Failure, OperationResult>> addStock(
+    String sku,
+    int quantityToAdd,
+  ) async {
     if (await networkInfo.isConnected) {
       try {
         await remoteDataSource.addStock(sku, quantityToAdd);
@@ -146,7 +177,9 @@ class InventoryRepositoryImpl implements InventoryRepository {
   }
 
   @override
-  Future<Either<Failure, OperationResult>> updateProduct(Product product) async {
+  Future<Either<Failure, OperationResult>> updateProduct(
+    Product product,
+  ) async {
     Product productToUpdate = product;
 
     // Check if the imageUrl is a new local file path that needs uploading
@@ -157,7 +190,10 @@ class InventoryRepositoryImpl implements InventoryRepository {
         !product.imageUrl!.startsWith('/images/')) {
       if (await networkInfo.isConnected) {
         try {
-          final uploadedProduct = await remoteDataSource.uploadProductImage(product.id, product.imageUrl!);
+          final uploadedProduct = await remoteDataSource.uploadProductImage(
+            product.id,
+            product.imageUrl!,
+          );
           // Update the product instance with the new remote image URL
           productToUpdate = Product(
             id: product.id,
@@ -172,7 +208,9 @@ class InventoryRepositoryImpl implements InventoryRepository {
         }
       } else {
         // Cannot upload new image offline, but we can save the local path for later sync
-        final permanentImageUrl = await _copyImageToPermanentStorage(product.imageUrl);
+        final permanentImageUrl = await _copyImageToPermanentStorage(
+          product.imageUrl,
+        );
         productToUpdate = Product(
           id: product.id,
           name: product.name,
@@ -220,8 +258,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await remoteDataSource.deleteProduct(id);
         await localDataSource.deleteProduct(id);
         return const Right(OperationResult(isQueued: false));
-      }
-      on ServerException {
+      } on ServerException {
         return Left(ServerFailure());
       }
     } else {
@@ -230,8 +267,7 @@ class InventoryRepositoryImpl implements InventoryRepository {
         await localDataSource.addProductDeletionToQueue(id);
         await localDataSource.deleteProduct(id);
         return const Right(OperationResult(isQueued: true));
-      }
-      on Exception {
+      } on Exception {
         return Left(CacheFailure());
       }
     }

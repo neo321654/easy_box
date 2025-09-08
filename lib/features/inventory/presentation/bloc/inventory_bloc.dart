@@ -14,10 +14,9 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   InventoryBloc({
     required GetProductsUseCase getProductsUseCase,
     required FindProductBySkuUseCase findProductBySkuUseCase,
-  })
-      : _getProductsUseCase = getProductsUseCase,
-        _findProductBySkuUseCase = findProductBySkuUseCase,
-        super(InventoryInitial()) {
+  }) : _getProductsUseCase = getProductsUseCase,
+       _findProductBySkuUseCase = findProductBySkuUseCase,
+       super(InventoryInitial()) {
     on<FetchProductsRequested>(_onFetchProductsRequested);
     on<SearchTermChanged>(_onSearchTermChanged);
   }
@@ -28,14 +27,15 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
   ) async {
     emit(InventoryLoading());
     final failureOrProducts = await _getProductsUseCase();
-    failureOrProducts.fold(
-      (failure) => emit(const InventoryFailure()),
-      (products) {
-        // ignore: avoid_print
-        print('[DEBUG] InventoryBloc received products: ${products.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}');
-        emit(InventorySuccess(allProducts: products));
-      },
-    );
+    failureOrProducts.fold((failure) => emit(const InventoryFailure()), (
+      products,
+    ) {
+      // ignore: avoid_print
+      print(
+        '[DEBUG] InventoryBloc received products: ${products.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}',
+      );
+      emit(InventorySuccess(allProducts: products));
+    });
   }
 
   Future<void> _onSearchTermChanged(
@@ -48,22 +48,30 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
         final lowerCaseSearchTerm = event.searchTerm.toLowerCase();
         return product.name.toLowerCase().contains(lowerCaseSearchTerm) ||
             product.sku.toLowerCase().contains(lowerCaseSearchTerm) ||
-            (product.location?.toLowerCase().contains(lowerCaseSearchTerm) ?? false);
+            (product.location?.toLowerCase().contains(lowerCaseSearchTerm) ??
+                false);
       }).toList();
 
       if (event.searchTerm.isNotEmpty && filteredProducts.isEmpty) {
         // If no local product found, try to find it by SKU remotely
-        final failureOrProduct = await _findProductBySkuUseCase(event.searchTerm);
+        final failureOrProduct = await _findProductBySkuUseCase(
+          event.searchTerm,
+        );
         failureOrProduct.fold(
-          (failure) => emit(const InventoryFailure()), // Handle failure to find remotely
+          (failure) =>
+              emit(const InventoryFailure()), // Handle failure to find remotely
           (product) {
             if (product == null) {
               emit(InventoryProductNotFound(sku: event.searchTerm));
             } else {
               // Product found remotely, but not in local cache. Refresh local cache.
               // This might be an edge case, but good to handle.
-              emit(currentState.copyWith(searchTerm: event.searchTerm)); // Re-filter with existing products
-              add(FetchProductsRequested()); // Then fetch all products to update cache
+              emit(
+                currentState.copyWith(searchTerm: event.searchTerm),
+              ); // Re-filter with existing products
+              add(
+                FetchProductsRequested(),
+              ); // Then fetch all products to update cache
             }
           },
         );

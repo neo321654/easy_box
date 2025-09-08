@@ -56,11 +56,46 @@ final sl = GetIt.instance;
 Future<void> init({Locale? systemLocale}) async {
   // Initial mock data for the persistent mock backend
   final List<ProductModel> initialMockProducts = [
-    const ProductModel(id: '1', name: 'Red T-Shirt, Size L', sku: 'SKU-TS-RED-L', quantity: 150, location: 'A1-01-01', thumbnailUrl: null),
-    const ProductModel(id: '2', name: 'Blue Jeans, Size 32', sku: 'SKU-JN-BLU-32', quantity: 85, location: 'A1-01-02', thumbnailUrl: null),
-    const ProductModel(id: '3', name: 'Green Hoodie, Size M', sku: 'SKU-HD-GRN-M', quantity: 110, location: 'A2-03-05', thumbnailUrl: null),
-    const ProductModel(id: '4', name: 'Black Sneakers, Size 42', sku: 'SKU-SN-BLK-42', quantity: 200, location: 'C4-02-01', thumbnailUrl: null),
-    const ProductModel(id: '5', name: 'White Socks (3-pack)', sku: 'SKU-SK-WHT-3P', quantity: 350, location: 'C4-02-02', thumbnailUrl: null),
+    const ProductModel(
+      id: '1',
+      name: 'Red T-Shirt, Size L',
+      sku: 'SKU-TS-RED-L',
+      quantity: 150,
+      location: 'A1-01-01',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '2',
+      name: 'Blue Jeans, Size 32',
+      sku: 'SKU-JN-BLU-32',
+      quantity: 85,
+      location: 'A1-01-02',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '3',
+      name: 'Green Hoodie, Size M',
+      sku: 'SKU-HD-GRN-M',
+      quantity: 110,
+      location: 'A2-03-05',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '4',
+      name: 'Black Sneakers, Size 42',
+      sku: 'SKU-SN-BLK-42',
+      quantity: 200,
+      location: 'C4-02-01',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '5',
+      name: 'White Socks (3-pack)',
+      sku: 'SKU-SK-WHT-3P',
+      quantity: 350,
+      location: 'C4-02-02',
+      thumbnailUrl: null,
+    ),
   ];
 
   //####################
@@ -71,12 +106,14 @@ Future<void> init({Locale? systemLocale}) async {
   //region Auth
   //--------------------
   // Blocs
-  sl.registerLazySingleton(() => AuthBloc(
-        loginUseCase: sl(),
-        getMeUseCase: sl(),
-        logoutUseCase: sl(),
-        loginAnonymouslyUseCase: sl(),
-      ));
+  sl.registerLazySingleton(
+    () => AuthBloc(
+      loginUseCase: sl(),
+      getMeUseCase: sl(),
+      logoutUseCase: sl(),
+      loginAnonymouslyUseCase: sl(),
+    ),
+  );
 
   // Use Cases
   sl.registerLazySingleton(() => LoginUseCase(sl()));
@@ -86,7 +123,8 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Repositories
   sl.registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryApiImpl(dio: sl(), prefs: sl()));
+    () => AuthRepositoryApiImpl(dio: sl(), prefs: sl()),
+  );
   //endregion
 
   //--------------------
@@ -110,7 +148,8 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Data Sources
   sl.registerLazySingleton<OrderRemoteDataSource>(
-      () => OrderRemoteDataSourceApiImpl(dio: sl(), prefs: sl()));
+    () => OrderRemoteDataSourceApiImpl(dio: sl(), prefs: sl()),
+  );
   sl.registerLazySingleton<OrderLocalDataSource>(
     () => OrderLocalDataSourceImpl(database: sl()),
   );
@@ -120,7 +159,9 @@ Future<void> init({Locale? systemLocale}) async {
   //region Receiving
   //--------------------
   // Blocs
-  sl.registerFactory(() => ReceivingBloc(addStockUseCase: sl(), createProductUseCase: sl()));
+  sl.registerFactory(
+    () => ReceivingBloc(addStockUseCase: sl(), createProductUseCase: sl()),
+  );
   //endregion
 
   //--------------------
@@ -134,8 +175,16 @@ Future<void> init({Locale? systemLocale}) async {
   //region Inventory
   //--------------------
   // Blocs
-  sl.registerFactory(() => InventoryBloc(getProductsUseCase: sl(), findProductBySkuUseCase: sl()));
-  sl.registerFactory(() => ProductDetailBloc(updateProductUseCase: sl(), deleteProductUseCase: sl()));
+  sl.registerFactory(
+    () =>
+        InventoryBloc(getProductsUseCase: sl(), findProductBySkuUseCase: sl()),
+  );
+  sl.registerFactory(
+    () => ProductDetailBloc(
+      updateProductUseCase: sl(),
+      deleteProductUseCase: sl(),
+    ),
+  );
   sl.registerFactory(() => ProductCreationBloc(createProductUseCase: sl()));
 
   // Use Cases
@@ -157,7 +206,8 @@ Future<void> init({Locale? systemLocale}) async {
 
   // Data Sources
   sl.registerLazySingleton<InventoryRemoteDataSource>(
-      () => InventoryRemoteDataSourceApiImpl(dio: sl(), prefs: sl()));
+    () => InventoryRemoteDataSourceApiImpl(dio: sl(), prefs: sl()),
+  );
 
   // Local Data Sources
   sl.registerLazySingleton<InventoryLocalDataSource>(
@@ -189,7 +239,9 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton(() => SaveLocaleUseCase(sl()));
 
   // Repositories
-  sl.registerLazySingleton<SettingsRepository>(() => SettingsRepositoryImpl(sl()));
+  sl.registerLazySingleton<SettingsRepository>(
+    () => SettingsRepositoryImpl(sl()),
+  );
   //endregion
 
   //endregion
@@ -199,15 +251,15 @@ Future<void> init({Locale? systemLocale}) async {
   //####################
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
-  sl.registerLazySingleton<Talker>(() => TalkerFlutter.init(observer: TelegramTalkerObserver()));
+  sl.registerLazySingleton<Talker>(
+    () => TalkerFlutter.init(observer: TelegramTalkerObserver()),
+  );
   sl.registerLazySingleton(() {
     final dio = Dio();
     dio.interceptors.add(
       TalkerDioLogger(
         talker: sl<Talker>(),
-        settings: const TalkerDioLoggerSettings(
-          printResponseData: false,
-        ),
+        settings: const TalkerDioLoggerSettings(printResponseData: false),
       ),
     );
     return dio;
@@ -264,8 +316,12 @@ Future<void> init({Locale? systemLocale}) async {
       }
       if (oldVersion < 5) {
         db.execute('ALTER TABLE products ADD COLUMN location TEXT');
-        db.execute('ALTER TABLE product_creations_queue ADD COLUMN location TEXT');
-        db.execute('ALTER TABLE product_updates_queue ADD COLUMN location TEXT');
+        db.execute(
+          'ALTER TABLE product_creations_queue ADD COLUMN location TEXT',
+        );
+        db.execute(
+          'ALTER TABLE product_updates_queue ADD COLUMN location TEXT',
+        );
       }
       if (oldVersion < 6) {
         db.execute('ALTER TABLE products ADD COLUMN image_url TEXT');
@@ -314,7 +370,9 @@ Future<void> init({Locale? systemLocale}) async {
     },
   );
   sl.registerLazySingleton<Database>(
-      () => mockBackendDb, instanceName: 'mockBackendDb'); // Register mock backend DB
+    () => mockBackendDb,
+    instanceName: 'mockBackendDb',
+  ); // Register mock backend DB
 
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));

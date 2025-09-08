@@ -39,9 +39,7 @@ class _ScanningViewState extends State<_ScanningView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(context.S.scanBarcodePageTitle),
-      ),
+      appBar: AppBar(title: Text(context.S.scanBarcodePageTitle)),
       body: BlocListener<ScanningBloc, ScanningState>(
         listener: (context, state) {
           // Allow new scans once processing is finished
@@ -98,14 +96,12 @@ class _ScanningViewState extends State<_ScanningView> {
                 if (state is ScanningLoading) {
                   return Container(
                     color: Colors.black.withAlpha((255 * 0.5).round()),
-                    child: const Center(
-                      child: LoadingIndicator(),
-                    ),
+                    child: const Center(child: LoadingIndicator()),
                   );
                 }
                 return const SizedBox.shrink();
               },
-            )
+            ),
           ],
         ),
       ),
@@ -122,11 +118,19 @@ class _ScanningViewState extends State<_ScanningView> {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(context.S
-                .productSkuLabelWithColon(context.S.productSkuLabel, product.sku)),
+            Text(
+              context.S.productSkuLabelWithColon(
+                context.S.productSkuLabel,
+                product.sku,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(context.S.quantityLabelWithColon(
-                context.S.quantityLabel, product.quantity)),
+            Text(
+              context.S.quantityLabelWithColon(
+                context.S.quantityLabel,
+                product.quantity,
+              ),
+            ),
           ],
         ),
         actions: [

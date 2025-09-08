@@ -85,16 +85,16 @@ class _CreateProductAndAddStockFormState
   void _createProductAndAddStock() {
     if (_formKey.currentState?.validate() ?? false) {
       context.read<ReceivingBloc>().add(
-            CreateProductAndAddStock(
-              name: _nameController.text,
-              sku: widget.sku,
-              quantity: widget.quantity,
-              location: _locationController.text.isEmpty
-                  ? null
-                  : _locationController.text,
-              imageUrl: _imageFile?.path,
-            ),
-          );
+        CreateProductAndAddStock(
+          name: _nameController.text,
+          sku: widget.sku,
+          quantity: widget.quantity,
+          location: _locationController.text.isEmpty
+              ? null
+              : _locationController.text,
+          imageUrl: _imageFile?.path,
+        ),
+      );
       Navigator.of(context).pop();
     }
   }
@@ -114,11 +114,20 @@ class _CreateProductAndAddStockFormState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Text(context.S.addProductPageTitle, style: Theme.of(context).textTheme.headlineSmall),
+              Text(
+                context.S.addProductPageTitle,
+                style: Theme.of(context).textTheme.headlineSmall,
+              ),
               const SizedBox(height: 16),
-              Text('SKU: ${widget.sku}', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                'SKU: ${widget.sku}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 8),
-              Text('${context.S.quantityLabel}: ${widget.quantity}', style: Theme.of(context).textTheme.titleMedium),
+              Text(
+                '${context.S.quantityLabel}: ${widget.quantity}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
               const SizedBox(height: 24),
               GestureDetector(
                 onTap: _showImageSourceDialog,
@@ -133,10 +142,7 @@ class _CreateProductAndAddStockFormState
                   child: _imageFile != null
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(8),
-                          child: Image.file(
-                            _imageFile!,
-                            fit: BoxFit.cover,
-                          ),
+                          child: Image.file(_imageFile!, fit: BoxFit.cover),
                         )
                       : Center(
                           child: Column(
