@@ -31,6 +31,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    parser_classes = [MultiPartParser, FormParser]
 
     @action(detail=True, methods=['post'])
     def add_stock(self, request, pk=None):
