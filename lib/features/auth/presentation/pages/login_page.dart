@@ -1,7 +1,7 @@
 import 'package:easy_box/core/extensions/extensions.dart';
 import 'package:easy_box/core/utils/utils.dart';
-import 'package:easy_box/core/widgets/app_snack_bar.dart';
-import 'package:easy_box/core/widgets/widgets.dart';
+import 'package:easy_box/shared/widgets/app_snack_bar.dart';
+import 'package:easy_box/shared/widgets/widgets.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -63,23 +63,17 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    TextFormField(
+                    AppTextField(
                       key: const ValueKey('login_email_field'),
                       controller: _emailController,
-                      decoration: InputDecoration(
-                        labelText: context.S.loginEmailLabel,
-                        border: const OutlineInputBorder(),
-                      ),
+                      labelText: context.S.loginEmailLabel,
                       keyboardType: TextInputType.emailAddress,
                     ),
                     const SizedBox(height: AppDimensions.medium),
-                    TextFormField(
+                    AppTextField(
                       key: const ValueKey('login_password_field'),
                       controller: _passwordController,
-                      decoration: InputDecoration(
-                        labelText: context.S.loginPasswordLabel,
-                        border: const OutlineInputBorder(),
-                      ),
+                      labelText: context.S.loginPasswordLabel,
                       obscureText: true,
                     ),
                     const SizedBox(height: AppDimensions.large),

@@ -1,3 +1,4 @@
+import 'package:easy_box/shared/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 void showAppSnackBar(
@@ -10,7 +11,8 @@ void showAppSnackBar(
     ..showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: isError ? Colors.red : Colors.green,
+        backgroundColor:
+            isError ? Theme.of(context).colorScheme.error : AppColors.success,
       ),
     );
 }

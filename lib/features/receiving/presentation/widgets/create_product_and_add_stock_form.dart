@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
-import 'package:easy_box/core/widgets/widgets.dart';
+import 'package:easy_box/shared/widgets/widgets.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

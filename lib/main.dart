@@ -7,6 +7,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
+import 'package:easy_box/shared/theme/app_theme.dart';
+
 import 'core/router/app_router.dart';
 import 'di/injection_container.dart';
 import 'generated/app_localizations.dart';
@@ -84,14 +86,8 @@ class MyApp extends StatelessWidget {
                 ),
               );
             },
-            theme: ThemeData(
-              brightness: Brightness.light,
-              primarySwatch: Colors.blue,
-            ),
-            darkTheme: ThemeData(
-              brightness: Brightness.dark,
-              primarySwatch: Colors.blue,
-            ),
+            theme: AppTheme.lightTheme,
+            darkTheme: AppTheme.darkTheme,
             themeMode: state.themeMode,
             locale: state.locale,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
