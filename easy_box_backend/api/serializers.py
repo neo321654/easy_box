@@ -74,13 +74,14 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
-        lines_data = validated_data.pop('orderline_set')
+        lines_data = validated_data.get('orderline_set')
         instance.customer_name = validated_data.get('customer_name', instance.customer_name)
         instance.status = validated_data.get('status', instance.status)
         instance.save()
 
-        OrderLine.objects.filter(order=instance).delete()
-        for line_data in lines_data:
-            OrderLine.objects.create(order=instance, **line_data)
+        if lines_data:
+            OrderLine.objects.filter(order=instance).delete()
+            for line_data in lines_data:
+                OrderLine.objects.create(order=instance, **line_data)
 
         return instance
