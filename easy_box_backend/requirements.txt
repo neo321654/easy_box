@@ -6,3 +6,4 @@ cloudinary
 requests
 gunicorn
 psycopg2-binary
+whitenoise
