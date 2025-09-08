@@ -12,14 +12,22 @@ class ProductModel extends Product {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
+    const String baseUrl = 'http://38.244.208.106:8000';
+
+    String? getAbsoluteUrl(String? relativeUrl) {
+      if (relativeUrl == null || relativeUrl.isEmpty) return null;
+      if (Uri.tryParse(relativeUrl)?.isAbsolute ?? false) return relativeUrl;
+      return baseUrl + relativeUrl;
+    }
+
     return ProductModel(
       id: json['id'].toString(),
       name: json['name'],
       sku: json['sku'],
       quantity: json['quantity'],
       location: json['location'],
-      imageUrl: json['image_url'],
-      thumbnailUrl: json['thumbnail_url'],
+      imageUrl: getAbsoluteUrl(json['image_url']),
+      thumbnailUrl: getAbsoluteUrl(json['thumbnail_url']),
     );
   }
 
