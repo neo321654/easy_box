@@ -55,7 +55,7 @@ class ProductSerializer(serializers.ModelSerializer):
 class OrderLineSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderLine
-        fields = '__all__'
+        exclude = ('order',)
 
 class OrderSerializer(serializers.ModelSerializer):
     lines = OrderLineSerializer(many=True, source='orderline_set')
