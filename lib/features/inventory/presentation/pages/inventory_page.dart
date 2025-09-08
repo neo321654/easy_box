@@ -75,6 +75,7 @@ class _InventoryViewState extends State<_InventoryView> {
         title: Text(context.S.inventoryPageTitle),
       ),
       floatingActionButton: FloatingActionButton.extended(
+        key: const ValueKey('add_product_fab'),
         onPressed: () => _showAddProductSheet(),
         label: Text(context.S.addProductButtonText),
         icon: const Icon(Icons.add),
@@ -99,6 +100,7 @@ class _InventoryViewState extends State<_InventoryView> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(
+                    key: const ValueKey('inventory_search_field'),
                     controller: _searchController,
                     decoration: InputDecoration(
                       hintText: context.S.inventorySearchHint,
@@ -120,6 +122,7 @@ class _InventoryViewState extends State<_InventoryView> {
                       context.read<InventoryBloc>().add(FetchProductsRequested());
                     },
                     child: ListView.builder(
+                      key: const ValueKey('inventory_product_list'),
                       itemCount: state.filteredProducts.length,
                       itemBuilder: (context, index) {
                         final product = state.filteredProducts[index];

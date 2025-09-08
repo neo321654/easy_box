@@ -36,6 +36,9 @@ dependencies:
   talker_bloc_logger: ^4.1.1
 
 dev_dependencies:
+  flutter_driver:
+    sdk: flutter
+  test: any
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0

@@ -17,6 +17,7 @@ class ProductListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      key: ValueKey('product_list_item_${product.sku}'),
       onTap: () async {
         final result = await Navigator.of(context).push(
           MaterialPageRoute(

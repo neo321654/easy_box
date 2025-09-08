@@ -106,6 +106,7 @@ class _PickingViewState extends State<_PickingView> {
                 children: [
                   FloatingActionButton.extended(
 
+                    key: const ValueKey('picking_scan_barcode_button'),
                     heroTag: 'scanFab', // Unique tag for multiple FABs
                     onPressed: () async {
                       final pickingBloc = context.read<PickingBloc>(); // Get bloc before async gap
@@ -120,6 +121,7 @@ class _PickingViewState extends State<_PickingView> {
                   ),
                   SizedBox(height: 25,),
                   FloatingActionButton.extended(
+                    key: const ValueKey('picking_complete_button'),
                     heroTag: 'completeFab', // Unique tag for multiple FABs
                     onPressed: allItemsPicked
                         ? () {

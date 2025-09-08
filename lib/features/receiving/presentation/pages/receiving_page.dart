@@ -128,6 +128,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
             child: Column(
               children: [
                 TextFormField(
+                  key: const ValueKey('receiving_sku_field'),
                   controller: _skuController,
                   decoration: InputDecoration(
                     labelText: context.S.productSkuLabel,
@@ -143,6 +144,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
+                  key: const ValueKey('receiving_quantity_field'),
                   controller: _quantityController,
                   decoration: InputDecoration(
                     labelText: context.S.quantityLabel,
@@ -167,6 +169,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
                       return const LoadingIndicator();
                     }
                     return PrimaryButton(
+                      key: const ValueKey('receiving_add_stock_button'),
                       onPressed: _addStock,
                       text: context.S.addStockButtonText,
                     );
