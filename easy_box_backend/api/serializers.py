@@ -53,9 +53,11 @@ class ProductSerializer(serializers.ModelSerializer):
         return super().update(instance, validated_data)
 
 class OrderLineSerializer(serializers.ModelSerializer):
+    product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
+
     class Meta:
         model = OrderLine
-        exclude = ('order',)
+        fields = ['product', 'quantity_to_pick']
 
 class OrderSerializer(serializers.ModelSerializer):
     lines = OrderLineSerializer(many=True, source='orderline_set')
