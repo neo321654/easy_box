@@ -7,14 +7,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   final Dio dio;
   final SharedPreferences prefs;
-  final String _baseUrl = 'http://38.244.208.106:8000';
+  final String _baseUrl = 'http://38.244.208.106:8000/api';
 
   InventoryRemoteDataSourceApiImpl({required this.dio, required this.prefs});
 
   Future<Options> _getOptions() async {
     final token = prefs.getString('user_token');
     return Options(headers: {
-      'Authorization': 'Bearer $token',
+      'Authorization': 'Token $token',
     });
   }
 

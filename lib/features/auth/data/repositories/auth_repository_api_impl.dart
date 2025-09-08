@@ -21,12 +21,11 @@ class AuthRepositoryApiImpl implements AuthRepository {
   }) async {
     try {
       final response = await dio.post(
-        '$_baseUrl/auth/token',
-        data: FormData.fromMap({'username': email, 'password': password}),
-        options: Options(contentType: Headers.formUrlEncodedContentType),
+        '$_baseUrl/api/auth/token/',
+        data: {'email': email, 'password': password},
       );
 
-      final token = response.data['access_token'];
+      final token = response.data['token'];
       await prefs.setString(_userTokenKey, token);
       final user = await getMe();
       return user != null ? Right(user) : Left(ServerFailure());
@@ -45,13 +44,13 @@ class AuthRepositoryApiImpl implements AuthRepository {
 
     try {
       final response = await dio.get(
-        '$_baseUrl/auth/users/me',
-        options: Options(headers: {'Authorization': 'Bearer $token'}),
+        '$_baseUrl/api/users/me/',
+        options: Options(headers: {'Authorization': 'Token $token'}),
       );
       final data = response.data;
       return User(
         id: data['id'].toString(),
-        name: data['name'],
+        name: data['username'],
         email: data['email'],
       );
     } catch (e) {
