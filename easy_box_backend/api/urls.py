@@ -11,5 +11,5 @@ router.register(r'orderlines', OrderLineViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('auth/token', views.obtain_auth_token)
+    path('auth/token/', views.obtain_auth_token)
 ]
