@@ -242,7 +242,7 @@ Future<void> init({Locale? systemLocale}) async {
         'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
       );
     },
-    version: 7,
+    version: 8,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(
@@ -280,6 +280,9 @@ Future<void> init({Locale? systemLocale}) async {
         db.execute(
           'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
         );
+      }
+      if (oldVersion < 8) {
+        db.execute('ALTER TABLE products ADD COLUMN thumbnail_url TEXT');
       }
     },
   );
