@@ -1,8 +1,0 @@
-12532433e22Fri Sep  5 10:03:16 MSK 2025
-Fri Sep  5 10:06:05 MSK 2025
-Triggering workflow for testing Telegram notifications.
-Triggering workflow again to re-test Telegram notifications.
-Final test run after updating secrets.
-Final verification of persistent storage.
-Final test deployment trigger.
-One more time.
