@@ -99,6 +99,8 @@ class InventoryRepositoryImpl implements InventoryRepository {
         );
         await localDataSource.saveProduct(newProduct);
         return const Right(OperationResult(isQueued: false));
+      } on SkuAlreadyExistsException catch (e) {
+        return Left(SkuAlreadyExistsFailure(e.sku));
       } on ServerException {
         return Left(ServerFailure());
       } catch (e, st) {

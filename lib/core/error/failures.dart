@@ -15,6 +15,15 @@ class CacheFailure extends Failure {
   List<Object?> get props => [];
 }
 
+class SkuAlreadyExistsFailure extends Failure {
+  final String sku;
+
+  const SkuAlreadyExistsFailure(this.sku);
+
+  @override
+  List<Object?> get props => [sku];
+}
+
 class ProductNotFoundFailure extends Failure {
   final String sku;
 

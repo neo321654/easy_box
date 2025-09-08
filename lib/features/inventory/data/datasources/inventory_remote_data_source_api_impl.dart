@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/features/inventory/data/datasources/inventory_remote_data_source.dart';
@@ -96,7 +97,14 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
         options: await _getOptions(),
       );
       return ProductModel.fromJson(response.data);
-    } on DioException {
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 400 && e.response?.data != null) {
+        final errorData = e.response?.data;
+        if (errorData is Map && errorData.containsKey('sku')) {
+          // Assuming the backend returns something like {"sku": ["product with this sku already exists."]}
+          throw SkuAlreadyExistsException(sku);
+        }
+      }
       throw ServerException();
     }
   }
