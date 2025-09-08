@@ -26,6 +26,8 @@
   - [x] **Решение:** Исправить `OrderSerializer` для правильной обработки вложенных строк заказа.
 - [x] **Проблема:** Ошибка валидации `OrderLineSerializer`.
   - [x] **Решение:** Исключить поле `order` из `OrderLineSerializer`.
+- [x] **Проблема:** Неправильная обработка вложенных `OrderLine`.
+  - [x] **Решение:** Использовать `PrimaryKeyRelatedField` для `product` в `OrderLineSerializer`.
 
 ## Фаза 3: Тестирование функциональности
 
