@@ -21,8 +21,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.24.0-0.1.pre' # Using a newer Flutter version for Dart SDK compatibility
-          channel: 'beta' # Pre-release versions are on the beta channel
+          dart-version: '3.8.1'
+          channel: 'stable'
 
       - name: Install dependencies
         run: flutter pub get
