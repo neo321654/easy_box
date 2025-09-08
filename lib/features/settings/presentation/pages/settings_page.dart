@@ -50,35 +50,36 @@ class SettingsPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              RadioListTile<ThemeMode>(
-                title: Text(context.S.settingsThemeLight),
-                value: ThemeMode.light,
-                groupValue: settingsState.themeMode,
-                onChanged: (themeMode) {
-                  if (themeMode != null) {
-                    context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
-                  }
-                },
-              ),
-              RadioListTile<ThemeMode>(
-                title: Text(context.S.settingsThemeDark),
-                value: ThemeMode.dark,
-                groupValue: settingsState.themeMode,
-                onChanged: (themeMode) {
-                  if (themeMode != null) {
-                    context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
-                  }
-                },
-              ),
-              RadioListTile<ThemeMode>(
-                title: Text(context.S.settingsThemeSystem),
-                value: ThemeMode.system,
-                groupValue: settingsState.themeMode,
-                onChanged: (themeMode) {
-                  if (themeMode != null) {
-                    context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
-                  }
-                },
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.medium),
+                  child: ToggleButtons(
+                    borderRadius: BorderRadius.circular(8.0),
+                    isSelected: [
+                      settingsState.themeMode == ThemeMode.light,
+                      settingsState.themeMode == ThemeMode.dark,
+                      settingsState.themeMode == ThemeMode.system,
+                    ],
+                    onPressed: (index) {
+                      final themeMode = [ThemeMode.light, ThemeMode.dark, ThemeMode.system][index];
+                      context.read<SettingsBloc>().add(ThemeModeChanged(themeMode));
+                    },
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(context.S.settingsThemeLight),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(context.S.settingsThemeDark),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(context.S.settingsThemeSystem),
+                      ),
+                    ],
+                  ),
+                ),
               ),
               const Divider(),
               Padding(
@@ -88,35 +89,36 @@ class SettingsPage extends StatelessWidget {
                   style: Theme.of(context).textTheme.titleMedium,
                 ),
               ),
-              RadioListTile<Locale>(
-                title: Text(context.S.languageRussian),
-                value: const Locale('ru'),
-                groupValue: settingsState.locale,
-                onChanged: (locale) {
-                  if (locale != null) {
-                    context.read<SettingsBloc>().add(LocaleChanged(locale));
-                  }
-                },
-              ),
-              RadioListTile<Locale>(
-                title: Text(context.S.languageEnglish),
-                value: const Locale('en'),
-                groupValue: settingsState.locale,
-                onChanged: (locale) {
-                  if (locale != null) {
-                    context.read<SettingsBloc>().add(LocaleChanged(locale));
-                  }
-                },
-              ),
-              RadioListTile<Locale>(
-                title: Text(context.S.languageGerman),
-                value: const Locale('de'),
-                groupValue: settingsState.locale,
-                onChanged: (locale) {
-                  if (locale != null) {
-                    context.read<SettingsBloc>().add(LocaleChanged(locale));
-                  }
-                },
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: AppDimensions.medium),
+                  child: ToggleButtons(
+                    borderRadius: BorderRadius.circular(8.0),
+                    isSelected: [
+                      settingsState.locale == const Locale('ru'),
+                      settingsState.locale == const Locale('en'),
+                      settingsState.locale == const Locale('de'),
+                    ],
+                    onPressed: (index) {
+                      final locale = [const Locale('ru'), const Locale('en'), const Locale('de')][index];
+                      context.read<SettingsBloc>().add(LocaleChanged(locale));
+                    },
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(context.S.languageRussian),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(context.S.languageEnglish),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                        child: Text(context.S.languageGerman),
+                      ),
+                    ],
+                  ),
+                ),
               ),
             ],
           );
