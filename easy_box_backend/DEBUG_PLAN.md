@@ -28,6 +28,8 @@
   - [x] **Решение:** Исключить поле `order` из `OrderLineSerializer`.
 - [x] **Проблема:** Неправильная обработка вложенных `OrderLine`.
   - [x] **Решение:** Использовать `PrimaryKeyRelatedField` для `product` в `OrderLineSerializer`.
+- [x] **Проблема:** Неправильная обработка обновления заказа.
+  - [x] **Решение:** Использовать `validated_data.get()` вместо `validated_data.pop()`.
 
 ## Фаза 3: Тестирование функциональности
 

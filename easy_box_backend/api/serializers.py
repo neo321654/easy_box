@@ -74,7 +74,7 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
-        lines_data = validated_data.get('orderline_set')
+        lines_data = validated_data.get('lines')
         instance.customer_name = validated_data.get('customer_name', instance.customer_name)
         instance.status = validated_data.get('status', instance.status)
         instance.save()
