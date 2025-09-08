@@ -1,12 +1,36 @@
-name: Notify on Develop Merge
+name: Build and Notify on Develop Merge
 
-on: push
+on:
+  push:
+    branches:
+      - develop
 
 jobs:
-  send-telegram-notification:
+  build-and-send-apk:
     runs-on: ubuntu-latest
     steps:
-      - name: Send Telegram message
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '11'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.24.0-0.1.pre' # Using a newer Flutter version for Dart SDK compatibility
+          channel: 'beta' # Pre-release versions are on the beta channel
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build APK
+        run: flutter build apk --release
+
+      - name: Send APK to Telegram
         uses: appleboy/telegram-action@master
         with:
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
@@ -19,3 +43,4 @@ jobs:
             ${{ github.event.head_commit.message }}
             
             See commit: https://github.com/${{ github.repository }}/commit/${{ github.sha }}
+          document: "build/app/outputs/flutter-apk/app-release.apk"
