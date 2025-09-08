@@ -139,6 +139,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 ),
                 const SizedBox(height: AppDimensions.large),
                 TextFormField(
+                  key: const ValueKey('add_product_name_field'),
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: context.S.productNameLabel,
@@ -150,6 +151,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 ),
                 const SizedBox(height: AppDimensions.medium),
                 TextFormField(
+                  key: const ValueKey('add_product_sku_field'),
                   controller: _skuController,
                   readOnly: widget.initialSku != null, // Make read-only if initialSku is provided
                   decoration: InputDecoration(
@@ -168,6 +170,7 @@ class _AddProductFormState extends State<AddProductForm> {
                 ),
                 const SizedBox(height: AppDimensions.medium),
                 TextFormField(
+                  key: const ValueKey('add_product_location_field'),
                   controller: _locationController,
                   decoration: InputDecoration(
                     labelText: context.S.productLocationLabel,
@@ -181,6 +184,7 @@ class _AddProductFormState extends State<AddProductForm> {
                       return const LoadingIndicator();
                     }
                     return PrimaryButton(
+                      key: const ValueKey('add_product_save_button'),
                       onPressed: _createProduct,
                       text: context.S.saveButtonText,
                     );

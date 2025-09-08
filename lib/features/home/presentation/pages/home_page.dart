@@ -39,6 +39,7 @@ class HomePage extends StatelessWidget {
         automaticallyImplyLeading: false,
         actions: [
           IconButton(
+            key: const ValueKey('logout_button'),
             icon: const Icon(Icons.logout),
             onPressed: () {
               context.read<AuthBloc>().add(LoggedOut());
@@ -53,6 +54,7 @@ class HomePage extends StatelessWidget {
         crossAxisSpacing: AppDimensions.medium,
         children: [
           _HomeMenuItem(
+            key: const ValueKey('home_menu_inventory'),
             icon: Icons.inventory_2_outlined,
             title: context.S.homeMenuInventory,
             onTap: () {
@@ -60,11 +62,13 @@ class HomePage extends StatelessWidget {
             },
           ),
           _HomeMenuItem(
+            key: const ValueKey('home_menu_add_product'),
             icon: Icons.add_box_outlined,
             title: context.S.homeMenuAddProduct,
             onTap: () => _showAddProductSheet(context),
           ),
           _HomeMenuItem(
+            key: const ValueKey('home_menu_receiving'),
             icon: Icons.archive_outlined,
             title: context.S.homeMenuReceiving,
             onTap: () {
@@ -72,6 +76,7 @@ class HomePage extends StatelessWidget {
             },
           ),
           _HomeMenuItem(
+            key: const ValueKey('home_menu_scanning'),
             icon: Icons.qr_code_scanner,
             title: context.S.homeMenuScanning,
             onTap: () {
@@ -79,6 +84,7 @@ class HomePage extends StatelessWidget {
             },
           ),
           _HomeMenuItem(
+            key: const ValueKey('home_menu_settings'),
             icon: Icons.settings_outlined,
             title: context.S.homeMenuSettings,
             onTap: () {
@@ -86,6 +92,7 @@ class HomePage extends StatelessWidget {
             },
           ),
           _HomeMenuItem(
+            key: const ValueKey('home_menu_picking'),
             icon: Icons.shopping_basket_outlined,
             title: context.S.homeMenuPicking,
             onTap: () {
@@ -100,6 +107,7 @@ class HomePage extends StatelessWidget {
 
 class _HomeMenuItem extends StatelessWidget {
   const _HomeMenuItem({
+    super.key,
     required this.icon,
     required this.title,
     required this.onTap,

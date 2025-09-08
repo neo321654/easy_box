@@ -218,7 +218,7 @@ Future<void> init({Locale? systemLocale}) async {
     join(await getDatabasesPath(), 'easy_box_database.db'),
     onCreate: (db, version) {
       db.execute(
-        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT)',
+        'CREATE TABLE products(id TEXT PRIMARY KEY, name TEXT, sku TEXT, quantity INTEGER, location TEXT, image_url TEXT, thumbnail_url TEXT)',
       );
       db.execute(
         'CREATE TABLE stock_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, sku TEXT, quantity INTEGER, timestamp INTEGER)',
@@ -242,7 +242,7 @@ Future<void> init({Locale? systemLocale}) async {
         'CREATE TABLE order_updates_queue(id INTEGER PRIMARY KEY AUTOINCREMENT, order_id TEXT, status INTEGER, lines TEXT, timestamp INTEGER)',
       );
     },
-    version: 8,
+    version: 9,
     onUpgrade: (db, oldVersion, newVersion) {
       if (oldVersion < 2) {
         db.execute(

@@ -34,6 +34,7 @@ class OrderListPage extends StatelessWidget {
             }
             if (state is OrderListSuccess) {
               return ListView.builder(
+                key: const ValueKey('order_list'),
                 itemCount: state.orders.length,
                 itemBuilder: (context, index) {
                   final order = state.orders[index];

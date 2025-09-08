@@ -66,6 +66,7 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextFormField(
+                      key: const ValueKey('login_email_field'),
                       controller: _emailController,
                       decoration: InputDecoration(
                         labelText: context.S.loginEmailLabel,
@@ -75,6 +76,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: AppDimensions.medium),
                     TextFormField(
+                      key: const ValueKey('login_password_field'),
                       controller: _passwordController,
                       decoration: InputDecoration(
                         labelText: context.S.loginPasswordLabel,
@@ -84,11 +86,13 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     const SizedBox(height: AppDimensions.large),
                     PrimaryButton(
+                      key: const ValueKey('login_button'),
                       onPressed: state is AuthLoading ? null : _login,
                       text: context.S.loginButtonText,
                     ),
                     const SizedBox(height: AppDimensions.small),
                     TextButton(
+                      key: const ValueKey('login_anonymous_button'),
                       onPressed: state is AuthLoading ? null : _loginAnonymously,
                       child: Text(context.S.loginAnonymousButtonText),
                     ),

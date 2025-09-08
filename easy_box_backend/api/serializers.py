@@ -33,19 +33,38 @@ class UserSerializer(serializers.ModelSerializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(write_only=True, required=False)
+    image_url = serializers.CharField(read_only=True)
+    thumbnail_url = serializers.CharField(read_only=True)
 
     class Meta:
         model = Product
-        fields = '__all__'
+        fields = ('id', 'name', 'sku', 'quantity', 'location', 'image', 'image_url', 'thumbnail_url')
 
     def create(self, validated_data):
         image = validated_data.pop('image', None)
         product = super().create(validated_data)
         if image:
-            upload_result = cloudinary.uploader.upload(image)
+            upload_result = cloudinary.uploader.upload(
+                image,
+                transformation=[{'width': 400, 'height': 400, 'crop': 'limit'}]
+            )
             product.image_url = upload_result['secure_url']
+            
+            thumb_upload_result = cloudinary.uploader.upload(
+                image,
+                transformation=[{'width': 100, 'height': 100, 'crop': 'thumb'}]
+            )
+            product.thumbnail_url = thumb_upload_result['secure_url']
+            
             product.save()
         return product
+
+    def update(self, instance, validated_data):
+        if 'image' in validated_data:
+            image = validated_data.pop('image')
+            upload_result = cloudinary.uploader.upload(image)
+            validated_data['image_url'] = upload_result['secure_url']
+        return super().update(instance, validated_data)
 
 class OrderLineSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
