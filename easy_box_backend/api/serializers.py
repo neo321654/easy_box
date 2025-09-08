@@ -58,14 +58,14 @@ class OrderLineSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OrderSerializer(serializers.ModelSerializer):
-    lines = OrderLineSerializer(many=True)
+    lines = OrderLineSerializer(many=True, source='orderline_set')
 
     class Meta:
         model = Order
         fields = '__all__'
 
     def create(self, validated_data):
-        lines_data = validated_data.pop('lines')
+        lines_data = validated_data.pop('orderline_set')
         order = Order.objects.create(**validated_data)
         for line_data in lines_data:
             OrderLine.objects.create(order=order, **line_data)
