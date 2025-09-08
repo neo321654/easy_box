@@ -21,8 +21,8 @@ jobs:
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.22.0' # I've specified a recent stable version of Flutter
-          channel: 'stable'
+          flutter-version: '3.23.0-0.1.pre' # Using a newer Flutter version for Dart SDK compatibility
+          channel: 'beta' # Pre-release versions are on the beta channel
 
       - name: Install dependencies
         run: flutter pub get
