@@ -32,6 +32,17 @@ class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+    @action(detail=True, methods=['post'])
+    def add_stock(self, request, pk=None):
+        product = self.get_object()
+        quantity = request.data.get('quantity')
+        if quantity is None:
+            return Response({'error': 'Quantity not provided'}, status=400)
+        product.quantity += int(quantity)
+        product.save()
+        serializer = self.get_serializer(product)
+        return Response(serializer.data)
+
     @action(detail=True, methods=['post'], parser_classes=[MultiPartParser, FormParser])
     def upload_image(self, request, pk=None):
         product = self.get_object()

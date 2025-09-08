@@ -36,7 +36,7 @@ class OrderRemoteDataSourceApiImpl implements OrderRemoteDataSource {
   Future<void> updateOrder(OrderModel order) async {
     try {
       await dio.put(
-        '$_baseUrl/orders/${order.id}',
+        '$_baseUrl/orders/${order.id}/',
         data: order.toJson(),
         options: await _getOptions(),
       );

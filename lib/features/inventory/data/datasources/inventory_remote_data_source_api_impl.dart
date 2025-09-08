@@ -36,10 +36,14 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   Future<ProductModel?> findProductBySku(String sku) async {
     try {
       final response = await dio.get(
-        '$_baseUrl/products/sku/$sku',
+        '$_baseUrl/products/?sku=$sku',
         options: await _getOptions(),
       );
-      return ProductModel.fromJson(response.data);
+      if (response.data.length > 0) {
+        return ProductModel.fromJson(response.data[0]);
+      } else {
+        return null;
+      }
     } on DioException catch (e) {
       if (e.response?.statusCode == 404) {
         return null;
@@ -51,8 +55,15 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   @override
   Future<void> addStock(String sku, int quantityToAdd) async {
     try {
+      // First, find product by SKU to get its ID
+      final product = await findProductBySku(sku);
+      if (product == null) {
+        throw ProductNotFoundException(sku);
+      }
+
       await dio.post(
-        '$_baseUrl/products/$sku/add_stock?quantity=$quantityToAdd',
+        '$_baseUrl/products/${product.id}/add_stock/',
+        data: {'quantity': quantityToAdd},
         options: await _getOptions(),
       );
     } on DioException catch (e) {
@@ -76,7 +87,7 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
         'sku': sku,
         'quantity': 0,
         if (location != null) 'location': location,
-        if (imageUrl != null) 'file': await MultipartFile.fromFile(imageUrl),
+        if (imageUrl != null) 'image': await MultipartFile.fromFile(imageUrl),
       });
 
       final response = await dio.post(
@@ -94,7 +105,7 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   Future<void> updateProduct(ProductModel product) async {
     try {
       await dio.put(
-        '$_baseUrl/products/${product.id}',
+        '$_baseUrl/products/${product.id}/',
         data: product.toJson(),
         options: await _getOptions(),
       );
@@ -107,7 +118,7 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   Future<void> deleteProduct(String id) async {
     try {
       await dio.delete(
-        '$_baseUrl/products/$id',
+        '$_baseUrl/products/$id/',
         options: await _getOptions(),
       );
     } on DioException {
@@ -119,11 +130,11 @@ class InventoryRemoteDataSourceApiImpl implements InventoryRemoteDataSource {
   Future<ProductModel> uploadProductImage(String productId, String imagePath) async {
     try {
       final formData = FormData.fromMap({
-        'file': await MultipartFile.fromFile(imagePath),
+        'image': await MultipartFile.fromFile(imagePath),
       });
 
       final response = await dio.post(
-        '$_baseUrl/products/$productId/upload-image',
+        '$_baseUrl/products/$productId/upload_image/',
         data: formData,
         options: await _getOptions(),
       );
