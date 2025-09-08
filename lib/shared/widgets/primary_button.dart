@@ -1,4 +1,3 @@
-import 'package:easy_box/core/utils/app_dimensions.dart';
 import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
@@ -11,9 +10,6 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        minimumSize: const Size(double.infinity, AppDimensions.buttonHeight),
-      ),
       child: Text(text),
     );
   }

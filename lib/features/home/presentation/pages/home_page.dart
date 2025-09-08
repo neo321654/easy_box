@@ -4,6 +4,7 @@ import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/add_product_form.dart';
+import 'package:easy_box/shared/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -53,7 +54,7 @@ class HomePage extends StatelessWidget {
         mainAxisSpacing: AppDimensions.medium,
         crossAxisSpacing: AppDimensions.medium,
         children: [
-          _HomeMenuItem(
+          ActionCard(
             key: const ValueKey('home_menu_inventory'),
             icon: Icons.inventory_2_outlined,
             title: context.S.homeMenuInventory,
@@ -61,13 +62,13 @@ class HomePage extends StatelessWidget {
               context.push('/inventory');
             },
           ),
-          _HomeMenuItem(
+          ActionCard(
             key: const ValueKey('home_menu_add_product'),
             icon: Icons.add_box_outlined,
             title: context.S.homeMenuAddProduct,
             onTap: () => _showAddProductSheet(context),
           ),
-          _HomeMenuItem(
+          ActionCard(
             key: const ValueKey('home_menu_receiving'),
             icon: Icons.archive_outlined,
             title: context.S.homeMenuReceiving,
@@ -75,7 +76,7 @@ class HomePage extends StatelessWidget {
               context.push('/receiving');
             },
           ),
-          _HomeMenuItem(
+          ActionCard(
             key: const ValueKey('home_menu_scanning'),
             icon: Icons.qr_code_scanner,
             title: context.S.homeMenuScanning,
@@ -83,7 +84,7 @@ class HomePage extends StatelessWidget {
               context.push('/scanning');
             },
           ),
-          _HomeMenuItem(
+          ActionCard(
             key: const ValueKey('home_menu_settings'),
             icon: Icons.settings_outlined,
             title: context.S.homeMenuSettings,
@@ -91,7 +92,7 @@ class HomePage extends StatelessWidget {
               context.push('/settings');
             },
           ),
-          _HomeMenuItem(
+          ActionCard(
             key: const ValueKey('home_menu_picking'),
             icon: Icons.shopping_basket_outlined,
             title: context.S.homeMenuPicking,
@@ -100,41 +101,6 @@ class HomePage extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _HomeMenuItem extends StatelessWidget {
-  const _HomeMenuItem({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String title;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, size: 48),
-            const SizedBox(height: AppDimensions.small),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
-          ],
-        ),
       ),
     );
   }

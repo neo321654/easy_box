@@ -1,6 +1,6 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
-import 'package:easy_box/core/widgets/app_snack_bar.dart';
-import 'package:easy_box/core/widgets/widgets.dart';
+import 'package:easy_box/shared/widgets/app_snack_bar.dart';
+import 'package:easy_box/shared/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/receiving/presentation/bloc/receiving_bloc.dart';
 import 'package:easy_box/features/receiving/presentation/widgets/create_product_and_add_stock_form.dart';

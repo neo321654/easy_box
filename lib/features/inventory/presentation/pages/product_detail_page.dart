@@ -2,9 +2,9 @@ import 'dart:io';
 
 import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/core/utils/app_dimensions.dart';
-import 'package:easy_box/core/widgets/app_snack_bar.dart';
-import 'package:easy_box/core/widgets/image_source_sheet.dart';
-import 'package:easy_box/core/widgets/widgets.dart';
+import 'package:easy_box/shared/widgets/app_snack_bar.dart';
+import 'package:easy_box/shared/widgets/image_source_sheet.dart';
+import 'package:easy_box/shared/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_detail_bloc.dart';

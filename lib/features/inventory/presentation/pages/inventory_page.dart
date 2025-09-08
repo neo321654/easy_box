@@ -1,5 +1,5 @@
 import 'package:easy_box/core/extensions/context_extension.dart';
-import 'package:easy_box/core/widgets/widgets.dart';
+import 'package:easy_box/shared/widgets/widgets.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/product_creation_bloc.dart';

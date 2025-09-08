@@ -2,8 +2,8 @@ import 'package:easy_box/core/extensions/context_extension.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/order/domain/entities/entities.dart';
 import 'package:easy_box/features/order/presentation/bloc/picking_bloc.dart';
-import 'package:easy_box/core/widgets/confirmation_dialog.dart';
-import 'package:easy_box/core/widgets/quantity_input_dialog.dart'; // Import the new dialog
+import 'package:easy_box/shared/widgets/confirmation_dialog.dart';
+import 'package:easy_box/shared/widgets/quantity_input_dialog.dart'; // Import the new dialog
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_box/core/utils/scanner_utils.dart';
