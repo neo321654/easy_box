@@ -5,7 +5,7 @@ import cloudinary.uploader
 from django.utils.html import format_html
 
 class ProductAdminForm(forms.ModelForm):
-    image = forms.ImageField(required=False)
+    image = forms.ImageField(label='Изображение', required=False)
 
     class Meta:
         model = Product
@@ -18,8 +18,8 @@ class ProductAdmin(admin.ModelAdmin):
     def image_thumbnail(self, obj):
         if obj.thumbnail_url:
             return format_html(f'<img src="{obj.thumbnail_url}" width="100" />')
-        return "No Image"
-    image_thumbnail.short_description = 'Thumbnail'
+        return "Нет изображения"
+    image_thumbnail.short_description = 'Миниатюра'
 
     def save_model(self, request, obj, form, change):
         if 'image' in form.cleaned_data and form.cleaned_data['image']:
