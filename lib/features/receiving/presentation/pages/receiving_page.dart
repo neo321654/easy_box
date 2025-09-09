@@ -112,7 +112,7 @@ class _ReceivingViewState extends State<_ReceivingView> {
           } else if (state is CreateProductFailure) {
             showAppSnackBar(
               context,
-              context.S.failedToCreateProduct,
+              state.message ?? context.S.failedToCreateProduct,
               isError: true,
             );
           } else if (state is AddStockAfterCreateFailure) {

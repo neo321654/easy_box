@@ -61,7 +61,15 @@ class ReceivingBloc extends Bloc<ReceivingEvent, ReceivingState> {
 
     await failureOrCreateResult.fold(
       (failure) async {
-        emit(const CreateProductFailure());
+        if (failure is SkuAlreadyExistsFailure) {
+          emit(
+            CreateProductFailure(
+              message: 'Product with SKU ${failure.sku} already exists.',
+            ),
+          );
+        } else {
+          emit(const CreateProductFailure());
+        }
       },
       (createResult) async {
         final failureOrAddStockResult = await _addStockUseCase(
