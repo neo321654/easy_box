@@ -53,14 +53,28 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
         whereArgs: [orderMap['id']],
       );
 
+      // Transform flat lineMaps to the nested structure expected by fromJson
+      final nestedLineMaps = lineMaps.map((lineMap) {
+        return {
+          'product': {
+            'id': lineMap['product_id'],
+            'name': lineMap['product_name'],
+            'sku': lineMap['sku'],
+            'location': lineMap['location'],
+            'image_url': lineMap['image_url'],
+          },
+          'quantity_to_pick': lineMap['quantity_to_pick'],
+          'quantity_picked': lineMap['quantity_picked'],
+        };
+      }).toList();
+
       final fullOrderMap = Map<String, dynamic>.from(orderMap);
       // Convert integer status from DB back to String for the fromJson factory
       final statusIndex = fullOrderMap['status'] as int;
       fullOrderMap['status'] = OrderStatus.values[statusIndex].name;
 
       // The fromJson method on OrderModel expects the lines to be in the map.
-      // The local database stores them separately, so we add them to the map here.
-      fullOrderMap['lines'] = lineMaps;
+      fullOrderMap['lines'] = nestedLineMaps;
       orders.add(OrderModel.fromJson(fullOrderMap));
     }
     return orders;
