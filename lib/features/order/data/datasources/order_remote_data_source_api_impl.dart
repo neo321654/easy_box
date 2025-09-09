@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:easy_box/core/config/env_config.dart';
 import 'package:easy_box/core/error/exceptions.dart';
 import 'package:easy_box/features/order/data/datasources/order_remote_data_source.dart';
 import 'package:easy_box/features/order/data/models/order_model.dart';
@@ -7,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OrderRemoteDataSourceApiImpl implements OrderRemoteDataSource {
   final Dio dio;
   final SharedPreferences prefs;
-  final String _baseUrl = 'http://38.244.208.106:8000/api';
+  final String _baseUrl = '${EnvConfig.baseUrl}/api';
 
   OrderRemoteDataSourceApiImpl({required this.dio, required this.prefs});
 

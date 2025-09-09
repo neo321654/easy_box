@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:flutter/material.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class ProductImage extends StatelessWidget {
   final String? imageUrl;
@@ -19,8 +21,7 @@ class ProductImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: avoid_print
-    print('[DEBUG] ProductImage received URL: $imageUrl');
+    sl<Talker>().debug('[DEBUG] ProductImage received URL: $imageUrl');
 
     if (imageUrl == null || imageUrl!.isEmpty) {
       return Icon(Icons.image, size: width, color: Colors.grey);

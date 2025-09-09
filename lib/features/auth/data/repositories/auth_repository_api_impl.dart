@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:easy_box/core/config/env_config.dart';
 import 'package:easy_box/core/error/failures.dart';
 import 'package:easy_box/features/auth/domain/entities/user.dart';
 import 'package:easy_box/features/auth/domain/repositories/auth_repository.dart';
@@ -8,7 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthRepositoryApiImpl implements AuthRepository {
   final Dio dio;
   final SharedPreferences prefs;
-  final String _baseUrl = 'http://38.244.208.106:8000';
+  final String _baseUrl = EnvConfig.baseUrl;
   static const _userTokenKey = 'user_token';
 
   AuthRepositoryApiImpl({required this.dio, required this.prefs});

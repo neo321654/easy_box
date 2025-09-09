@@ -1,8 +1,10 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/domain/usecases/get_products_usecase.dart';
 import 'package:easy_box/features/inventory/domain/usecases/find_product_by_sku_usecase.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 part 'inventory_event.dart';
 part 'inventory_state.dart';
@@ -30,8 +32,7 @@ class InventoryBloc extends Bloc<InventoryEvent, InventoryState> {
     failureOrProducts.fold((failure) => emit(const InventoryFailure()), (
       products,
     ) {
-      // ignore: avoid_print
-      print(
+      sl<Talker>().debug(
         '[DEBUG] InventoryBloc received products: ${products.map((p) => 'SKU: ${p.sku}, Img: ${p.imageUrl}, Thumb: ${p.thumbnailUrl}').toList()}',
       );
       emit(InventorySuccess(allProducts: products));

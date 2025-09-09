@@ -3,8 +3,10 @@ import 'package:easy_box/features/inventory/domain/entities/product.dart';
 import 'package:easy_box/features/inventory/presentation/bloc/inventory_bloc.dart';
 import 'package:easy_box/features/inventory/presentation/pages/product_detail_page.dart';
 import 'package:easy_box/features/inventory/presentation/widgets/product_image.dart';
+import 'package:easy_box/di/injection_container.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:talker_flutter/talker_flutter.dart';
 
 class ProductListItem extends StatelessWidget {
   final Product product;
@@ -14,8 +16,7 @@ class ProductListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final urlForImage = product.thumbnailUrl ?? product.imageUrl;
-    // ignore: avoid_print
-    print(
+    sl<Talker>().debug(
       '[DEBUG] ProductListItem for SKU ${product.sku}: Using URL: $urlForImage (Thumbnail: ${product.thumbnailUrl}, Image: ${product.imageUrl})',
     );
 

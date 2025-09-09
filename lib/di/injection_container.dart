@@ -52,59 +52,19 @@ import 'package:flutter/material.dart';
 import 'package:talker_flutter/talker_flutter.dart';
 
 final sl = GetIt.instance;
+const String kMockBackendDb = 'mockBackendDb';
 
 Future<void> init({Locale? systemLocale}) async {
-  // Initial mock data for the persistent mock backend
-  final List<ProductModel> initialMockProducts = [
-    const ProductModel(
-      id: '1',
-      name: 'Red T-Shirt, Size L',
-      sku: 'SKU-TS-RED-L',
-      quantity: 150,
-      location: 'A1-01-01',
-      thumbnailUrl: null,
-    ),
-    const ProductModel(
-      id: '2',
-      name: 'Blue Jeans, Size 32',
-      sku: 'SKU-JN-BLU-32',
-      quantity: 85,
-      location: 'A1-01-02',
-      thumbnailUrl: null,
-    ),
-    const ProductModel(
-      id: '3',
-      name: 'Green Hoodie, Size M',
-      sku: 'SKU-HD-GRN-M',
-      quantity: 110,
-      location: 'A2-03-05',
-      thumbnailUrl: null,
-    ),
-    const ProductModel(
-      id: '4',
-      name: 'Black Sneakers, Size 42',
-      sku: 'SKU-SN-BLK-42',
-      quantity: 200,
-      location: 'C4-02-01',
-      thumbnailUrl: null,
-    ),
-    const ProductModel(
-      id: '5',
-      name: 'White Socks (3-pack)',
-      sku: 'SKU-SK-WHT-3P',
-      quantity: 350,
-      location: 'C4-02-02',
-      thumbnailUrl: null,
-    ),
-  ];
+  await _initCore(systemLocale: systemLocale);
+  _initAuth();
+  _initOrder();
+  _initReceiving();
+  _initScanning();
+  _initInventory();
+  _initSettings(systemLocale: systemLocale);
+}
 
-  //####################
-  //region Features
-  //####################
-
-  //--------------------
-  //region Auth
-  //--------------------
+void _initAuth() {
   // Blocs
   sl.registerLazySingleton(
     () => AuthBloc(
@@ -125,11 +85,9 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<AuthRepository>(
     () => AuthRepositoryApiImpl(dio: sl(), prefs: sl()),
   );
-  //endregion
+}
 
-  //--------------------
-  //region Order
-  //--------------------
+void _initOrder() {
   // Blocs
   sl.registerFactory(() => OrderListBloc(getOrdersUseCase: sl()));
 
@@ -153,27 +111,21 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<OrderLocalDataSource>(
     () => OrderLocalDataSourceImpl(database: sl()),
   );
-  //endregion
+}
 
-  //--------------------
-  //region Receiving
-  //--------------------
+void _initReceiving() {
   // Blocs
   sl.registerFactory(
     () => ReceivingBloc(addStockUseCase: sl(), createProductUseCase: sl()),
   );
-  //endregion
+}
 
-  //--------------------
-  //region Scanning
-  //--------------------
+void _initScanning() {
   // Blocs
   sl.registerFactory(() => ScanningBloc(findProductBySkuUseCase: sl()));
-  //endregion
+}
 
-  //--------------------
-  //region Inventory
-  //--------------------
+void _initInventory() {
   // Blocs
   sl.registerFactory(
     () =>
@@ -213,11 +165,9 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<InventoryLocalDataSource>(
     () => InventoryLocalDataSourceImpl(database: sl()),
   );
-  //endregion
+}
 
-  //--------------------
-  //region Settings
-  //--------------------
+void _initSettings({Locale? systemLocale}) {
   // Blocs
   sl.registerFactory(() {
     final initialState = SettingsState(
@@ -242,17 +192,13 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<SettingsRepository>(
     () => SettingsRepositoryImpl(sl()),
   );
-  //endregion
+}
 
-  //endregion
-
-  //####################
-  //region External
-  //####################
+Future<void> _initCore({Locale? systemLocale}) async {
   final sharedPreferences = await SharedPreferences.getInstance();
   sl.registerLazySingleton(() => sharedPreferences);
   sl.registerLazySingleton<Talker>(
-    () => TalkerFlutter.init(observer: TelegramTalkerObserver()),
+    () => TalkerFlutter.init(observer: TelegramTalkerObserver(sl())),
   );
   sl.registerLazySingleton(() {
     final dio = Dio();
@@ -345,6 +291,48 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton<Database>(() => appDb); // Register app's DB
 
   // Mock backend database
+  final initialMockProducts = [
+    const ProductModel(
+      id: '1',
+      name: 'Red T-Shirt, Size L',
+      sku: 'SKU-TS-RED-L',
+      quantity: 150,
+      location: 'A1-01-01',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '2',
+      name: 'Blue Jeans, Size 32',
+      sku: 'SKU-JN-BLU-32',
+      quantity: 85,
+      location: 'A1-01-02',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '3',
+      name: 'Green Hoodie, Size M',
+      sku: 'SKU-HD-GRN-M',
+      quantity: 110,
+      location: 'A2-03-05',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '4',
+      name: 'Black Sneakers, Size 42',
+      sku: 'SKU-SN-BLK-42',
+      quantity: 200,
+      location: 'C4-02-01',
+      thumbnailUrl: null,
+    ),
+    const ProductModel(
+      id: '5',
+      name: 'White Socks (3-pack)',
+      sku: 'SKU-SK-WHT-3P',
+      quantity: 350,
+      location: 'C4-02-02',
+      thumbnailUrl: null,
+    ),
+  ];
   final mockBackendDb = await openDatabase(
     join(await getDatabasesPath(), 'easy_box_mock_backend_database.db'),
     onCreate: (db, version) async {
@@ -371,10 +359,9 @@ Future<void> init({Locale? systemLocale}) async {
   );
   sl.registerLazySingleton<Database>(
     () => mockBackendDb,
-    instanceName: 'mockBackendDb',
+    instanceName: kMockBackendDb,
   ); // Register mock backend DB
 
   sl.registerLazySingleton(() => Connectivity());
   sl.registerLazySingleton<NetworkInfo>(() => NetworkInfoImpl(sl()));
-  //endregion
 }

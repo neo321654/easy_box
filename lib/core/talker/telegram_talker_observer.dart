@@ -3,10 +3,13 @@ import 'package:dio/dio.dart';
 import 'package:easy_box/di/injection_container.dart';
 import 'package:easy_box/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:talker_flutter/talker_flutter.dart';
+import 'package:easy_box/core/config/env_config.dart';
 
 class TelegramTalkerObserver extends TalkerObserver {
-  final Dio _dio = Dio();
-  final String _url = 'http://38.244.208.106:8000/log-client-error';
+  TelegramTalkerObserver(this._dio);
+  final Dio _dio;
+
+  final String _url = '${EnvConfig.baseUrl}/log-client-error';
 
   void _sendToTelegram(String logMessage) {
     // Get user info from AuthBloc via GetIt
@@ -24,7 +27,6 @@ class TelegramTalkerObserver extends TalkerObserver {
         await _dio.post(_url, data: {'message': fullMessage});
       } catch (e) {
         // ignore: avoid_print
-        print('Failed to send log to Telegram: $e');
       }
     });
   }
