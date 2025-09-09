@@ -48,6 +48,7 @@ class PickingBloc extends Bloc<PickingEvent, PickingState> {
           location: line.location,
           quantityToPick: line.quantityToPick,
           quantityPicked: event.quantity, // Update picked quantity
+          imageUrl: line.imageUrl, // Keep the existing image URL
         );
       }
       return line;

@@ -28,25 +28,22 @@ class OrderModel extends Order {
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'customer_name': customerName,
       'status': status.name,
       'lines': lines.map((line) {
-        // Handle both OrderLine and OrderLineModel, making the method robust.
-        if (line is OrderLineModel) {
-          return line.toJson();
-        } else {
-          // Convert a domain OrderLine entity to a model before serializing.
-          return OrderLineModel(
-            productId: line.productId,
-            productName: line.productName,
-            sku: line.sku,
-            location: line.location,
-            quantityToPick: line.quantityToPick,
-            quantityPicked: line.quantityPicked,
-            imageUrl: line.imageUrl,
-          ).toJson();
-        }
+        // Ensure we have an OrderLineModel to call toJsonForUpdate on.
+        final lineModel = (line is OrderLineModel)
+            ? line
+            : OrderLineModel(
+                productId: line.productId,
+                productName: line.productName,
+                sku: line.sku,
+                location: line.location,
+                quantityToPick: line.quantityToPick,
+                quantityPicked: line.quantityPicked,
+                imageUrl: line.imageUrl,
+              );
+        return lineModel.toJsonForUpdate();
       }).toList(),
     };
   }
