@@ -39,8 +39,14 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SERVER_PORT }}
           script: |
+            set -e
+            echo "--- Navigating to project root on server ---"
+            cd ~/easy_box # Assuming easy_box is the root of the git repo
+            echo "--- Pulling latest changes from main branch ---"
+            git pull origin main
+            echo "--- Navigating to backend directory ---"
+            cd easy_box_backend
             echo "--- Creating .env file ---"
-            cd ~/easy_box/easy_box_backend
             cat <<EOF > .env
             SECRET_KEY=${{ secrets.SECRET_KEY }}
             ALGORITHM=${{ secrets.ALGORITHM }}
@@ -53,17 +59,11 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
             echo "--- .env file created ---"
-            
-            echo "--- Начинаю деплой ---"
-            echo "Текущая директория: $(pwd)"
-            echo "--- Принудительно обновляю файлы до последней версии из Git ---"
-            git fetch origin
-            git reset --hard origin/main
-            echo "--- Перезапускаю docker-compose с гарантированно новым docker-compose.yml ---"
+            echo "--- Pulling latest Docker image and restarting services ---"
             docker pull 321654neo/easy_box_backend:latest
-            docker-compose down
-            docker-compose up -d
-            echo "--- Деплой завершен ---"
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml up -d
+            echo "--- Deployment finished ---"
 
       - name: Clean up old Docker images
         uses: appleboy/ssh-action@master
