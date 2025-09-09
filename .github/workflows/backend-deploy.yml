@@ -45,6 +45,9 @@ jobs:
             git reset --hard origin/main
             cd easy_box_backend
             
+            echo "--- Volumes before action ---"
+            docker volume ls
+
             echo "Creating .env file"
             cat <<EOF > .env
             SECRET_KEY=${{ secrets.SECRET_KEY }}
@@ -59,10 +62,18 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
 
-            echo "Pulling latest Docker image and restarting services"
+            echo "--- Bringing containers down ---"
             docker-compose -f docker-compose.prod.yml down
+
+            echo "--- Volumes after down ---"
+            docker volume ls
+
+            echo "--- Pulling latest Docker image and restarting services ---"
             docker-compose -f docker-compose.prod.yml pull backend
             docker-compose -f docker-compose.prod.yml up -d --build
+
+            echo "--- Volumes after up ---"
+            docker volume ls
 
             echo "Running migrations"
             docker-compose -f docker-compose.prod.yml exec -T backend python manage.py migrate --noinput
