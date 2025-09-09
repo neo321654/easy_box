@@ -110,9 +110,12 @@ class _ReceivingViewState extends State<_ReceivingView> {
           } else if (state is AddStockFailure) {
             showAppSnackBar(context, context.S.failedToAddStock, isError: true);
           } else if (state is CreateProductFailure) {
+            final message = state.sku != null
+                ? context.S.productWithSkuAlreadyExists(state.sku!)
+                : state.message ?? context.S.failedToCreateProduct;
             showAppSnackBar(
               context,
-              state.message ?? context.S.failedToCreateProduct,
+              message,
               isError: true,
             );
           } else if (state is AddStockAfterCreateFailure) {

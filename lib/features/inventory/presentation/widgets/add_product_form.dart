@@ -26,6 +26,7 @@ class _AddProductFormState extends State<AddProductForm> {
   late final TextEditingController _skuController;
   late final TextEditingController _locationController;
   File? _imageFile;
+  String? _errorMessage;
 
   @override
   void initState() {
@@ -89,11 +90,17 @@ class _AddProductFormState extends State<AddProductForm> {
           );
           Navigator.of(context).pop(true); // Go back after successful creation
         } else if (state is ProductCreationFailure) {
-          showAppSnackBar(
-            context,
-            state.message,
-            isError: true,
-          );
+          final message = state.sku != null
+              ? context.S.productWithSkuAlreadyExists(state.sku!)
+              : state.message;
+          setState(() {
+            _errorMessage = message;
+          });
+        } else if (state is ProductCreationLoading ||
+            state is ProductCreationInitial) {
+          setState(() {
+            _errorMessage = null;
+          });
         }
       },
       child: SingleChildScrollView(
@@ -186,6 +193,15 @@ class _AddProductFormState extends State<AddProductForm> {
                   ),
                 ),
                 const SizedBox(height: AppDimensions.large),
+                if (_errorMessage != null)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: AppDimensions.medium),
+                    child: Text(
+                      _errorMessage!,
+                      style: TextStyle(color: Theme.of(context).colorScheme.error),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
                 BlocBuilder<ProductCreationBloc, ProductCreationState>(
                   builder: (context, state) {
                     if (state is ProductCreationLoading) {

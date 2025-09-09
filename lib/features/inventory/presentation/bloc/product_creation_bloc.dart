@@ -30,11 +30,7 @@ class ProductCreationBloc
 
     failureOrResult.fold((failure) {
       if (failure is SkuAlreadyExistsFailure) {
-        emit(
-          ProductCreationFailure(
-            message: 'Product with SKU ${failure.sku} already exists.',
-          ),
-        );
+        emit(ProductCreationFailure(sku: failure.sku));
       } else {
         emit(const ProductCreationFailure());
       }

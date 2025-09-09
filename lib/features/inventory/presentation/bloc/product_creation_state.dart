@@ -4,7 +4,7 @@ abstract class ProductCreationState extends Equatable {
   const ProductCreationState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ProductCreationInitial extends ProductCreationState {}
@@ -22,9 +22,10 @@ class ProductCreationSuccess extends ProductCreationState {
 
 class ProductCreationFailure extends ProductCreationState {
   final String message;
+  final String? sku;
 
-  const ProductCreationFailure({this.message = 'Failed to create product.'});
+  const ProductCreationFailure({this.message = 'Failed to create product.', this.sku});
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message, sku];
 }

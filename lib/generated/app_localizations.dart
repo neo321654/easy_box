@@ -573,6 +573,12 @@ abstract class AppLocalizations {
   /// In ru, this message translates to:
   /// **'Добавить изображение товара'**
   String get addProductImage;
+
+  /// No description provided for @productWithSkuAlreadyExists.
+  ///
+  /// In ru, this message translates to:
+  /// **'Товар с SKU {sku} уже существует'**
+  String productWithSkuAlreadyExists(String sku);
 }
 
 class _AppLocalizationsDelegate

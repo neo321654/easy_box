@@ -135,5 +135,13 @@
   "selectImageSource": "Выберите источник изображения",
   "camera": "Камера",
   "gallery": "Галерея",
-  "addProductImage": "Добавить изображение товара"
+  "addProductImage": "Добавить изображение товара",
+  "productWithSkuAlreadyExists": "Товар с SKU {sku} уже существует",
+  "@productWithSkuAlreadyExists": {
+    "placeholders": {
+      "sku": {
+        "type": "String"
+      }
+    }
+  }
 }

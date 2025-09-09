@@ -284,4 +284,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addProductImage => 'Add Product Image';
+
+  @override
+  String productWithSkuAlreadyExists(String sku) {
+    return 'Product with SKU $sku already exists';
+  }
 }

@@ -135,5 +135,13 @@
   "selectImageSource": "Select Image Source",
   "camera": "Camera",
   "gallery": "Gallery",
-  "addProductImage": "Add Product Image"
+  "addProductImage": "Add Product Image",
+  "productWithSkuAlreadyExists": "Product with SKU {sku} already exists",
+  "@productWithSkuAlreadyExists": {
+    "placeholders": {
+      "sku": {
+        "type": "String"
+      }
+    }
+  }
 }
