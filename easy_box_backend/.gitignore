@@ -13,3 +13,4 @@ easy_box.db
 
 # Uploaded files
 uploads/
+db.sqlite3
