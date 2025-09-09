@@ -4,6 +4,11 @@ from django import forms
 import cloudinary.uploader
 from django.utils.html import format_html
 
+# Change Admin Titles
+admin.site.site_header = "Панель управления Easy Box"
+admin.site.site_title = "Администрирование Easy Box"
+admin.site.index_title = "Добро пожаловать в панель управления"
+
 class ProductAdminForm(forms.ModelForm):
     image = forms.ImageField(required=False)
 

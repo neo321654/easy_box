@@ -1,0 +1,49 @@
+:root {
+    --primary: #417690; /* Industrial Blue/Grey */
+    --secondary: #5b80b2;
+    --accent: #f5a623; /* Orange accent */
+    --primary-fg: #fff;
+
+    --body-fg: #333;
+    --body-bg: #f8f8f8;
+    --body-quiet-color: #666;
+    --body-loud-color: #000;
+
+    --header-color: #fff;
+    --header-bg: var(--primary);
+    --header-link-color: var(--primary-fg);
+
+    --breadcrumbs-fg: #c4dce8;
+    --breadcrumbs-link-fg: #fff;
+    --breadcrumbs-bg: #5b80b2;
+
+    --link-fg: #447e9b;
+    --link-hover-color: #036;
+    --link-selected-fg: #5b80b2;
+
+    --hairline-color: #e8e8e8;
+    --border-color: #ccc;
+
+    --error-fg: #ba2121;
+    --message-success-bg: #dfd;
+    --message-warning-bg: #ffc;
+    --message-error-bg: #ffefef;
+
+    --darkened-bg: #f8f8f8; /* A bit darker than --body-bg */
+    --selected-bg: #e4e4e4; /* E.g. selected table cells */
+    --selected-row: #f2f2f2;
+
+    --button-fg: #fff;
+    --button-bg: var(--primary);
+    --button-hover-bg: #396a83;
+    --default-button-bg: #5b80b2;
+    --default-button-hover-bg: #4a71a3;
+    --close-button-bg: #888;
+    --close-button-hover-bg: #747474;
+    --delete-button-bg: #ba2121;
+    --delete-button-hover-bg: #a41515;
+
+    --object-tools-fg: var(--button-fg);
+    --object-tools-bg: var(--close-button-bg);
+    --object-tools-hover-bg: var(--close-button-hover-bg);
+}
