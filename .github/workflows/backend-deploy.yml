@@ -62,7 +62,8 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
 
-            echo "--- Pulling latest Docker image and restarting services ---"
+            echo "--- Force recreating containers ---"
+            docker-compose -f docker-compose.prod.yml rm -fsv
             docker-compose -f docker-compose.prod.yml up -d --build
 
             echo "Running migrations"
