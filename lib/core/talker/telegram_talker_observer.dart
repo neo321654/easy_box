@@ -6,7 +6,7 @@ import 'package:talker_flutter/talker_flutter.dart';
 
 class TelegramTalkerObserver extends TalkerObserver {
   final Dio _dio = Dio();
-  final String _url = 'http://38.244.208.106:8000/log-client-error';
+  final String _url = 'http://38.244.208.106/log-client-error';
 
   void _sendToTelegram(String logMessage) {
     // Get user info from AuthBloc via GetIt

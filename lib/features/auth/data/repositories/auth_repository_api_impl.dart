@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class AuthRepositoryApiImpl implements AuthRepository {
   final Dio dio;
   final SharedPreferences prefs;
-  final String _baseUrl = 'http://38.244.208.106:8000';
+  final String _baseUrl = 'http://38.244.208.106';
   static const _userTokenKey = 'user_token';
 
   AuthRepositoryApiImpl({required this.dio, required this.prefs});

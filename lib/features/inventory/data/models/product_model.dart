@@ -12,7 +12,7 @@ class ProductModel extends Product {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    const String baseUrl = 'http://38.244.208.106:8000';
+    const String baseUrl = 'http://38.244.208.106';
 
     String? getAbsoluteUrl(String? relativeUrl) {
       if (relativeUrl == null || relativeUrl.isEmpty) return null;

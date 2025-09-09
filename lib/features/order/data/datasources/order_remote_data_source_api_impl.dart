@@ -7,7 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class OrderRemoteDataSourceApiImpl implements OrderRemoteDataSource {
   final Dio dio;
   final SharedPreferences prefs;
-  final String _baseUrl = 'http://38.244.208.106:8000/api';
+  final String _baseUrl = 'http://38.244.208.106/api';
 
   OrderRemoteDataSourceApiImpl({required this.dio, required this.prefs});
 
