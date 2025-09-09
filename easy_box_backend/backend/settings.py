@@ -174,11 +174,15 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 JAZZMIN_SETTINGS = {
-    "site_title": "Easy Box Admin",
+    "site_title": "Админка Easy Box",
     "site_header": "Easy Box",
     "site_brand": "Easy Box",
     "welcome_sign": "Добро пожаловать в панель управления Easy Box",
     "copyright": "Easy Box Ltd",
+    "search_model": "auth.User",
+    "topmenu_links": [
+        {"name": "Главная", "url": "/", "permissions": ["auth.view_user"]},
+    ],
     "ui_tweaks": {
         "theme": "flatly",
         "navbar_small_text": False,
