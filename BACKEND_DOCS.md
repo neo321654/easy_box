@@ -7,6 +7,7 @@
 - **Технологический стек:**
   - **Фреймворк:** Django & Django Rest Framework
   - **База данных:** PostgreSQL (в продакшене), SQLite (для локальной разработки)
+  - **Хранение изображений:** Cloudinary
   - **Веб-сервер:** Nginx
   - **Сервер приложения:** Gunicorn
   - **Окружение:** Docker & Docker Compose
@@ -14,18 +15,18 @@
 ## 2. Структура проекта (`easy_box_backend/`)
 
 - `api/`: Основное Django-приложение, содержащее всю бизнес-логику.
-  - `models.py`: Определяет модели базы данных (`User`, `Product`, `Order`, `OrderLine`).
+  - `models.py`: Определяет модели (`User`, `Product`, `Order`, `OrderLine`). Изображения хранятся в виде URL (`image_url`, `thumbnail_url`), полученных от Cloudinary.
   - `views.py`: Содержит `ViewSet`'ы для обработки API-запросов.
-  - `serializers.py`: Отвечает за преобразование объектов Django в JSON и обратно.
-  - `admin.py`: Настраивает отображение моделей в админ-панели Django.
+  - `serializers.py`: Отвечает за преобразование объектов Django в JSON и обратно. Содержит логику загрузки изображений в Cloudinary при создании/обновлении товара.
+  - `admin.py`: Настраивает отображение моделей в админ-панели Django, включая логику загрузки изображений в Cloudinary.
   - `urls.py`: Определяет маршруты (endpoints) API.
 - `backend/`: Папка с настройками Django-проекта.
-  - `settings.py`: Главный конфигурационный файл. Настройки базы данных, CORS, и другие переменные окружения загружаются из `.env` файла.
+  - `settings.py`: Главный конфигурационный файл. Настройки базы данных, CORS, Cloudinary и другие переменные окружения загружаются из `.env` файла.
   - `urls.py`: Корневой файл маршрутизации проекта.
 - `Dockerfile`: Инструкция для сборки Docker-образа приложения.
 - `docker-compose.yml`: Файл для запуска проекта в локальном окружении (использует SQLite).
 - `docker-compose.prod.yml`: Файл для развертывания на продакшн-сервере. Запускает 3 сервиса: `db` (PostgreSQL), `backend` (Gunicorn + Django), `nginx`.
-- `nginx/nginx.prod.conf`: Конфигурация Nginx для продакшена. Выполняет роль реверс-прокси и раздает статические (`/static/`) и медиа-файлы (`/media/`).
+- `nginx/nginx.prod.conf`: Конфигурация Nginx для продакшена. Выполняет роль реверс-прокси.
 
 ## 3. API Endpoints
 
@@ -51,9 +52,12 @@
 
 Для запуска проекта на локальной машине необходимы Docker и Docker Compose.
 
-1.  **Создайте файл `.env`** в корне папки `easy_box_backend/` со следующим содержимым (для локальной разработки достаточно `SECRET_KEY`):
+1.  **Создайте файл `.env`** в корне папки `easy_box_backend/` со следующим содержимым:
     ```
     SECRET_KEY=your_secret_local_key
+    CLOUDINARY_CLOUD_NAME=your_cloud_name
+    CLOUDINARY_API_KEY=your_api_key
+    CLOUDINARY_API_SECRET=your_api_secret
     ```
 2.  **Запустите сервисы:**
     ```bash
@@ -83,4 +87,7 @@
   5.  Старые контейнеры останавливаются и удаляются (`docker-compose down --volumes`).
   6.  Запускаются новые версии контейнеров (`docker-compose -f docker-compose.prod.yml up -d`).
   7.  Применяются миграции базы данных.
-- **Секреты GitHub:** Для работы CI/CD в настройках репозитория (`Settings -> Secrets and variables -> Actions`) должны быть заданы все необходимые переменные (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `SECRET_KEY` и др.).
+- **Секреты GitHub:** Для работы CI/CD в настройках репозитория (`Settings -> Secrets and variables -> Actions`) должны быть заданы все необходимые переменные, включая:
+  - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
+  - `SECRET_KEY`
+  - `CLOUDINARY_CLOUD_NAME`, `CLOUDINARY_API_KEY`, `CLOUDINARY_API_SECRET`
