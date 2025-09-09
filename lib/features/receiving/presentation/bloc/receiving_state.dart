@@ -4,7 +4,7 @@ abstract class ReceivingState extends Equatable {
   const ReceivingState();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class ReceivingInitial extends ReceivingState {}
@@ -30,7 +30,7 @@ abstract class ReceivingFailure extends ReceivingState {
   const ReceivingFailure();
 
   @override
-  List<Object> get props => [];
+  List<Object?> get props => [];
 }
 
 class AddStockFailure extends ReceivingFailure {
@@ -39,7 +39,12 @@ class AddStockFailure extends ReceivingFailure {
 
 class CreateProductFailure extends ReceivingFailure {
   final String? message;
-  const CreateProductFailure({this.message});
+  final String? sku;
+
+  const CreateProductFailure({this.message, this.sku});
+
+  @override
+  List<Object?> get props => [message, sku];
 }
 
 class AddStockAfterCreateFailure extends ReceivingFailure {
