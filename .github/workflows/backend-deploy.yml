@@ -60,6 +60,7 @@ jobs:
             EOF
 
             echo "Pulling latest Docker image and restarting services"
+            docker-compose -f docker-compose.prod.yml down --volumes
             docker-compose -f docker-compose.prod.yml pull backend
             docker-compose -f docker-compose.prod.yml up -d --build
 
