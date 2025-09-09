@@ -32,44 +32,10 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'first_name', 'last_name']
 
 class ProductSerializer(serializers.ModelSerializer):
-    image = serializers.ImageField(write_only=True, required=False)
-    image_url = serializers.CharField(read_only=True)
-    thumbnail_url = serializers.CharField(read_only=True)
 
     class Meta:
         model = Product
-        fields = ('id', 'name', 'sku', 'quantity', 'location', 'image', 'image_url', 'thumbnail_url')
-
-    def create(self, validated_data):
-        image = validated_data.pop('image', None)
-        product = super().create(validated_data)
-        if image:
-            # Upload the original image once
-            upload_result = cloudinary.uploader.upload(
-                image,
-                transformation=[{'width': 400, 'height': 400, 'crop': 'limit'}]
-            )
-            
-            # Set the main image URL
-            product.image_url = upload_result['secure_url']
-            
-            # Build the thumbnail URL from the public_id and format of the uploaded image
-            public_id = upload_result['public_id']
-            file_format = upload_result['format']
-            thumbnail_url = cloudinary.CloudinaryImage(public_id, format=file_format).build_url(
-                transformation=[{'width': 100, 'height': 100, 'crop': 'thumb'}]
-            )
-            product.thumbnail_url = thumbnail_url
-            
-            product.save()
-        return product
-
-    def update(self, instance, validated_data):
-        if 'image' in validated_data:
-            image = validated_data.pop('image')
-            upload_result = cloudinary.uploader.upload(image)
-            validated_data['image_url'] = upload_result['secure_url']
-        return super().update(instance, validated_data)
+        fields = ('id', 'name', 'sku', 'quantity', 'location', 'image', 'thumbnail')
 
 class OrderLineSerializer(serializers.ModelSerializer):
     product = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all())
