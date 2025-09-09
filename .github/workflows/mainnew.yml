@@ -42,8 +42,9 @@ jobs:
             set -e
             echo "--- Navigating to project root on server ---"
             cd ~/easy_box # Assuming easy_box is the root of the git repo
-            echo "--- Pulling latest changes from main branch ---"
-            git pull origin main
+            echo "--- Ensuring local branch matches remote ---"
+            git fetch origin
+            git reset --hard origin/main
             echo "--- Navigating to backend directory ---"
             cd easy_box_backend
             echo "--- Creating .env file ---"
