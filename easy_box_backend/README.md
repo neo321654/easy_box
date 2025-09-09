@@ -1,2 +1,1 @@
-
-# Triggering CI/CD to apply deployment script changes.
+- Test persistence deploy trigger.
