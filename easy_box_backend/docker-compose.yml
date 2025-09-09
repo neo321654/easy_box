@@ -3,14 +3,10 @@ version: '3.8'
 services:
   api:
     build: .
-    command: bash -c "mkdir -p /app/db && python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate --noinput && gunicorn backend.wsgi:application --bind 0.0.0.0:8000"
     volumes:
       - .:/app
-      - db_data:/app/db
     ports:
       - "8000:8000"
     env_file:
       - .env
-
-volumes:
-  db_data:
