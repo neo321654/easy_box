@@ -32,4 +32,5 @@ abstract class InventoryLocalDataSource {
   Future<void> addProductDeletionToQueue(String id);
   Future<List<Map<String, dynamic>>> getQueuedProductDeletions();
   Future<void> clearQueuedProductDeletions();
+  Future<ProductModel?> findProductById(String id);
 }

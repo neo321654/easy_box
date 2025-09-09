@@ -179,4 +179,18 @@ class InventoryLocalDataSourceImpl implements InventoryLocalDataSource {
   Future<void> clearQueuedProductDeletions() async {
     await database.delete(_tableProductDeletionsQueue);
   }
+
+  @override
+  Future<ProductModel?> findProductById(String id) async {
+    final List<Map<String, dynamic>> maps = await database.query(
+      _tableProducts,
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+    if (maps.isNotEmpty) {
+      return ProductModel.fromJson(maps.first);
+    } else {
+      return null;
+    }
+  }
 }

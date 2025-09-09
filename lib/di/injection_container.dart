@@ -138,10 +138,11 @@ Future<void> init({Locale? systemLocale}) async {
   sl.registerLazySingleton(() => UpdateOrderUseCase(sl()));
 
   // Repositories
-  sl.registerLazySingleton<OrderRepository>(
+    sl.registerLazySingleton<OrderRepository>(
     () => OrderRepositoryImpl(
       remoteDataSource: sl(),
       localDataSource: sl(),
+      inventoryLocalDataSource: sl(),
       networkInfo: sl(),
     ),
   );

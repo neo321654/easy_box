@@ -29,10 +29,23 @@ class OrderLocalDataSourceImpl implements OrderLocalDataSource {
           conflictAlgorithm: ConflictAlgorithm.replace,
         );
         for (final line in order.lines) {
-          final lineModel = line as OrderLineModel;
+          final Map<String, dynamic> lineJson;
+          if (line is OrderLineModel) {
+            lineJson = line.toJson();
+          } else {
+            lineJson = OrderLineModel(
+              productId: line.productId,
+              productName: line.productName,
+              sku: line.sku,
+              location: line.location,
+              quantityToPick: line.quantityToPick,
+              quantityPicked: line.quantityPicked,
+              imageUrl: line.imageUrl,
+            ).toJson();
+          }
           batch.insert(_tableOrderLines, {
             'order_id': order.id,
-            ...lineModel.toJson(),
+            ...lineJson,
           }, conflictAlgorithm: ConflictAlgorithm.replace);
         }
       }
