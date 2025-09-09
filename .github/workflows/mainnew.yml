@@ -61,8 +61,8 @@ jobs:
             git reset --hard origin/main
             echo "--- Перезапускаю docker-compose с гарантированно новым docker-compose.yml ---"
             docker pull 321654neo/easy_box_backend:latest
-            docker-compose down
-            docker-compose up -d
+            docker-compose -f docker-compose.prod.yml down
+            docker-compose -f docker-compose.prod.yml up -d
             echo "--- Деплой завершен ---"
 
       - name: Clean up old Docker images
