@@ -91,7 +91,7 @@ class _AddProductFormState extends State<AddProductForm> {
         } else if (state is ProductCreationFailure) {
           showAppSnackBar(
             context,
-            context.S.failedToCreateProduct,
+            state.message,
             isError: true,
           );
         }

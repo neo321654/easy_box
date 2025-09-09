@@ -38,7 +38,8 @@ class AddStockFailure extends ReceivingFailure {
 }
 
 class CreateProductFailure extends ReceivingFailure {
-  const CreateProductFailure();
+  final String? message;
+  const CreateProductFailure({this.message});
 }
 
 class AddStockAfterCreateFailure extends ReceivingFailure {
