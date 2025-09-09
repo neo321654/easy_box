@@ -56,4 +56,12 @@ class OrderLineModel extends OrderLine {
       'image_url': imageUrl,
     };
   }
+
+  Map<String, dynamic> toJsonForUpdate() {
+    return {
+      'product': int.tryParse(productId),
+      'quantity_to_pick': quantityToPick,
+      'quantity_picked': quantityPicked,
+    };
+  }
 }
