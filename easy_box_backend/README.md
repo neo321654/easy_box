@@ -1,1 +1,2 @@
-- Test persistence deploy trigger.
+
+- Triggering deployment with volume logging.
