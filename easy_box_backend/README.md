@@ -1,1 +1,2 @@
-- Final persistence test.
+
+- Triggering deployment with rm -fsv fix.
