@@ -40,3 +40,5 @@ class OrderLine(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity_to_pick = models.IntegerField()
     quantity_picked = models.IntegerField(default=0)
+
+# Trigger deployment for data persistence test
