@@ -8,6 +8,7 @@
 - The user wants me to merge to the main branch without asking for confirmation.
 - The deployment workflow is triggered only on a push to the `main` branch if changes are detected within the `easy_box_backend/` directory.
 - A deployment is triggered only by a push to `main` that includes changes in the `easy_box_backend/` directory. This applies even when fixing the deployment workflow itself. To force a deployment, I must make a trivial change in a file within `easy_box_backend/`.
+- **Current Problem:** Products added via the admin panel are not being saved.
 --- End of Context from: ../../.gemini/GEMINI.md ---
 
 --- Context from: GEMINI.md ---
