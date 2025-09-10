@@ -44,6 +44,7 @@ jobs:
 
             echo "Creating .env file"
             cat <<EOF > .env
+            DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}
             SECRET_KEY=${{ secrets.SECRET_KEY }}
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
