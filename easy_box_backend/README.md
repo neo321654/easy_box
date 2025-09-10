@@ -3,3 +3,4 @@
 - Chore: trigger deployment again to fix KeyError.
 - Chore: add logging and backup to deployment.
 - Chore: trigger one more test deployment.
+- Chore: trigger deployment for postgresql fix.
