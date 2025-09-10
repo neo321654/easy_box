@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -122,18 +123,9 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-import dj_database_url
-
-# ... (keep the rest of the file as is)
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
 DATABASES = {
-    'default': dj_database_url.config(conn_max_age=600, ssl_require=False)
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=False, default='sqlite:///db.sqlite3')
 }
-
-# ... (the rest of the file)
 
 
 # Password validation
@@ -205,6 +197,6 @@ JAZZMIN_SETTINGS = {
         "sidebar_nav_child_indent": False,
         "sidebar_nav_compact_style": False,
         "sidebar_nav_legacy_style": False,
-        "sidebar_nav_flat_style": False
+        "sidebar__nav_flat_style": False
     }
 }
