@@ -8,3 +8,4 @@
 - Chore: trigger deployment for final settings fix.
 - Chore: trigger deployment for force-pull strategy.
 - Chore: trigger deployment for migrate env injection.
+- Chore: trigger deployment to test data persistence.
