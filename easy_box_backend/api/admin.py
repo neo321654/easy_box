@@ -10,21 +10,23 @@ admin.site.site_title = "Администрирование Easy Box"
 admin.site.index_title = "Добро пожаловать в панель управления"
 
 class ProductAdminForm(forms.ModelForm):
-    image = forms.ImageField(required=False)
+    image = forms.ImageField(required=False, label="Изображение")
 
     class Meta:
         model = Product
         fields = '__all__'
 
+
 class ProductAdmin(admin.ModelAdmin):
     form = ProductAdminForm
     list_display = ('name', 'sku', 'quantity', 'location', 'image_thumbnail')
+    fields = ('name', 'sku', 'quantity', 'location', 'image')
 
     def image_thumbnail(self, obj):
         if obj.thumbnail_url:
             return format_html(f'<img src="{obj.thumbnail_url}" width="100" />')
-        return "No Image"
-    image_thumbnail.short_description = 'Thumbnail'
+        return "Изображения нет"
+    image_thumbnail.short_description = 'Миниатюра'
 
     def save_model(self, request, obj, form, change):
         if 'image' in form.cleaned_data and form.cleaned_data['image']:
