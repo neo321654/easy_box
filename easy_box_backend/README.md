@@ -9,3 +9,4 @@
 - Chore: trigger deployment for force-pull strategy.
 - Chore: trigger deployment for migrate env injection.
 - Chore: trigger deployment to test data persistence.
+- Chore: trigger deployment with simplified script.
