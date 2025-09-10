@@ -1,4 +1,4 @@
-name: Deploy Backend
+name: Deploy Backend from Scratch
 
 on:
   push:
@@ -14,15 +14,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
@@ -40,9 +31,32 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             set -e
-            cd ~/easy_box/easy_box_backend
+            
+            # Phase 1: Server Cleanup
+            echo "### Phase 1: Cleaning server..."
+            # Stop any running containers from the project to release locks
+            if [ -d "easy_box/easy_box_backend" ]; then
+              cd easy_box/easy_box_backend
+              docker-compose -f docker-compose.prod.yml down --volumes || echo "No containers were running."
+              cd ~
+            fi
+            
+            # Remove old project directory
+            echo "Removing old project directory..."
+            rm -rf easy_box
+            
+            # Prune all docker resources
+            echo "Pruning Docker system..."
+            docker system prune -af
 
-            echo "Creating .env file"
+            # Phase 2: Fresh Setup
+            echo "### Phase 2: Setting up fresh project..."
+            # Clone the repository fresh
+            git clone https://github.com/${{ github.repository }}.git easy_box
+            cd easy_box/easy_box_backend
+
+            # Create the .env file from secrets
+            echo "Creating .env file..."
             cat <<EOF > .env
             DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}
             SECRET_KEY=${{ secrets.SECRET_KEY }}
@@ -56,21 +70,23 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
 
-            echo "### Pulling latest image from Docker Hub..."
+            # Phase 3: First Deployment
+            echo "### Phase 3: Starting services..."
+            # Pull the latest backend image
             docker pull 321654neo/easy_box_backend:latest
-
-            echo "### Recreating backend container safely..."
-            docker-compose -f docker-compose.prod.yml --env-file .env stop backend
-            docker-compose -f docker-compose.prod.yml --env-file .env rm -f backend
+            
+            # Start all services
             docker-compose -f docker-compose.prod.yml --env-file .env up -d --remove-orphans
 
-            echo "### Waiting for services to start..."
+            # Wait for services to stabilize
+            echo "Waiting for services to start..."
             sleep 15
 
-            echo "### Running migrations..."
-            docker-compose -f docker-compose.prod.yml exec -T -e "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}" backend python manage.py migrate --noinput
+            # Run database migrations
+            echo "Running migrations..."
+            docker-compose -f docker-compose.prod.yml --env-file .env exec -T backend python manage.py migrate --noinput
 
-            echo "### Deployment finished"
+            echo "### Deployment finished successfully!"
 
       - name: Clean up old Docker images
         uses: appleboy/ssh-action@master
