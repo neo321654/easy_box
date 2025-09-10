@@ -57,7 +57,7 @@ jobs:
             EOF
 
             echo "### Exporting environment variables..."
-            export $(grep -v '^#' .env | xargs)
+            set -a; source .env; set +a
 
             echo "### Pulling latest image from Docker Hub..."
             docker pull 321654neo/easy_box_backend:latest
