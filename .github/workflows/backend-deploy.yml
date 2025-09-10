@@ -62,9 +62,8 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
 
-            echo "### Force recreating containers..."
-            docker-compose -f docker-compose.prod.yml rm -fs
-            docker-compose -f docker-compose.prod.yml up -d --build
+            echo "### Recreating containers if needed..."
+            docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans
 
             echo "### Waiting for services to start..."
             sleep 15
