@@ -9,3 +9,4 @@ psycopg2-binary
 whitenoise
 Pillow
 django-jazzmin
+dj-database-url
