@@ -5,3 +5,4 @@
 - Chore: trigger one more test deployment.
 - Chore: trigger deployment for postgresql fix.
 - Chore: trigger deployment for dockerfile fix.
+- Chore: trigger deployment for final settings fix.
