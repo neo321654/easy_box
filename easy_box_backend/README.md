@@ -7,3 +7,4 @@
 - Chore: trigger deployment for dockerfile fix.
 - Chore: trigger deployment for final settings fix.
 - Chore: trigger deployment for force-pull strategy.
+- Chore: trigger deployment for migrate env injection.
