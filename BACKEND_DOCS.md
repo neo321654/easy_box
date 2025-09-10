@@ -6,7 +6,7 @@
 
 - **Технологический стек:**
   - **Фреймворк:** Django & Django Rest Framework
-  - **База данных:** PostgreSQL (в продакшене), SQLite (для локальной разработки)
+  - **База данных:** PostgreSQL
   - **Хранение изображений:** Cloudinary
   - **Веб-сервер:** Nginx
   - **Сервер приложения:** Gunicorn
@@ -15,17 +15,17 @@
 ## 2. Структура проекта (`easy_box_backend/`)
 
 - `api/`: Основное Django-приложение, содержащее всю бизнес-логику.
-  - `models.py`: Определяет модели (`User`, `Product`, `Order`, `OrderLine`). Изображения хранятся в виде URL (`image_url`, `thumbnail_url`), полученных от Cloudinary.
+  - `models.py`: Определяет модели (`User`, `Product`, `Order`, `OrderLine`).
   - `views.py`: Содержит `ViewSet`'ы для обработки API-запросов.
-  - `serializers.py`: Отвечает за преобразование объектов Django в JSON и обратно. Содержит логику загрузки изображений в Cloudinary при создании/обновлении товара.
-  - `admin.py`: Настраивает отображение моделей в админ-панели Django, включая логику загрузки изображений в Cloudinary.
+  - `serializers.py`: Отвечает за преобразование объектов Django в JSON и обратно. Содержит логику загрузки изображений в Cloudinary.
+  - `admin.py`: Настраивает отображение моделей в админ-панели Django.
   - `urls.py`: Определяет маршруты (endpoints) API.
 - `backend/`: Папка с настройками Django-проекта.
-  - `settings.py`: Главный конфигурационный файл. Настройки базы данных, CORS, Cloudinary и другие переменные окружения загружаются из `.env` файла.
+  - `settings.py`: Главный конфигурационный файл. Настройки базы данных, CORS, Cloudinary и другие переменные окружения загружаются из переменных окружения (с помощью `dj-database-url` и `os.getenv`).
   - `urls.py`: Корневой файл маршрутизации проекта.
-- `Dockerfile`: Инструкция для сборки Docker-образа приложения.
-- `docker-compose.yml`: Файл для запуска проекта в локальном окружении (использует SQLite).
-- `docker-compose.prod.yml`: Файл для развертывания на продакшн-сервере. Запускает 3 сервиса: `db` (PostgreSQL), `backend` (Gunicorn + Django), `nginx`.
+- `Dockerfile`: Инструкция для сборки Docker-образа приложения. Миграции НЕ применяются на этапе сборки.
+- `docker-compose.yml`: Файл для запуска проекта в локальном окружении.
+- `docker-compose.prod.yml`: Файл для развертывания на продакшн-сервере. Запускает 3 сервиса: `db` (PostgreSQL), `backend` (Gunicorn + Django), `nginx`. Использует образ, собранный в CI/CD.
 - `nginx/nginx.prod.conf`: Конфигурация Nginx для продакшена. Выполняет роль реверс-прокси.
 
 ## 3. API Endpoints
@@ -52,12 +52,13 @@
 
 Для запуска проекта на локальной машине необходимы Docker и Docker Compose.
 
-1.  **Создайте файл `.env`** в корне папки `easy_box_backend/` со следующим содержимым:
+1.  **Создайте файл `.env`** в корне папки `easy_box_backend/` со следующим содержимым (для работы с Cloudinary):
     ```
     SECRET_KEY=your_secret_local_key
     CLOUDINARY_CLOUD_NAME=your_cloud_name
     CLOUDINARY_API_KEY=your_api_key
     CLOUDINARY_API_SECRET=your_api_secret
+    # DATABASE_URL можно не указывать, по умолчанию будет использоваться db.sqlite3
     ```
 2.  **Запустите сервисы:**
     ```bash
@@ -65,11 +66,11 @@
     ```
 3.  **Выполните миграции базы данных** (в отдельном терминале):
     ```bash
-    docker-compose exec backend python manage.py migrate
+    docker-compose exec web python manage.py migrate
     ```
 4.  **Создайте суперпользователя** для доступа к админке:
     ```bash
-    docker-compose exec backend python manage.py createsuperuser
+    docker-compose exec web python manage.py createsuperuser
     ```
 5.  Проект будет доступен по адресу `http://localhost:8000`.
 
@@ -80,13 +81,16 @@
 - **Триггер:** Деплой запускается автоматически при каждом `push` в ветку `main`, если изменения затрагивают папку `easy_box_backend/`.
 - **Workflow:** Процесс описан в файле `.github/workflows/backend-deploy.yml`.
 - **Процесс:**
-  1.  Собирается Docker-образ приложения.
-  2.  Образ загружается в Docker Hub.
+  1.  Собирается Docker-образ приложения на основе актуального кода.
+  2.  Образ загружается в Docker Hub (`321654neo/easy_box_backend:latest`).
   3.  Скрипт подключается к продакшн-серверу по SSH.
-  4.  На сервере создается актуальный `.env` файл из секретов GitHub.
-  5.  Старые контейнеры останавливаются и удаляются (`docker-compose down --volumes`).
-  6.  Запускаются новые версии контейнеров (`docker-compose -f docker-compose.prod.yml up -d`).
-  7.  Применяются миграции базы данных.
+  4.  На сервере обновляется код из репозитория (`git reset --hard origin/main`) для получения актуального `docker-compose.prod.yml`.
+  5.  Создается актуальный `.env` файл из секретов GitHub.
+  6.  С сервера принудительно скачивается последняя версия образа из Docker Hub (`docker pull`).
+  7.  **Создается резервная копия базы данных** (`pg_dump`).
+  8.  **Безопасно перезапускается только контейнер приложения:** старый контейнер `backend` останавливается и удаляется, `db` и `nginx` не затрагиваются.
+  9.  Запускается новый контейнер `backend` на основе скачанного образа (`docker-compose up -d`).
+  10. **Применяются миграции базы данных.** В команду миграции принудительно передается `DATABASE_URL` для гарантии подключения к PostgreSQL.
 - **Секреты GitHub:** Для работы CI/CD в настройках репозитория (`Settings -> Secrets and variables -> Actions`) должны быть заданы все необходимые переменные, включая:
   - `POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`
   - `SECRET_KEY`
