@@ -40,10 +40,7 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             set -e
-            cd ~/easy_box
-            git fetch origin
-            git reset --hard origin/main
-            cd easy_box_backend
+            cd ~/easy_box/easy_box_backend
 
             echo "Creating .env file"
             cat <<EOF > .env
@@ -61,16 +58,6 @@ jobs:
             echo "### Pulling latest image from Docker Hub..."
             docker pull 321654neo/easy_box_backend:latest
 
-            echo "### (LOG) Containers before changes..."
-            docker ps -a
-
-            echo "### (LOG) Volumes before changes..."
-            docker volume ls
-
-            echo "### (PLAN B) Backing up database..."
-            docker-compose -f docker-compose.prod.yml exec -T db pg_dump -U ${{ secrets.POSTGRES_USER }} -d ${{ secrets.POSTGRES_DB }} > ~/db_backup.sql
-            echo "Backup created at ~/db_backup.sql"
-
             echo "### Recreating backend container safely..."
             docker-compose -f docker-compose.prod.yml stop backend
             docker-compose -f docker-compose.prod.yml rm -f backend
@@ -78,15 +65,6 @@ jobs:
 
             echo "### Waiting for services to start..."
             sleep 15
-
-            echo "### (LOG) Containers after changes..."
-            docker ps -a
-
-            echo "### Logs from DB container after startup:"
-            docker-compose -f docker-compose.prod.yml logs db
-
-            echo "### Logs from Backend container after startup:"
-            docker-compose -f docker-compose.prod.yml logs backend
 
             echo "### Running migrations..."
             docker-compose -f docker-compose.prod.yml exec -T -e "DATABASE_URL=postgres://${{ secrets.POSTGRES_USER }}:${{ secrets.POSTGRES_PASSWORD }}@db:5432/${{ secrets.POSTGRES_DB }}" backend python manage.py migrate --noinput
