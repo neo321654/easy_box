@@ -1,3 +1,16 @@
+--- Context from: ../../.gemini/GEMINI.md ---
+## Gemini Added Memories
+- The user prefers using `context.S` for localization instead of `context.l10n`.
+- The user is asking about localization. I should clarify if they want to add a new language or something else related to language generation.
+- The user wants to explicitly approve merges into the main branch.
+- The user's Git workflow: Create a feature branch from `develop`. Merge the feature branch into `develop` and push. Then, merge `develop` into `main` and push to deploy.
+- Run `analyze_files` to check for errors before every commit.
+- The user wants me to merge to the main branch without asking for confirmation.
+- The deployment workflow is triggered only on a push to the `main` branch if changes are detected within the `easy_box_backend/` directory.
+- A deployment is triggered only by a push to `main` that includes changes in the `easy_box_backend/` directory. This applies even when fixing the deployment workflow itself. To force a deployment, I must make a trivial change in a file within `easy_box_backend/`.
+--- End of Context from: ../../.gemini/GEMINI.md ---
+
+--- Context from: GEMINI.md ---
 # Правила и Соглашения по Рабочему Процессу
 
 Этот документ содержит набор правил и соглашений, выработанных в ходе работы над проектом, для обеспечения консистентности и предсказуемости.
@@ -52,7 +65,7 @@ Additionally, the project uses GitHub Actions for CI/CD, with the following key 
 
 ## 6. Управление Данными и Секретами (Data and Secrets Management)
 
-- **База Данных (Database):** Продакшн-база данных является постоянной. Скрипт деплоя не должен удалять тома с данными (`--volumes`). Любые изменения схемы, которые могут привести к потере данных, должны обсуждаться отдельно.
+- **База Данных (Database)::** Продакшн-база данных является постоянной. Скрипт деплоя не должен удалять тома с данными (`--volumes`). Любые изменения схемы, которые могут привести к потере данных, должны обсуждаться отдельно.
 - **Секреты (Secrets):** Никакие секреты (ключи API, пароли) не должны коммититься в репозиторий. Они управляются через GitHub Actions Secrets и загружаются в `.env` файл на сервере во время деплоя.
 
 ## 7. Обработка Ошибок и Тестирование (Error Handling and Testing)
@@ -66,3 +79,4 @@ Additionally, the project uses GitHub Actions for CI/CD, with the following key 
 - Это правило применяется, даже если вы исправляете сам процесс деплоя. Если вы меняете `.github/workflows/backend-deploy.yml` но не трогаете файлы в `easy_box_backend/`, **деплой не запустится**.
 - Чтобы принудительно запустить деплой, внесите любое минимальное изменение в любой файл внутри `easy_box_backend/` (например, добавьте комментарий или пустую строку).
 - Процесс деплоя определен в `.github/workflows/backend-deploy.yml`.
+--- End of Context from: GEMINI.md ---
