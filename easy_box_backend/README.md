@@ -4,3 +4,4 @@
 - Chore: add logging and backup to deployment.
 - Chore: trigger one more test deployment.
 - Chore: trigger deployment for postgresql fix.
+- Chore: trigger deployment for dockerfile fix.
