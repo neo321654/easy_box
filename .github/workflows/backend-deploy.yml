@@ -2,7 +2,7 @@ name: Deploy Backend
 
 on:
   push:
-    branches:&
+    branches:
       - main
     paths:
       - 'easy_box_backend/**'
