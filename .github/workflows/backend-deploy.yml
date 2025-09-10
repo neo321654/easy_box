@@ -2,7 +2,7 @@ name: Deploy Backend
 
 on:
   push:
-    branches:
+    branches:&
       - main
     paths:
       - 'easy_box_backend/**'
@@ -63,7 +63,7 @@ jobs:
             EOF
 
             echo "### Force recreating containers..."
-            docker-compose -f docker-compose.prod.yml rm -fsv
+            docker-compose -f docker-compose.prod.yml rm -fs
             docker-compose -f docker-compose.prod.yml up -d --build
 
             echo "### Waiting for services to start..."
