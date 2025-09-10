@@ -14,7 +14,7 @@ class ProductAdminForm(forms.ModelForm):
 
     class Meta:
         model = Product
-        fields = '__all__'
+        exclude = ('image_url', 'thumbnail_url')
 
 
 class ProductAdmin(admin.ModelAdmin):
