@@ -44,9 +44,9 @@ jobs:
             git fetch origin
             git reset --hard origin/main
             cd easy_box_backend
-            
-            echo "--- Volumes before action ---"
-            docker volume ls
+
+            echo "### Inspecting volume before action..."
+            docker volume inspect easy_box_backend_postgres_data
 
             echo "Creating .env file"
             cat <<EOF > .env
@@ -62,14 +62,23 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
 
-            echo "--- Force recreating containers ---"
+            echo "### Force recreating containers..."
             docker-compose -f docker-compose.prod.yml rm -fsv
             docker-compose -f docker-compose.prod.yml up -d --build
 
-            echo "Running migrations"
+            echo "### Waiting for services to start..."
+            sleep 15
+
+            echo "### Logs from DB container after startup:"
+            docker-compose -f docker-compose.prod.yml logs db
+
+            echo "### Logs from Backend container after startup:"
+            docker-compose -f docker-compose.prod.yml logs backend
+
+            echo "### Running migrations..."
             docker-compose -f docker-compose.prod.yml exec -T backend python manage.py migrate --noinput
 
-            echo "Deployment finished"
+            echo "### Deployment finished"
 
       - name: Clean up old Docker images
         uses: appleboy/ssh-action@master
