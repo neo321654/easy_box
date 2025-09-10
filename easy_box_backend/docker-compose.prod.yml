@@ -11,10 +11,9 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
   backend:
-    build: .
+    image: 321654neo/easy_box_backend:latest
     command: gunicorn backend.wsgi:application --bind 0.0.0.0:8000
     volumes:
-      - .:/app
       - static_volume:/app/staticfiles
       - media_volume:/app/media
     expose:

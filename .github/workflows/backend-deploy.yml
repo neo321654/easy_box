@@ -48,7 +48,6 @@ jobs:
             echo "Creating .env file"
             cat <<EOF > .env
             SECRET_KEY=${{ secrets.SECRET_KEY }}
-            DATABASE_URL=${{ secrets.DATABASE_URL }}
             POSTGRES_DB=${{ secrets.POSTGRES_DB }}
             POSTGRES_USER=${{ secrets.POSTGRES_USER }}
             POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
@@ -58,6 +57,9 @@ jobs:
             TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
+
+            echo "### Pulling latest image from Docker Hub..."
+            docker pull 321654neo/easy_box_backend:latest
 
             echo "### (LOG) Containers before changes..."
             docker ps -a
@@ -72,7 +74,7 @@ jobs:
             echo "### Recreating backend container safely..."
             docker-compose -f docker-compose.prod.yml stop backend
             docker-compose -f docker-compose.prod.yml rm -f backend
-            docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans
+            docker-compose -f docker-compose.prod.yml up -d --remove-orphans
 
             echo "### Waiting for services to start..."
             sleep 15
