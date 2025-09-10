@@ -62,7 +62,9 @@ jobs:
             TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
             EOF
 
-            echo "### Recreating containers if needed..."
+            echo "### Recreating backend container safely..."
+            docker-compose -f docker-compose.prod.yml stop backend
+            docker-compose -f docker-compose.prod.yml rm -f backend
             docker-compose -f docker-compose.prod.yml up -d --build --remove-orphans
 
             echo "### Waiting for services to start..."
